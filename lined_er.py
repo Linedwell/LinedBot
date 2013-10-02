@@ -139,7 +139,7 @@ def main():
     log += crawlerCat(u'Article en cours',432000,False,True) #5 jours, inclusion des PdD associées aux articles
     timeEnd = time.time()
     lined_log.setValues(nbrTotal,nbrModif)
-    lined_log.editLog(log)
+    lined_log.editLog(site,log)
 
     print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
 

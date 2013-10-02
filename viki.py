@@ -13,7 +13,7 @@ import pywikibot
 from pywikibot import pagegenerators
 
 import callback
-import viki_log
+import lined_log
 
 
 # Déclarations
@@ -41,7 +41,7 @@ def newPages(all=False):
     
     
     if all:
-        pagesList = pagegenerators.AllpagesPageGenerator(start="Alezan", namespace=0,includeredirects=False,site=site)
+        pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=site)
     else:
         pagesList = pagegenerators.NewpagesPageGenerator(total=50,site=site)
 
@@ -150,8 +150,8 @@ def main():
     timeStart = time.time()
     log += newPages()
     timeEnd = time.time()
-    viki_log.setValues(nbrTotal,nbrModif)
-    viki_log.editLog(log)
+    lined_log.setValues(nbrTotal,nbrModif)
+    lined_log.editLog(site,log)
     print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
 
 
