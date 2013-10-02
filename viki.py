@@ -4,7 +4,7 @@
 # Auteur: Linedwell
 # Licence: <à définir>
 
-import sys
+import sys, getopt
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import re, time
@@ -145,10 +145,23 @@ def updateJobList(oldJobList, newJobList):
 
 
 # Exécution
-def main():
+def main(argv):
+    
+    all = False
+    
+    try:
+        opts, args = getopt.getopt(argv, 'a', ['all'])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ('-a', '--all'):
+            all = True
+
     log = u''
     timeStart = time.time()
-    log += newPages()
+    log += newPages(all)
     timeEnd = time.time()
     lined_log.setValues(nbrTotal,nbrModif)
     lined_log.editLog(site,log)
@@ -157,6 +170,6 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        main(sys.argv[1:])
     finally:
         pywikibot.stopme()
