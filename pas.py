@@ -13,6 +13,12 @@ from pywikibot import pagegenerators
 #Variables globales
 site = pywikibot.Site('fr','wikipedia')
 
+delimiterBegin = u'= Propositions =\n'
+delimiterEnd = u'= <small>Avertissements</small> =\n'
+    
+delimiterBeginRegex = u'=\s*Propositions\s*=\n'
+delimiterEndRegex = u'=\s*<small>Avertissements</small>\s*=\n'
+
 #Créé la section PàS du lendemain
 def pasNewSection(pageTemp):
     global summary
@@ -25,8 +31,7 @@ def pasNewSection(pageTemp):
     dayNum = int(dateD.tm_mday)
     
     if pageTemp.find(u'== ' + str(dayNum) + ' ' + month[monthNum - 1] + ' ==') == -1: #La section de dans 'pad' n'existe pas encore
-        delimiter = u'= <small>Avertissements</small> =\n'
-        pageTempBegin, pageTempEnd = pageTemp.split(delimiter)
+        pageTempBegin, pageTempEnd = re.split(delimiterEndRegex,pageTemp)
         pageTempEnd = delimiter + pageTempEnd
         
         newSection = u'== ' + str(dayNum) + ' ' + month[monthNum - 1] + ' ==\n'
@@ -47,14 +52,11 @@ def pasNewSection(pageTemp):
 
 def pasRemoveSection(pageTemp):
     global summary
-    
-    delimiterBegin = u'= Propositions =\n'
-    delimiterEnd = u'= <small>Avertissements</small> =\n'
 
-    pageTempBegin, pageTempBody = pageTemp.split(delimiterBegin)
+    pageTempBegin, pageTempBody = re.split(delimiterBeginRegex,pageTemp)
     pageTempBegin += delimiterBegin
     
-    pageTempBody, pageTempEnd = pageTempBody.split(delimiterEnd)
+    pageTempBody, pageTempEnd = re.split(delimiterEndRegex,pageTempBody)
     pageTempEnd = delimiterEnd + pageTempEnd
     
     section = re.split('(==\s*\d* \w*\s*==\n)',pageTempBody,flags=re.U)
@@ -93,7 +95,7 @@ def main(argv):
             archiveOnly = True
 
     summary = u''
-    target = u'Wikipedia:Pages à supprimer'
+    target = u'Wikipédia:Pages à supprimer'
     page = pywikibot.Page(site,target)
     pageTemp = page.get()
     pageTempNew = pasRemoveSection(pageTemp)
