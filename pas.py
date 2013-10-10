@@ -32,7 +32,7 @@ def pasNewSection(pageTemp):
     
     if pageTemp.find(u'== ' + str(dayNum) + ' ' + month[monthNum - 1] + ' ==') == -1: #La section de dans 'pad' n'existe pas encore
         pageTempBegin, pageTempEnd = re.split(delimiterEndRegex,pageTemp)
-        pageTempEnd = delimiter + pageTempEnd
+        pageTempEnd = delimiterEnd + pageTempEnd
         
         newSection = u'== ' + str(dayNum) + ' ' + month[monthNum - 1] + ' ==\n'
         newSection += u'{{En-tête section PàS|' + str(dayNum)+ '|' + month[monthNum - 1] + '|' + str(year) + '}}\n'
