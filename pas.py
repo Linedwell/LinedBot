@@ -35,7 +35,7 @@ def pasNewSection(pageTemp):
         pageTempEnd = delimiterEnd + pageTempEnd
         
         newSection = u'== ' + str(dayNum) + ' ' + month[monthNum - 1] + ' ==\n'
-        newSection += u'{{En-tête section PàS|' + str(dayNum)+ '|' + month[monthNum - 1] + '|' + str(year) + '}}\n'
+        newSection += u'{{En-tête section PàS|' + str(dayNum)+ '|' + month[monthNum - 1] + '|' + str(year) + '}}\n\n'
         newSection += u'{{Boîte déroulante/début|titre=Requêtes traitées}}\n{{Boîte déroulante/fin}}\n\n'
         
         pageTemp = pageTempBegin + newSection + pageTempEnd
