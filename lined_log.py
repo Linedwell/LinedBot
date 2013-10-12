@@ -18,7 +18,7 @@ summaryHeader = {
 
 
 #Met à jour la page de journalisation du bot
-def editLog(site,log,page='Utilisateur:LinedBot/Log',ar=False):
+def editLog(site,log,page='Utilisateur:LinedBot/Log',ar=True):
     if log != '':
         family = site.family.name
         year = time.strftime('%Y')

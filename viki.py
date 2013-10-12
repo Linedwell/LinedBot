@@ -164,7 +164,7 @@ def main(argv):
     log += newPages(all)
     timeEnd = time.time()
     lined_log.setValues(nbrTotal,nbrModif)
-    lined_log.editLog(site,log)
+    lined_log.editLog(site,log,ar=False)
     print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
 
 
