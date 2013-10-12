@@ -104,7 +104,7 @@ def main(argv):
         pageTempNew = pasNewSection(pageTempNew)
 
     if pageTempNew != pageTemp:
-            page.put(pageTempNew,"[[WP:Bot|Robot]] : " + summary)
+        page.put(pageTempNew,"[[WP:Bot|Robot]] : " + summary)
 
     else:
         print "Aucune action aujourd'hui, archivage et section du lendemain non requis."
