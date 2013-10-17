@@ -22,14 +22,14 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',ar=True):
     if log != '':
         family = site.family.name
         year = time.strftime('%Y')
-        month = [u'Janvier',u'Février',u'Mars',u'Avril',u'Mai',u'Juin',u'Juillet',u'Août',u'Septembre',u'Octobre',u'Novembre',u'Décembre']
+        month = [u'',u'Janvier',u'Février',u'Mars',u'Avril',u'Mai',u'Juin',u'Juillet',u'Août',u'Septembre',u'Octobre',u'Novembre',u'Décembre']
         pageLog = pywikibot.Page(site,page)
         pageArchive = pywikibot.Page(site,pageLog.title() + '/' + str(int(year) - 1))
         if ar and not pageArchive.exists():
             pageLogTemp = archive(site,pageLog,pageArchive)
         else:
             pageLogTemp = pageLog.get()
-        if pageLogTemp.find(u'== ' + month[int(time.strftime('%m')) - 1] + ' ==') == -1: pageLogTemp += u'\n\n== ' + month[int(time.strftime('%m')) - 1] + ' =='
+        if pageLogTemp.find(u'== ' + month[int(time.strftime('%m'))] + ' ==') == -1: pageLogTemp += u'\n\n== ' + month[int(time.strftime('%m'))] + ' =='
         if pageLogTemp.find(u'== ' + time.strftime('%Y-%m-%d') + ' ==') != -1: pageLogTemp += '\n' + log
         else :
             pageLogTemp += '\n' + u'=== ' + time.strftime('%Y-%m-%d') + ' ===\n' + log
