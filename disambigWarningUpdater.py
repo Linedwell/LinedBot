@@ -19,6 +19,7 @@ from pywikibot import pagegenerators
 # Déclarations
 site = pywikibot.getSite('fr','wikipedia')
 
+#Met à jour le tableau récapitulatif
 def disambigWarningUpdater(pageTemp,newNumber):
     pageTemp = re.split('(\|-\n)', pageTemp, maxsplit=3)
     pageTempBegin = u''.join(pageTemp[:-1])
@@ -35,7 +36,7 @@ def disambigWarningUpdater(pageTemp,newNumber):
 
     return pageTemp
 
-
+#Convertit une ligne en "objet" utilisable
 def rawParser(raw):
     rawItems = raw.split('|')
     
@@ -52,7 +53,7 @@ def rawParser(raw):
     return rawObj
 
 
-
+#Génère la ligne supplémentaire du tableau, calculée à partir de la dernière ligne
 def rawMaker(prevRaw, newNumber):
     
     oldId = int(prevRaw['id'])

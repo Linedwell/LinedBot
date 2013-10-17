@@ -50,6 +50,7 @@ def pasNewSection(pageTemp):
 
     return pageTemp
 
+#Archive les sections vidées
 def pasRemoveSection(pageTemp):
     global summary
 
@@ -80,6 +81,7 @@ def pasRemoveSection(pageTemp):
 
     return pageTemp
 
+#Exécution
 def main(argv):
     global summary
     
