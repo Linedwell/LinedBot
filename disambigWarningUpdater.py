@@ -36,6 +36,7 @@ def disambigWarningUpdater(pageTemp,newNumber):
 
     return pageTemp
 
+
 #Convertit une ligne en "objet" utilisable
 def rawParser(raw):
     rawItems = raw.split('|')
@@ -60,7 +61,6 @@ def rawMaker(prevRaw, newNumber):
     oldDate = prevRaw['date']
     oldNumber = int(prevRaw['number'])
     
-    
     dateObj = datetime.today()
     date = dateObj.strftime('%d %B %Y')
     
@@ -68,7 +68,6 @@ def rawMaker(prevRaw, newNumber):
     
     durationObj = dateObj - oldDateObj
     duration = str(durationObj.days) + ' jours'
-    
 
     diffSize = newNumber - oldNumber
     diffPercent = (diffSize * 100.) / newNumber
@@ -79,12 +78,9 @@ def rawMaker(prevRaw, newNumber):
     else:
         diffColor = '{{vert|'
 
-    
     newRaw = '|-\n| ' + str(oldId+1) + '\n| ' + date + '\n|| ' + duration + '\n| {{formatnum:' + str(newNumber) +'}} || ' + diffColor + str(diffPercent) + '%}}\n|| ' + diffColor + str(diffSize) + '}}\n'
     
     return newRaw
-
-
 
 
 #Exécution
@@ -101,9 +97,8 @@ def main(args):
         else:
             print "Aucune mise à jour n'a été faite."
     else:
-        print "usage: python disambigWarningUpdater.py <number of pages>"
+        print "usage: python " + sys.argv[0] + " <number of pages>"
         sys.exit(2)
-
 
 
 if __name__ == "__main__":
