@@ -109,9 +109,9 @@ def main(args):
             if pageTemp != page.get():
                 page.put(pageTemp,"[[WP:Bot|Robot]] : " + u'mise à jour')
             else:
-                print "Aucune mise à jour n'a été faite."
+                print u"Aucune mise à jour n'a été faite."
     else:
-        print "usage: python " + sys.argv[0] + " <number of pages>"
+        print u"usage: python " + sys.argv[0] + " <number of pages>"
         sys.exit(2)
 
 
