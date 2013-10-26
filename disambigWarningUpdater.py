@@ -89,13 +89,27 @@ def main(args):
         newNumber = int(args[0])
         target = u"Modèle:Avertissements d'homonymie restants"
         page = pywikibot.Page(site,target)
-        pageTemp = page.get()
-        pageTemp = disambigWarningUpdater(pageTemp,newNumber)
         
-        if pageTemp != page.get():
-            page.put(pageTemp,"[[WP:Bot|Robot]] : " + u'mise à jour')
+        try:
+            pageTemp = page.get()
+                
+        except pywikibot.NoPage:
+            pywikibot.output(u"Page %s does not exist; skipping."
+                             % page.title(asLink=True))
+        except pywikibot.IsRedirectPage:
+            pywikibot.output(u"Page %s is a redirect; skipping."
+                             % page.title(asLink=True))
+        except pywikibot.LockedPage:
+            pywikibot.output(u"Page %s is locked; skipping."
+                             % page.title(asLink=True))
         else:
-            print "Aucune mise à jour n'a été faite."
+    
+            pageTemp = disambigWarningUpdater(pageTemp,newNumber)
+            
+            if pageTemp != page.get():
+                page.put(pageTemp,"[[WP:Bot|Robot]] : " + u'mise à jour')
+            else:
+                print "Aucune mise à jour n'a été faite."
     else:
         print "usage: python " + sys.argv[0] + " <number of pages>"
         sys.exit(2)

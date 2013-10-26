@@ -56,7 +56,6 @@ def newPages(all=False):
         except pywikibot.IsRedirectPage:
             pywikibot.output(u"Page %s is a redirect; skipping."
                              % page.title(asLink=True))
-
         except pywikibot.LockedPage:
             pywikibot.output(u"Page %s is locked; skipping."
                              % page.title(asLink=True))
