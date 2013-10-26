@@ -34,40 +34,53 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
     
     for page in pagesList:
         if not page.title() in ignoreList:
-            page.get()
-            if page.editTime() < limit:
-                if checkTalk:
-                    talk = page.toggleTalkPage()
-                if not checkTalk or (talk.exists() and talk.editTime() <= limit):
-                    nbrTotal += 1
-                    pageTemp = page.get()
-                    lastEdit = page.editTime()
-                    duration = calcDuration(lastEdit)
-                    for m in motif:
-                        parser = re.compile(r'\{\{' + m + r'.*?\}\}(?P<fin>\r\n|\n|\ )',re.I | re.U | re.DOTALL)
-                        searchResult = parser.search(pageTemp) #On cherche si le motif {{m}} existe dans la page
-                        if searchResult:
-                            templateResult = searchResult.group()
-                            pageTemp = parser.sub('',pageTemp,1) #Retire la 1re occurrence du motif dans la page
-                            
-                            templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
-                            templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
-                            
-                            summary = u"Retrait du bandeau " + templateResult + u" (non modifié depuis " + str(duration.days) + " jours)."
-                            
-                            c = callback.Callback()
-                            
-                            page.put(pageTemp,"[[WP:Bot|Robot]] : " + summary, callback=c)
-                            break
-                        else:
-                            summary = u'Aucun modèle trouvé correspondant au motif: ' + str(motif)
             
-                    if c.error == None:
-                        nbrModif += 1
-                        status = '{{Y&}}'
-                    else:
-                        status = '{{N&}}'
-                    log += u'*' + status + ' [[' + page.title() + ']] : ' + summary.replace('{{','{{m|') + '\n'
+            try:
+                pageTemp = page.get()
+        
+            except pywikibot.NoPage:
+                pywikibot.output(u"Page %s does not exist; skipping."
+                             % page.title(asLink=True))
+            except pywikibot.IsRedirectPage:
+                pywikibot.output(u"Page %s is a redirect; skipping."
+                             % page.title(asLink=True))
+            except pywikibot.LockedPage:
+                pywikibot.output(u"Page %s is locked; skipping."
+                             % page.title(asLink=True))
+            else:
+            
+                if page.editTime() < limit:
+                    if checkTalk:
+                        talk = page.toggleTalkPage()
+                    if not checkTalk or (talk.exists() and talk.editTime() <= limit):
+                        nbrTotal += 1
+                        lastEdit = page.editTime()
+                        duration = calcDuration(lastEdit)
+                        for m in motif:
+                            parser = re.compile(r'\{\{' + m + r'.*?\}\}(?P<fin>\r\n|\n|\ )',re.I | re.U | re.DOTALL)
+                            searchResult = parser.search(pageTemp) #On cherche si le motif {{m}} existe dans la page
+                            if searchResult:
+                                templateResult = searchResult.group()
+                                pageTemp = parser.sub('',pageTemp,1) #Retire la 1re occurrence du motif dans la page
+                                
+                                templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
+                                templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
+                                
+                                summary = u"Retrait du bandeau " + templateResult + u" (non modifié depuis " + str(duration.days) + " jours)."
+                                
+                                c = callback.Callback()
+                                
+                                page.put(pageTemp,"[[WP:Bot|Robot]] : " + summary, callback=c)
+                                break
+                            else:
+                                summary = u'Aucun modèle trouvé correspondant au motif: ' + str(motif)
+                
+                        if c.error == None:
+                            nbrModif += 1
+                            status = '{{Y&}}'
+                        else:
+                            status = '{{N&}}'
+                        log += u'*' + status + ' [[' + page.title() + ']] : ' + summary.replace('{{','{{m|') + '\n'
         else:
             print u'Skipping [[' + page.title() + ']], page in ignore list.'
 
