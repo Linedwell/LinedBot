@@ -99,19 +99,31 @@ def main(argv):
     summary = u''
     target = u'Wikipédia:Pages à supprimer'
     page = pywikibot.Page(site,target)
-    pageTemp = page.get()
-    pageTempNew = pasRemoveSection(pageTemp)
 
-    if not archiveOnly:
-        pageTempNew = pasNewSection(pageTempNew)
-
-    if pageTempNew != pageTemp:
-        page.put(pageTempNew,"[[WP:Bot|Robot]] : " + summary)
-
+    try:
+        pageTemp = page.get()
+        
+    except pywikibot.NoPage:
+        pywikibot.output(u"Page %s does not exist; skipping."
+                         % page.title(asLink=True))
+    except pywikibot.IsRedirectPage:
+        pywikibot.output(u"Page %s is a redirect; skipping."
+                         % page.title(asLink=True))
+    except pywikibot.LockedPage:
+        pywikibot.output(u"Page %s is locked; skipping."
+                         % page.title(asLink=True))
     else:
-        print "Aucune action aujourd'hui, archivage et section du lendemain non requis."
 
-    #raw_input()
+        pageTempNew = pasRemoveSection(pageTemp)
+
+        if not archiveOnly:
+            pageTempNew = pasNewSection(pageTempNew)
+
+        if pageTempNew != pageTemp:
+            page.put(pageTempNew,"[[WP:Bot|Robot]] : " + summary)
+
+        else:
+            print "Aucune action aujourd'hui, archivage et section du lendemain non requis."
     
 
 
