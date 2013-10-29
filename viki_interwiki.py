@@ -13,9 +13,12 @@ import time
 import itertools
 
 # Déclarations
-site = pywikibot.getSite('fr','vikidia')
-itsite = pywikibot.getSite('it','vikidia')
-essite = pywikibot.getSite('es','vikidia')
+site = {
+	'fr' : pywikibot.getSite('fr','vikidia'),
+	'es' : pywikibot.getSite('es','vikidia'),
+	'it' : pywikibot.getSite('it','vikidia'),
+	'ru' : pywikibot.getSite('ru','vikidia'),
+}
 
 
 frwiki = pywikibot.getSite('fr','wikipedia')
@@ -27,7 +30,9 @@ def inter(page):
     page.get()
     iwList = getInterwiki(page)
     for iw in iwList:
-        print iw
+        print pywikibot.Page(site[iw.site.lang],iw.title).get()
+
+
 
 
 def getInterwiki(page, expand=True):
@@ -50,7 +55,8 @@ def getInterwiki(page, expand=True):
 #Exécution
 def main():
     timeStart = time.time()
-    pg = pywikibot.Page(site,u'Turin')
+    lang = 'fr'
+    pg = pywikibot.Page(site[lang],u'Turin')
     inter(pg)
     timeEnd = time.time()
 

@@ -13,7 +13,7 @@ import pywikibot
 site = pywikibot.getSite()
 summaryHeader = {
     'wikipedia' : u'[[WP:Bot|Robot]] : ',
-    'vikidia' : u'[[VD:Robot|Robot]] : '
+    'vikidia' : u'[[VD:Robot|Robot]] : ',
 }
 
 
