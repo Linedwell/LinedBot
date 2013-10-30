@@ -20,6 +20,10 @@ site = {
 	'ru' : pywikibot.getSite('ru','vikidia'),
 }
 
+summary = {
+    'fr' : u'Robot: mise à jour des interwikis',
+}
+
 
 frwiki = pywikibot.getSite('fr','wikipedia')
 enwiki = pywikibot.getSite('simple','wikipedia')
@@ -27,10 +31,12 @@ nbrModif = 0
 nbrTotal = 0
 
 def inter(page):
-    page.get()
+    pageTemp = page.get()
     iwList = getInterwiki(page)
     for iw in iwList:
-        print pywikibot.Page(site[iw.site.lang],iw.title).get()
+        pageIw = pywikibot.Page(site[iw.site.lang],iw.title)
+        if not pageIw.exists():
+            print "grr"
 
 
 
