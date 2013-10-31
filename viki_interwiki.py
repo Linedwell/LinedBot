@@ -37,11 +37,11 @@ def inter(page):
     for iw in iwList:
         lang = iw.site.lang
         pageIw = pywikibot.Page(site[lang],iw.title)
-        link = u'[['+lang+':'+iw.title+']]\n'
+        link = iw.astext()+'\n'
+        pageTemp = pageTemp.replace(link,'')
         if not pageIw.exists():
             pageTemp = pageTemp.replace(link,'')
     page.put(pageTemp,summary[pageLang])
-
 
 
 
