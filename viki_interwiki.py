@@ -21,7 +21,7 @@ site = {
 }
 
 summary = {
-    'fr' : u'Robot: mise à jour des interwikis',
+    'fr' : u'[[Vikidia:Robot|Robot]] : mise à jour des interwikis',
 }
 
 
@@ -33,10 +33,14 @@ nbrTotal = 0
 def inter(page):
     pageTemp = page.get()
     iwList = getInterwiki(page)
+    pageLang = page.site.lang
     for iw in iwList:
-        pageIw = pywikibot.Page(site[iw.site.lang],iw.title)
+        lang = iw.site.lang
+        pageIw = pywikibot.Page(site[lang],iw.title)
+        link = u'[['+lang+':'+iw.title+']]\n'
         if not pageIw.exists():
-            print "grr"
+            pageTemp = pageTemp.replace(link,'')
+    page.put(pageTemp,summary[pageLang])
 
 
 
@@ -62,8 +66,8 @@ def getInterwiki(page, expand=True):
 def main():
     timeStart = time.time()
     lang = 'fr'
-    pg = pywikibot.Page(site[lang],u'Turin')
-    inter(pg)
+    page = pywikibot.Page(site[lang],u'Turin')
+    inter(page)
     timeEnd = time.time()
 
 if __name__ == "__main__":
