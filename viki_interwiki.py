@@ -22,6 +22,9 @@ site = {
 
 summary = {
     'fr' : u'[[Vikidia:Robot|Robot]] : mise à jour des interwikis',
+    'it' : u'Bot : interwiki update',
+    'es' : u'Bot : interwiki update',
+    'ru' : u'Bot : interwiki update',
 }
 
 
@@ -32,16 +35,51 @@ nbrTotal = 0
 
 def inter(page):
     pageTemp = page.get()
-    iwList = getInterwiki(page)
+    iwList = list(getInterwiki(page))
     pageLang = page.site.lang
+    
+    allList = []
+    allList.append(pywikibot.Link(page.title(), page.site))
+    
+    #premier tour pour récupérer la liste des intervikis (valides)
     for iw in iwList:
         lang = iw.site.lang
-        pageIw = pywikibot.Page(site[lang],iw.title)
-        link = iw.astext()+'\n'
-        pageTemp = pageTemp.replace(link,'')
-        if not pageIw.exists():
-            pageTemp = pageTemp.replace(link,'')
+        pageExt = pywikibot.Page(site[lang],iw.title)
+        if not pageExt.exists():
+            link = iw.astext()
+            pageTemp = pageTemp.replace(link+'\n','')
+            pageTemp = pageTemp.replace(link,'') #necessaire si dernier lien
+        else:
+            allList.append(iw)
+
     page.put(pageTemp,summary[pageLang])
+
+
+    #second tour pour la mettre à jour sur tous les autres vikis
+    for a in allList[1:]:
+        linkList = list(allList)
+        linkList.remove(a)
+        
+        pageLoc = pywikibot.Page(a.site,a.title)
+        
+        localIwList = list(getInterwiki(pageLoc))
+        
+        pageLocTemp = pageLoc.get()
+        
+        #retrait des interviki non valides (non liés depuis le viki source)
+        for liw in localIwList:
+            if not liw in linkList:
+                link = liw.astext()
+                pageLocTemp = pageLocTemp.replace(link+'\n','')
+                pageLocTemp = pageLocTemp.replace(link,'') #necessaire si dernier lien
+
+        #ajout des nouveaux interviki
+        for lnk in linkList:
+            if not lnk in localIwList:
+                link = lnk.astext(onsite=a.site) #on force le lien à être "vu" depuis le wiki de destination
+                pageLocTemp += '\n' + link
+
+        pageLoc.put(pageLocTemp, summary[a.site.lang])
 
 
 
