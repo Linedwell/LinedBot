@@ -28,8 +28,6 @@ summary = {
 }
 
 
-frwiki = pywikibot.getSite('fr','wikipedia')
-enwiki = pywikibot.getSite('simple','wikipedia')
 nbrModif = 0
 nbrTotal = 0
 
