@@ -52,7 +52,7 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                 if page.editTime() < limit:
                     if checkTalk:
                         talk = page.toggleTalkPage()
-                    if not checkTalk or (talk.exists() and talk.editTime() <= limit):
+                    if not checkTalk or not talk.exists() or talk.editTime() <= limit):
                         nbrTotal += 1
                         lastEdit = page.editTime()
                         duration = calcDuration(lastEdit)

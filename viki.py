@@ -80,21 +80,15 @@ def newPages(all=False):
                     jobList.append(u'catégoriser')
                 
                 # si la page ne pointe vers aucune autre, on l'indique en impasse
-                try:
-                    linkedPages = page.linkedPages()
-                    nbLink = len(set(linkedPages))
-                    if nbLink == 0:
-                        jobList.append('impasse')
-                except pywikibot.data.api.APIError:
-                    print u"APIError on " + page.title() + " ; skipping"
-                    pass
+                if page in deadendPagesList:
+                    jobList.append(u'impasse')
+                
                 
                 pageTemp, oldJobList = removeBanner(pageTemp)
 
                 jobList = updateJobList(oldJobList, jobList)
                 job = u''
 
-                #print page.title() + ' : ' + str(jobList)
             
                 # Différence symétrique entre les deux listes, on regarde si des éléments ne sont pas contenus dans les deux listes : (A-B)+(B-A)
                 diff = list(set(oldJobList).symmetric_difference(set(jobList)))
