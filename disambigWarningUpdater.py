@@ -62,7 +62,7 @@ def rawMaker(prevRaw, newNumber):
     oldNumber = int(prevRaw['number'])
     
     dateObj = datetime.today()
-    date = dateObj.strftime('%d %B %Y')
+    date = dateObj.strftime('%d %B %Y').lstrip('0') #suppression du 0 initial
     
     oldDateObj = datetime.strptime(oldDate,'%d%B%Y')
     
