@@ -50,7 +50,9 @@ def inter(page):
         else:
             allList.append(iw)
 
-    page.put(pageTemp,summary[pageLang])
+    if page.get() != pageTemp:
+
+        page.put(pageTemp,summary[pageLang])
 
 
     #second tour pour la mettre à jour sur tous les autres vikis
@@ -77,7 +79,8 @@ def inter(page):
                 link = lnk.astext(onsite=a.site) #on force le lien à être "vu" depuis le wiki de destination
                 pageLocTemp += '\n' + link
 
-        pageLoc.put(pageLocTemp, summary[a.site.lang])
+        if pageLoc.get() != pageLocTemp:
+            pageLoc.put(pageLocTemp, summary[a.site.lang])
 
 
 
@@ -102,7 +105,7 @@ def getInterwiki(page, expand=True):
 def main():
     timeStart = time.time()
     lang = 'fr'
-    page = pywikibot.Page(site[lang],u'Turin')
+    page = pywikibot.Page(site[lang],u'Pape')
     inter(page)
     timeEnd = time.time()
 

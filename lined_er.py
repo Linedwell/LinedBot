@@ -56,6 +56,7 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                         nbrTotal += 1
                         lastEdit = page.editTime()
                         duration = calcDuration(lastEdit)
+                        c = callback.Callback() #(re)init de c
                         for m in motif:
                             parser = re.compile(r'\{\{' + m + r'.*?\}\}(?P<fin>\r\n|\n|\ )',re.I | re.U | re.DOTALL)
                             searchResult = parser.search(pageTemp) #On cherche si le motif {{m}} existe dans la page
@@ -91,7 +92,7 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
 def motifFinder(catname):
 	motif = []
 	if catname == u'Événement récent':
-		motif = [u'(Section )?[Éé]v[éè]nement[_ ]récent']
+		motif = [u'(Section )?[Éé]v[éè]nements?[_ ]récents?']
 
 	elif catname == u'Mort récente':
 		motif = [u'Mort[_ ]récente?', u'Décès[_ ]récent']
