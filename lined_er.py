@@ -116,13 +116,13 @@ def motifFinder(catname):
 
 #Retourne la date avant laquelle on considère obsolète l'usage du modèle
 def calcLimit(delay):
-	today = datetime.today()
+	today = datetime.utcnow()
 	limite = today - timedelta(seconds=delay)
 	return limite
 	
 #Retourne le temps écoulé entre une date et le jour courant
 def calcDuration(date):
-	today = datetime.today()
+	today = datetime.utcnow()
 	duration = today - date
 	return duration
 	
