@@ -54,8 +54,9 @@ def inter(page):
         else:
             allList.append(iw)
 
-    if page.get() != pageTemp:
+    pageTemp = updateWPlink(page,pageTemp)
 
+    if page.get() != pageTemp:
         page.put(pageTemp,summary[pageLang])
 
 
@@ -106,11 +107,13 @@ def inter(page):
                 if not lnk in localEwList:
                     pageLocTemp += '\n' + lnk
 
+            pageLocTemp = updateWPlink(pageLoc,pageLocTemp)
+
             if pageLoc.get() != pageLocTemp:
                 pageLoc.put(pageLocTemp, summary[a.site.lang])
 
 
-
+#Récupération de la liste des interwikis "réguliers"
 def getInterwiki(page):
     text = page.text
     for linkmatch in pywikibot.link_regex.finditer(pywikibot.removeDisabledParts(text)):
@@ -123,7 +126,7 @@ def getInterwiki(page):
         except pywikibot.Error:
             continue
 
-
+#Récupération de la liste des interwikis "exotiques"
 def getExterwiki(page):
     text = page.text
     extraLang = ['nl','de']
@@ -131,7 +134,29 @@ def getExterwiki(page):
     for el in extraLang:
         exIw = re.search(r"\[\[" + el + "\:(?P<ln>.*)\]\]", text)
         if exIw != None:
-            yield "[[" + el + ":" + exIw.group('ln') + "]]"
+            yield u"[[" + el + ":" + exIw.group('ln') + "]]"
+
+
+#Mise à jour de l'interwiki (éventuel) vers Wikipédia
+def updateWPlink(page,pageTemp):
+    wpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),page.title())
+    wpLink = ''
+
+    if wpPage.exists():
+        wpLink = u"[[wp:" + wpPage.title() + "]]"
+                         
+    m = re.search(r"\[\[wp\:(?P<ln>.*)\]\]",pageTemp)
+
+    if m != None:
+        oldWpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),m.group('ln'))
+        if not oldWpPage.exists():
+            pageTemp.replace(m.group(),wpLink)
+
+    else:
+        pageTemp += '\n' + wpLink
+
+    return pageTemp
+
 
 
 
@@ -140,7 +165,7 @@ def getExterwiki(page):
 def main():
     timeStart = time.time()
     lang = 'fr'
-    page = pywikibot.Page(site[lang],u'Chat')
+    page = pywikibot.Page(site[lang],u'Utilisateur:Linedwell/Brouillon')
     inter(page)
     timeEnd = time.time()
 
