@@ -9,8 +9,8 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import re
 import time
-import locale
-locale.setlocale(locale.LC_TIME,'fr_fr') #remplacer 'fr_fr' par 'fra_fra' sur Windows
+#import locale
+#locale.setlocale(locale.LC_TIME,'fr_fr') #remplacer 'fr_fr' par 'fra_fra' sur Windows
 from datetime import datetime
 
 import pywikibot
@@ -62,9 +62,9 @@ def rawMaker(prevRaw, newNumber):
     oldNumber = int(prevRaw['number'])
     
     dateObj = datetime.today()
-    date = dateObj.strftime('%d %B %Y').lstrip('0') #suppression du 0 initial
+    date = dateObj.strftime('%d-%m-%Y').lstrip('0') #suppression du 0 initial
     
-    oldDateObj = datetime.strptime(oldDate,'%d%B%Y')
+    oldDateObj = datetime.strptime(oldDate,'%d-%m-%Y')
     
     durationObj = dateObj - oldDateObj
     duration = str(durationObj.days) + ' jours'
