@@ -11,20 +11,35 @@ import pywikibot
 from pywikibot import pagegenerators
 import time
 
+import callback
 import lined_log
 
 # Déclarations
 site = pywikibot.getSite('fr','wikipedia')
-nbrModif = 0
-nbrTotal = 0
 
 def admissibilite(pagesList):
     log = u''
+    nbAdd = 0
+    nbRem = 0
     backupList = loadBackupFile()
     actualList = titleList(pagesList)
 
     addList = list(set(actualList) - set(backupList))
     remList = list(set(backupList) - set(actualList))
+
+    for add in addList:
+        log += u"* {{Vert|'''+'''}} ajout du bandeau sur [[" + add + "]]\n"
+        nbAdd += 1
+
+    for rem in remList:
+        log += u"* {{Rouge|'''-'''}} retrait du bandeau sur [[" + rem + "]]\n"
+        nbRem += 1
+
+    #saveBackupFile(actualList)
+
+    summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + ")"
+
+    return log, summary
 
 #Return the content of the given category (only pages from namespace 0)
 def getCategoryContent(catname):
@@ -45,14 +60,14 @@ def titleList(pagesList):
 
 #Save a list to the backup file
 def saveBackupFile(list):
-    file = open("_admissibilite.bak","w+")
+    file = open('_admissibilite.bak','w+')
     for s in list:
         file.write(s.encode('utf-8') + '\n')
     file.close()
 
 #Load a list from the backup file
 def loadBackupFile():
-    file = open("_admissibilite.bak","r")
+    file = open('_admissibilite.bak','r')
     oldList = file.readlines()
     oldList = [s.strip('\n') for s in oldList]
     oldList = [s.decode('utf-8') for s in oldList]
@@ -67,8 +82,8 @@ def main():
     timeStart = time.time()
     catname = u"Tous les articles dont l'admissibilité est à vérifier"
     pagesList = getCategoryContent(catname)
-    log += admissibilite(pagesList)
-    ###
+    log, summary = admissibilite(pagesList)
+    lined_log.editLog(site,log,summary=summary,ar=False)
     timeEnd = time.time()
 
 if __name__ == "__main__":
