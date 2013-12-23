@@ -18,7 +18,7 @@ summaryHeader = {
 
 
 #Met à jour la page de journalisation du bot
-def editLog(site,log,page='Utilisateur:LinedBot/Log',ar=True):
+def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True):
     if log != '':
         family = site.family.name
         year = time.strftime('%Y')
@@ -33,8 +33,12 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',ar=True):
         if pageLogTemp.find(u'== ' + time.strftime('%Y-%m-%d') + ' ==') != -1: pageLogTemp += '\n' + log
         else :
             pageLogTemp += '\n' + u'=== ' + time.strftime('%Y-%m-%d') + ' ===\n' + log
-        summary = summaryHeader[family] + u"Mise à jour du journal (OK:" + str(nbrModif) + ", KO:" + str(nbrTotal - nbrModif) +")"
-        pageLog.put(pageLogTemp,summary)
+        if summary == '':
+            summary = summaryHeader[family] + u"Mise à jour du journal (OK:" + str(nbrModif) + ", KO:" + str(nbrTotal - nbrModif) +")"
+        else:
+            summary= summaryHeader[family] + summary
+
+    pageLog.put(pageLogTemp,summary)
 
 #Archive la page de journalisation du bot et réinitialise la page pour la nouvelle année
 def archive(site,pageLog,pageArchive):
