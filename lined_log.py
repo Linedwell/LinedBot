@@ -38,7 +38,7 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True):
         else:
             summary= summaryHeader[family] + summary
 
-    pageLog.put(pageLogTemp,summary)
+        pageLog.put(pageLogTemp,summary)
 
 #Archive la page de journalisation du bot et réinitialise la page pour la nouvelle année
 def archive(site,pageLog,pageArchive):

@@ -35,7 +35,7 @@ def admissibilite(pagesList):
         log += u"* {{Rouge|'''-'''}} retrait du bandeau sur [[" + rem + "]]\n"
         nbRem += 1
 
-    #saveBackupFile(actualList)
+    saveBackupFile(actualList)
 
     summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + ")"
 
@@ -83,7 +83,7 @@ def main():
     catname = u"Tous les articles dont l'admissibilité est à vérifier"
     pagesList = getCategoryContent(catname)
     log, summary = admissibilite(pagesList)
-    lined_log.editLog(site,log,summary=summary,ar=False)
+    lined_log.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False)
     timeEnd = time.time()
 
 if __name__ == "__main__":
