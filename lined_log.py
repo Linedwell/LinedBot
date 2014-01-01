@@ -42,6 +42,7 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True):
 
 #Archive la page de journalisation du bot et réinitialise la page pour la nouvelle année
 def archive(site,pageLog,pageArchive):
+    family = site.family.name
 	pageLog.move(pageArchive.title(),u'Archivage annuel') #Déplacement de pageLog vers pageArchive
 	pageArchive = pywikibot.Page(site,pageArchive.title())
 	
