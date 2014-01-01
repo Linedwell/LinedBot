@@ -43,17 +43,17 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True):
 #Archive la page de journalisation du bot et réinitialise la page pour la nouvelle année
 def archive(site,pageLog,pageArchive):
     family = site.family.name
-	pageLog.move(pageArchive.title(),u'Archivage annuel') #Déplacement de pageLog vers pageArchive
-	pageArchive = pywikibot.Page(site,pageArchive.title())
+    pageLog.move(pageArchive.title(),u'Archivage annuel') #Déplacement de pageLog vers pageArchive
+    pageArchive = pywikibot.Page(site,pageArchive.title())
 	
-	#Retrait du modèle de mise à jour de pageArchive
-	pageArchiveTemp = pageArchive.get(get_redirect=True)
-	pageArchiveTemp = pageArchiveTemp.replace(u'{{Mise à jour bot|Linedwell}}\n','',1)
-	summary = summaryHeader[family] + u"Retrait de {{Mise à jour bot}}, page d'archive n'étant plus mise à jour"
-	pageArchive.put(pageArchiveTemp,summary,force=True)
+    #Retrait du modèle de mise à jour de pageArchive
+    pageArchiveTemp = pageArchive.get(force=True,get_redirect=True)
+    pageArchiveTemp = pageArchiveTemp.replace(u'{{Mise à jour bot|Linedwell}}\n','',1)
+    summary = summaryHeader[family] + u"Retrait de {{Mise à jour bot}}, page d'archive n'étant plus mise à jour"
+    pageArchive.put(pageArchiveTemp,summary,force=True)
 	
-	pageLogTemp = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Sommaire|niveau=1}}\n' #On réinsère le modèle de màj sur pageLog
-	return pageLogTemp
+    pageLogTemp = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Sommaire|niveau=1}}\n' #On réinsère le modèle de màj sur pageLog
+    return pageLogTemp
 
 def setValues(nbTotal, nbModif):
 	global nbrTotal, nbrModif
