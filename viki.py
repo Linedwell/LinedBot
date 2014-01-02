@@ -26,15 +26,12 @@ def newPages(all=False):
     global nbrModif, nbrTotal
     
     log = u''
-    editBool = False
     
     homonCat =  pywikibot.Category(site,u'Homonymie')
     ebaucheCat = pywikibot.Category(site,u'Ébauche')
     ebaucheCat = set(ebaucheCat.subcategories(recurse=3))
     hiddenCat = pywikibot.Category(site,u'Catégorie cachée')
     hiddenCat  = set(hiddenCat.subcategories())
-    
-    
     
     deadendPagesList = list(pagegenerators.DeadendPagesPageGenerator(site=site))
     lonelyPagesList = list(pagegenerators.LonelyPagesPageGenerator(site=site))
@@ -107,7 +104,7 @@ def newPages(all=False):
                     if c.error == None:
                         nbrModif += 1
 
-                    log +=u'*' + '{{../ExtLinker|' + page.title() + u'}} : Mise à jour du bandeau {{m|maintenance}} avec les paramètres suivants : ' + job + '\n'
+                    log +=u'*' + '{{Utilisateur:LinedBot/ExtLinker|' + page.title() + u'}} : Mise à jour du bandeau {{m|maintenance}} avec les paramètres suivants : ' + job + '\n'
 
     return log
 
@@ -145,7 +142,6 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, 'a', ['all'])
     except getopt.GetoptError:
-        usage()
         sys.exit(2)
 
     for opt, arg in opts:
@@ -157,7 +153,7 @@ def main(argv):
     log += newPages(all)
     timeEnd = time.time()
     lined_log.setValues(nbrTotal,nbrModif)
-    lined_log.editLog(site,log,ar=False)
+    lined_log.editLog(site,log)
     print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
 
 
