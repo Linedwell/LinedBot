@@ -142,7 +142,6 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, 'a', ['all'])
     except getopt.GetoptError:
-        usage()
         sys.exit(2)
 
     for opt, arg in opts:
