@@ -81,7 +81,7 @@ def newPages(all=False):
                     jobList.append(u'impasse')
                 
                 # si la page fait plus de 2000 octets et ne contient aucun lien externe
-                if len(pageTemp) < 2000 and len(list(page.extlinks())) == 0:
+                if len(pageTemp) > 2000 and len(list(page.extlinks())) == 0:
                     jobList.append(u'sourcer')
 
 
