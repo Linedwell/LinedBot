@@ -80,9 +80,13 @@ def newPages(all=False):
                 if page in deadendPagesList:
                     jobList.append(u'impasse')
                 
-                
-                pageTemp, oldJobList = removeBanner(pageTemp)
+                # si la page fait plus de 2000 octets et ne contient aucun lien externe
+                if len(pageTemp) > 2000 and len(list(page.extlinks())) == 0:
+                    jobList.append(u'sourcer')
 
+
+
+                pageTemp, oldJobList = removeBanner(pageTemp)
                 jobList = updateJobList(oldJobList, jobList)
                 job = u''
 
@@ -124,7 +128,7 @@ def removeBanner(pageTemp):
 
 # Retourne une jobList mise à jour (catégories appliquées par le bot + utilisateurs)
 def updateJobList(oldJobList, newJobList):
-    botJobList = [u'catégoriser',u'impasse',u'orphelin']
+    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'sourcer']
     
     tempJobList = list(oldJobList)
     for j in botJobList:
