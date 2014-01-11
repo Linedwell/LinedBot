@@ -6,11 +6,15 @@ import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import time
+from datetime import date, datetime, timedelta
+
 import pywikibot
 
 #Variables globales
 
 site = pywikibot.getSite()
+month = [u'',u'Janvier',u'Février',u'Mars',u'Avril',u'Mai',u'Juin',u'Juillet',u'Août',u'Septembre',u'Octobre',u'Novembre',u'Décembre']
+
 summaryHeader = {
     'wikipedia' : u'[[WP:Bot|Robot]] : ',
     'vikidia' : u'[[VD:Robot|Robot]] : ',
@@ -18,19 +22,23 @@ summaryHeader = {
 
 
 #Met à jour la page de journalisation du bot
-def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True):
+def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True,cl=False):
     if log != '':
         family = site.family.name
         year = time.strftime('%Y')
-        month = [u'',u'Janvier',u'Février',u'Mars',u'Avril',u'Mai',u'Juin',u'Juillet',u'Août',u'Septembre',u'Octobre',u'Novembre',u'Décembre']
         pageLog = pywikibot.Page(site,page)
         pageArchive = pywikibot.Page(site,pageLog.title() + '/' + str(int(year) - 1))
+        
         if ar and not pageArchive.exists():
             pageLogTemp = archive(site,pageLog,pageArchive)
         else:
             pageLogTemp = pageLog.get()
+        
+        if cl > 0:
+            pageLogTemp = clean(pageTemp,cl)
+
         if pageLogTemp.find(u'== ' + month[int(time.strftime('%m'))] + ' ==') == -1: pageLogTemp += u'\n\n== ' + month[int(time.strftime('%m'))] + ' =='
-        if pageLogTemp.find(u'== ' + time.strftime('%Y-%m-%d') + ' ==') != -1: pageLogTemp += '\n' + log
+        if pageLogTemp.find(u'=== ' + time.strftime('%Y-%m-%d') + ' ===') != -1: pageLogTemp += '\n' + log
         else :
             pageLogTemp += '\n' + u'=== ' + time.strftime('%Y-%m-%d') + ' ===\n' + log
         if summary == '':
@@ -54,6 +62,18 @@ def archive(site,pageLog,pageArchive):
 	
     pageLogTemp = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Sommaire|niveau=1}}\n' #On réinsère le modèle de màj sur pageLog
     return pageLogTemp
+
+#Supprime les sections plus vieilles que X jours
+def clean(pageTemp, days=30):
+    limit = datetime.utcnow() - timedelta(days=days)
+    date = limit.strftime("%Y-%m-%d")
+    index = pageTemp.find(u'=== ' + date + ' ===')
+    if index != -1:
+        pageHeader = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Palette|Admissibilité à vérifier}}\n{{Sommaire|niveau=1}}\n\n'
+        monthSection = u'== ' + month[int(limit.strftime('%m'))] + ' ==\n'
+        
+        pageTemp = pageHeader + monthSection + pageTemp[index:]
+    return pageTemp
 
 def setValues(nbTotal, nbModif):
 	global nbrTotal, nbrModif
