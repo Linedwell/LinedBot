@@ -35,7 +35,7 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True,cl=False
             pageLogTemp = pageLog.get()
         
         if cl > 0:
-            pageLogTemp = clean(pageTemp,cl)
+            pageLogTemp = clean(pageLogTemp,cl)
 
         if pageLogTemp.find(u'== ' + month[int(time.strftime('%m'))] + ' ==') == -1: pageLogTemp += u'\n\n== ' + month[int(time.strftime('%m'))] + ' =='
         if pageLogTemp.find(u'=== ' + time.strftime('%Y-%m-%d') + ' ===') != -1: pageLogTemp += '\n' + log
