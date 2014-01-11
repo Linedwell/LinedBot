@@ -80,10 +80,12 @@ def loadBackupFile():
 def main():
     log = u''
     timeStart = time.time()
+
     catname = u"Tous les articles dont l'admissibilité est à vérifier"
     pagesList = getCategoryContent(catname)
     log, summary = admissibilite(pagesList)
-    lined_log.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False)
+    lined_log.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False,cl=15)
+    
     timeEnd = time.time()
 
 if __name__ == "__main__":
