@@ -37,7 +37,7 @@ def admissibilite(pagesList):
 
     saveBackupFile(actualList)
 
-    summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + ")"
+    summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + "; =" + str(len(actualList)) + ")"
 
     return log, summary
 
@@ -85,7 +85,7 @@ def main():
     pagesList = getCategoryContent(catname)
     log, summary = admissibilite(pagesList)
     lined_log.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False,cl=15)
-    
+    print summary
     timeEnd = time.time()
 
 if __name__ == "__main__":
