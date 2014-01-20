@@ -12,7 +12,7 @@ from pywikibot import pagegenerators
 import time
 
 import callback
-import lined_log
+import logger
 
 # Déclarations
 site = pywikibot.getSite('fr','wikipedia')
@@ -84,7 +84,7 @@ def main():
     catname = u"Tous les articles dont l'admissibilité est à vérifier"
     pagesList = getCategoryContent(catname)
     log, summary = admissibilite(pagesList)
-    lined_log.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False,cl=15)
+    logger.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False,cl=15)
     print summary
     timeEnd = time.time()
 

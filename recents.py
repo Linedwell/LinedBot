@@ -15,7 +15,7 @@ from pywikibot import pagegenerators
 
 import callback
 import ignoreList
-import lined_log
+import logger
 
 # Déclarations
 site = pywikibot.getSite('fr','wikipedia')
@@ -152,8 +152,8 @@ def main():
     log += crawlerCat(u'Article en travaux',864000,False,True) #10 jours, inclusion des PdD associées aux articles
     log += crawlerCat(u'Article en cours',432000,False,True) #5 jours, inclusion des PdD associées aux articles
     timeEnd = time.time()
-    lined_log.setValues(nbrTotal,nbrModif)
-    lined_log.editLog(site,log)
+    logger.setValues(nbrTotal,nbrModif)
+    logger.editLog(site,log)
 
     print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
 
