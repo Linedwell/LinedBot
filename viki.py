@@ -13,7 +13,7 @@ import pywikibot
 from pywikibot import pagegenerators
 
 import callback
-import lined_log
+import logger
 
 
 # Déclarations
@@ -156,8 +156,8 @@ def main(argv):
     timeStart = time.time()
     log += newPages(all)
     timeEnd = time.time()
-    lined_log.setValues(nbrTotal,nbrModif)
-    lined_log.editLog(site,log)
+    logger.setValues(nbrTotal,nbrModif)
+    logger.editLog(site,log)
     print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
 
 
