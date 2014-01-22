@@ -10,7 +10,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import pywikibot
 from pywikibot import pagegenerators
 import time
-
+import shutil
 import callback
 import logger
 
@@ -80,7 +80,7 @@ def loadBackupFile():
 def main():
     log = u''
     timeStart = time.time()
-
+    shutil.copyfile('_admissibilite.bak','_admissibilite.bak.bak')
     catname = u"Tous les articles dont l'admissibilité est à vérifier"
     pagesList = getCategoryContent(catname)
     log, summary = admissibilite(pagesList)

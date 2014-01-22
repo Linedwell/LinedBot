@@ -15,7 +15,7 @@ import itertools
 # Déclarations
 site = {
 	'fr' : pywikibot.getSite('fr','vikidia'),
-    'en' : pywikibot.getSite('simple','wikipedia'),
+    'en' : pywikibot.getSite('en','vikidia'),
 	'es' : pywikibot.getSite('es','vikidia'),
 	'it' : pywikibot.getSite('it','vikidia'),
 	'ru' : pywikibot.getSite('ru','vikidia'),
@@ -84,17 +84,18 @@ def inter(page):
                                      % pageLoc.title(asLink=True))
         else:
         
-            #retrait des interviki non valides (non liés depuis le viki source)
+            #retrait des interviki non valides
             for liw in localIwList:
-                if not liw in linkList:
+                pageExt = pywikibot.Page(liw)
+                if not pageExt.exists():
                     link = liw.astext()
                     pageLocTemp = pageLocTemp.replace(link+'\n','')
                     pageLocTemp = pageLocTemp.replace(link,'') #necessaire si dernier lien
 
-            for lew in localEwList:
-                if not lew in ewList:
-                    pageLocTemp = pageLocTemp.replace(lew+'\n','')
-                    pageLocTemp = pageLocTemp.replace(lew,'') #necessaire si dernier lien
+#            for lew in localEwList:
+#                if not lew in ewList:
+#                    pageLocTemp = pageLocTemp.replace(lew+'\n','')
+#                    pageLocTemp = pageLocTemp.replace(lew,'') #necessaire si dernier lien
 
 
             #ajout des nouveaux interviki
@@ -164,8 +165,8 @@ def updateWPlink(page,pageTemp):
 #Exécution
 def main():
     timeStart = time.time()
-    lang = 'fr'
-    page = pywikibot.Page(site[lang],u'Utilisateur:Linedwell/Brouillon')
+    lang = 'en'
+    page = pywikibot.Page(site[lang],u'Italy')
     inter(page)
     timeEnd = time.time()
 
