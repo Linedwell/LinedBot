@@ -139,7 +139,7 @@ def removeBanner(pageTemp):
 
 # Retourne une jobList mise à jour (catégories appliquées par le bot + utilisateurs)
 def updateJobList(oldJobList, newJobList):
-    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'source']
+    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'sourcer']
     
     tempJobList = list(oldJobList)
     for j in botJobList:
