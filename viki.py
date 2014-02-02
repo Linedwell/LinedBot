@@ -87,9 +87,11 @@ def newPages(all=False):
                     if page in deadendPagesList:
                         jobList.append(u'impasse')
                     
+                    """
                     # si la page fait plus de 2000 octets et ne contient aucun lien externe
                     if len(pageTemp) > 2000 and len(list(page.extlinks())) == 0:
                         jobList.append(u'sourcer')
+                    """
             
                 else:
                     print u'Skipping [[' + page.title() + ']], page in ignore list.'
@@ -137,7 +139,7 @@ def removeBanner(pageTemp):
 
 # Retourne une jobList mise à jour (catégories appliquées par le bot + utilisateurs)
 def updateJobList(oldJobList, newJobList):
-    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'sourcer']
+    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'source']
     
     tempJobList = list(oldJobList)
     for j in botJobList:
