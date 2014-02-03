@@ -27,11 +27,17 @@ def newPages(all=False):
     
     log = u''
     
+    ignorePage = pywikibot.Page(site,u'Utilisateur:LinedBot/Ignore')
+    ignoreList = list(ignorePage.linkedPages())
+
+    
     homonCat =  pywikibot.Category(site,u'Homonymie')
     ebaucheCat = pywikibot.Category(site,u'Ébauche')
     ebaucheCat = set(ebaucheCat.subcategories(recurse=3))
     hiddenCat = pywikibot.Category(site,u'Catégorie cachée')
     hiddenCat  = set(hiddenCat.subcategories())
+    
+    concoursCat = pywikibot.Category(site,'Article VikiConcours')
     
     deadendPagesList = list(pagegenerators.DeadendPagesPageGenerator(site=site))
     lonelyPagesList = list(pagegenerators.LonelyPagesPageGenerator(site=site))
@@ -57,33 +63,40 @@ def newPages(all=False):
             pywikibot.output(u"Page %s is locked; skipping."
                              % page.title(asLink=True))
         else:
-    
-            # On ne s'occupe de la page que si elle n'est pas une homonymie
-            catTest = page.categories()
-            if not homonCat in catTest:
-                
-                jobList = []
-                
-                # s'il existe des références, on retire le job 'orphelin'
-                if page in lonelyPagesList:
-                    jobList.append(u'orphelin')
-                
-                # s'il n'existe aucune catégorie (directe), on ajoute le job 'catégoriser'
-                cat = page.categories()
-                realCat = list(set(cat) - set(hiddenCat) - set(ebaucheCat))
             
-                nbCat = len(list(realCat))
-                if nbCat == 0:
-                    jobList.append(u'catégoriser')
+            
+            # On ne s'occupe de la page que si elle n'est ni une homonymie ni une page du VikiConcours
+            pageCat = page.categories()
+            if not homonCat in pageCat and not concoursCat in pageCat:
                 
-                # si la page ne pointe vers aucune autre, on l'indique en impasse
-                if page in deadendPagesList:
-                    jobList.append(u'impasse')
+                #On ne traite l'ajout de bandeau que si la page n'est pas ignorée
+                jobList = []
+                if not page in ignoreList:
+                    
+                    # s'il existe des références, on retire le job 'orphelin'
+                    if page in lonelyPagesList:
+                        jobList.append(u'orphelin')
+                    
+                    # s'il n'existe aucune catégorie (directe), on ajoute le job 'catégoriser'
+                    cat = page.categories()
+                    realCat = list(set(cat) - set(hiddenCat) - set(ebaucheCat))
                 
-                # si la page fait plus de 2000 octets et ne contient aucun lien externe
-                if len(pageTemp) > 2000 and len(list(page.extlinks())) == 0:
-                    jobList.append(u'sourcer')
-
+                    nbCat = len(list(realCat))
+                    if nbCat == 0:
+                        jobList.append(u'catégoriser')
+                    
+                    # si la page ne pointe vers aucune autre, on l'indique en impasse
+                    if page in deadendPagesList:
+                        jobList.append(u'impasse')
+                    
+                    """
+                    # si la page fait plus de 2000 octets et ne contient aucun lien externe
+                    if len(pageTemp) > 2000 and len(list(page.extlinks())) == 0:
+                        jobList.append(u'sourcer')
+                    """
+            
+                else:
+                    print u'Skipping [[' + page.title() + ']], page in ignore list.'
 
 
                 pageTemp, oldJobList = removeBanner(pageTemp)
