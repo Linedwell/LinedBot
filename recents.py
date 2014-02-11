@@ -58,7 +58,7 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                         duration = calcDuration(lastEdit)
                         c = callback.Callback() #(re)init de c
                         for m in motif:
-                            parser = re.compile(r'\{\{' + m + r'.*?\}\}(\r\n|\n|\ |(?={{))',re.I | re.U | re.DOTALL)
+                            parser = re.compile(r'{{' + m + r'.*?}}(\r\n|\n|\ |(?={{))',re.I | re.U | re.DOTALL)
                             searchResult = parser.search(pageTemp) #On cherche si le motif {{m}} existe dans la page
                             if searchResult:
                                 templateResult = searchResult.group()
