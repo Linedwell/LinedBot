@@ -61,7 +61,7 @@ def pasRemoveSection(pageTemp):
     pageTempEnd = delimiterEnd + pageTempEnd
     
     section = re.split('(==\s*\d* \w*\s*==\n)',pageTempBody,flags=re.U)
-    parser = re.compile(ur'\{\{En-tête section PàS\|.*?\}\}\s*\{\{Boîte déroulante\/début\|.*?\}\}', re.U | re.I | re.M)
+    parser = re.compile(ur'{{En-tête section PàS\|.*?}}\s*{{Boîte déroulante\/début\|.*?}}', re.U | re.I | re.M)
     
     pageTempBody = u''
     count = 0

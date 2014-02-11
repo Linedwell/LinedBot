@@ -129,7 +129,7 @@ def newPages(all=False):
 
 # Retrait du bandeau si besoin
 def removeBanner(pageTemp):
-    parser = re.compile(r'\{\{Maintenance\|job=(?P<jb>.*?)\|.*?\}\}(?P<fin>\r\n|\n|\ )',re.I | re.U | re.DOTALL)
+    parser = re.compile(r'{{Maintenance\|job=(?P<jb>.*?)\|.*?}}(?P<fin>\r\n|\n|\ )',re.I | re.U | re.DOTALL)
     searchResult = parser.search(pageTemp)
     oldJobList = []
     if searchResult:
