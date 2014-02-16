@@ -69,7 +69,7 @@ def clean(pageTemp, days=30):
     date = limit.strftime("%Y-%m-%d")
     index = pageTemp.find(u'=== ' + date + ' ===')
     if index != -1:
-        pageHeader = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Palette|Admissibilité à vérifier}}\n{{Sommaire|niveau=2}}\n\n'
+        pageHeader = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Palette|Admissibilité à vérifier}}\n{{Sommaire|niveau=2}}\n{{/graphe}}\n\n'
         monthSection = u'== ' + month[int(limit.strftime('%m'))] + ' ==\n'
         
         pageTemp = pageHeader + monthSection + pageTemp[index:]
