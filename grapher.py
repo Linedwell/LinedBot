@@ -11,12 +11,10 @@ import pywikibot
 
 # Déclarations
 site = pywikibot.getSite('fr','wikipedia')
-page = pywikibot.Page(site, u'Utilisateur:LinedBot/Sandbox')
+page = pywikibot.Page(site, u"Projet:Maintenance/Suivi d'admissibilité/graphe")
 
 # Met à jour le graphe de la page passée en paramètre avec la nouvelle valeur
-def update(page,val):
-    pageTemp = page.get()
-    
+def update(val):
     last_values = file("_grapher.log","r").readlines()[-14:]
     last_values = [int(el.strip()) for el in last_values]
     last_values.append(val)
@@ -27,7 +25,7 @@ def update(page,val):
     step = ymax - ymin
     step2= 100
 
-    template = """{{Graphique polygonal
+    fields = """
  | coul_fond = white
  | largeur = 500
  | hauteur = 350
@@ -61,8 +59,7 @@ def update(page,val):
  | S01V14 = {val14}
  | S01V15 = {val15}
  | points = oui
-}}
-    """
+"""
     
     context = {
         "ymax" : ymax,
@@ -85,20 +82,17 @@ def update(page,val):
         "val14": last_values[13],
         "val15": last_values[14],
 
-}
+    }
+    
+    template = u"<noinclude>{{Mise à jour bot|Linedwell}}</noinclude>\n<center>\n{{Graphique polygonal" + fields.format(**context) + u"}}\n\n'''Évolution au cours des deux dernières semaines'''\n</center>"
+    summary = "[[WP:Bot|Robot]] : mise à jour"
 
-    print template.format(**context)
+    page.put(template, summary)
     
     gr_log = open("_grapher.log","w")
     for val in last_values:
-        gr_log.write(val + '\n')
+        gr_log.write(str(val) + '\n')
     gr_log.close()
-
-
-
-#Exécution
-def main():
-    update(page,3700)
 
 if __name__ == "__main__":
     try:

@@ -13,6 +13,7 @@ import time
 import shutil
 import callback
 import logger
+import grapher
 
 # Déclarations
 site = pywikibot.getSite('fr','wikipedia')
@@ -23,6 +24,7 @@ def admissibilite(pagesList):
     nbRem = 0
     backupList = loadBackupFile()
     actualList = titleList(pagesList)
+    total = len(actualList)
 
     addList = list(set(actualList) - set(backupList))
     remList = list(set(backupList) - set(actualList))
@@ -37,9 +39,9 @@ def admissibilite(pagesList):
 
     saveBackupFile(actualList)
 
-    summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + "; =" + str(len(actualList)) + ")"
+    summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + "; =" + str(total) + ")"
 
-    return log, summary
+    return log, summary, total
 
 #Return the content of the given category (only pages from namespace 0)
 def getCategoryContent(catname):
@@ -83,7 +85,8 @@ def main():
     shutil.copyfile('_admissibilite.bak','_admissibilite.bak.bak')
     catname = u"Tous les articles dont l'admissibilité est à vérifier"
     pagesList = getCategoryContent(catname)
-    log, summary = admissibilite(pagesList)
+    log, summary, total = admissibilite(pagesList)
+    grapher.update(total)
     logger.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False,cl=15)
     print summary
     timeEnd = time.time()
