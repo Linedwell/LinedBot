@@ -140,13 +140,14 @@ def getExterwiki(page):
 
 #Mise à jour de l'interwiki (éventuel) vers Wikipédia
 def updateWPlink(page,pageTemp):
+    pageTemp = pageTemp.replace("{{FULLPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
     wpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),page.title())
     wpLink = ''
 
     if wpPage.exists():
         wpLink = u"[[wp:" + wpPage.title() + "]]"
                          
-    m = re.search(r"\[\[wp\:(?P<ln>.*)\]\]",pageTemp)
+    m = re.search(r"\[\[wp\:(?P<ln>.*?)\]\]",pageTemp)
 
     if m != None:
         oldWpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),m.group('ln'))
@@ -165,9 +166,11 @@ def updateWPlink(page,pageTemp):
 #Exécution
 def main():
     timeStart = time.time()
-    lang = 'en'
-    page = pywikibot.Page(site[lang],u'Italy')
-    inter(page)
+    source = pywikibot.getSite('fr','vikidia')
+    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"Amos")
+    for page in pagesList:
+        print page.title()
+        inter(page)
     timeEnd = time.time()
 
 if __name__ == "__main__":
