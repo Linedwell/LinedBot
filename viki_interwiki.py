@@ -166,8 +166,8 @@ def updateWPlink(page,pageTemp):
 #Exécution
 def main():
     timeStart = time.time()
-    source = pywikibot.getSite('fr','vikidia')
-    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"Amos")
+    source = pywikibot.getSite('it','vikidia')
+    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"")
     for page in pagesList:
         print page.title()
         inter(page)
