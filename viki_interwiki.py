@@ -141,6 +141,7 @@ def getExterwiki(page):
 #Mise à jour de l'interwiki (éventuel) vers Wikipédia
 def updateWPlink(page,pageTemp):
     pageTemp = pageTemp.replace("{{FULLPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
+    pageTemp = pageTemp.replace("{{PAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
     wpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),page.title())
     wpLink = ''
 
@@ -166,7 +167,7 @@ def updateWPlink(page,pageTemp):
 #Exécution
 def main():
     timeStart = time.time()
-    source = pywikibot.getSite('it','vikidia')
+    source = pywikibot.getSite('fr','vikidia')
     pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"")
     for page in pagesList:
         print page.title()
