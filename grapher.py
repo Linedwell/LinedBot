@@ -21,7 +21,7 @@ def update(val):
     
     #On fixe ymax (resp. ymin) à la valeur extrème trouvée +100 (resp. -100) arrondi à la centaine inférieure
     ymax = max(last_values) - max(last_values) % 100 + 100
-    ymin = min(last_values) - min(last_values) % 100 - 100
+    ymin = min(last_values) - min(last_values) % 100
     step = ymax - ymin
     step2= 100
 
