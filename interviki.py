@@ -93,10 +93,10 @@ def inter(page):
                     pageLocTemp = pageLocTemp.replace(link+'\n','')
                     pageLocTemp = pageLocTemp.replace(link,'') #necessaire si dernier lien
 
-#            for lew in localEwList:
-#                if not lew in ewList:
-#                    pageLocTemp = pageLocTemp.replace(lew+'\n','')
-#                    pageLocTemp = pageLocTemp.replace(lew,'') #necessaire si dernier lien
+            for lew in localEwList:
+                if not lew in ewList:
+                    pageLocTemp = pageLocTemp.replace(lew+'\n','')
+                    pageLocTemp = pageLocTemp.replace(lew,'') #necessaire si dernier lien
 
 
             #ajout des nouveaux interviki
