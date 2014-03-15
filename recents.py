@@ -149,8 +149,8 @@ def main():
     timeStart = time.time()
     log += crawlerCat(u'Événement récent',1296000,1,False) #15 jours, inclusion des sous-catégories de 1er niveau
     log += crawlerCat(u'Catégorie:Wikipédia:Triple révocation',2592000,False,True) #30 jours, inclusion des PdD associées aux articles
-    log += crawlerCat(u'Article en travaux',864000,False,True) #10 jours, inclusion des PdD associées aux articles
-    log += crawlerCat(u'Article en cours',432000,False,True) #5 jours, inclusion des PdD associées aux articles
+    log += crawlerCat(u'Article en travaux',1296000,False,True) #15 jours, inclusion des PdD associées aux articles
+    log += crawlerCat(u'Article en cours',604800,False,True) #7 jours, inclusion des PdD associées aux articles
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
