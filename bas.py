@@ -14,7 +14,7 @@ from datetime import date, datetime, timedelta
 # Déclarations
 site = pywikibot.getSite('fr','vikidia')
 page = pywikibot.Page(site,u"Vikidia:Bac à sable")
-template = u"{{subst:Bac à sable}}"
+template = u"{{subst:Vikidia:Bac à sable/Zéro}}"
 summary = u"[[Vikidia:Robot|Robot]] : Nettoyage du bac à sable"
 delay = 30
 
