@@ -113,7 +113,9 @@ def newPages(all=False):
                         job = ','.join(jobList)
                         banner = u'{{Maintenance|job=' + job + '|date=~~~~~}}\n\n'
                         pageTemp = banner + pageTemp
-                    summary = u'[[VD:Robot|Robot]] : Mise à jour du bandeau de maintenance.'
+                        summary = u'[[VD:Robot|Robot]] : Mise à jour du bandeau de maintenance.'
+                    else:
+                        summary = u'[[VD:Robot|Robot]] : Retrait du bandeau de maintenance.'
 
                     c = callback.Callback()
                     page.put(pageTemp,summary,callback=c)
