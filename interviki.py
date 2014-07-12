@@ -22,11 +22,11 @@ site = {
 }
 
 summary = {
-    'fr' : u'[[Vikidia:Robot|Robot]] : mise à jour des interwikis',
-    'it' : u'Bot : interwiki update',
-    'es' : u'Bot : interwiki update',
-    'en' : u'Bot : interwiki update',
-    'ru' : u'Bot : interwiki update',
+    'fr' : u"[[Vikidia:Robot|Robot]] : mise à jour des interwikis",
+    'it' : u"Bot : interwiki update",
+    'es' : u"Bot : interwiki update",
+    'en' : u"Bot : interwiki update",
+    'ru' : u"Bot : interwiki update",
 }
 
 projects = ['commons', 'incubator', 'mediawiki', 'meta', 'species', 'test',
@@ -112,7 +112,10 @@ def inter(page):
             pageLocTemp = updateWPlink(pageLoc,pageLocTemp)
 
             if pageLoc.get() != pageLocTemp:
-                pageLoc.put(pageLocTemp, summary[a.site.lang])
+                try:
+                    pageLoc.put(pageLocTemp, summary[a.site.lang])
+                except UnicodeDecodeError:
+                    print u"UnicodeDecodeError : Skipping " + pageLoc.title()
 
 
 #Récupération de la liste des interwikis "réguliers"
