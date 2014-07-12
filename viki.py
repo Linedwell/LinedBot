@@ -37,7 +37,9 @@ def newPages(all=False):
     hiddenCat = pywikibot.Category(site,u'Catégorie cachée')
     hiddenCat  = set(hiddenCat.subcategories())
     
-    concoursCat = pywikibot.Category(site,'Article VikiConcours')
+    ignoreCat = pywikibot.Category(site,u'Page ignorée par les robots')
+    
+    concoursCat = pywikibot.Category(site,u'Article VikiConcours')
     
     deadendPagesList = list(pagegenerators.DeadendPagesPageGenerator(site=site))
     lonelyPagesList = list(pagegenerators.LonelyPagesPageGenerator(site=site))
@@ -67,7 +69,7 @@ def newPages(all=False):
             
             # On ne s'occupe de la page que si elle n'est ni une homonymie ni une page du VikiConcours
             pageCat = page.categories()
-            if not homonCat in pageCat and not concoursCat in pageCat:
+            if (not homonCat in pageCat) and (not concoursCat in pageCat) and (not ignoreCat in pageCat):
                 
                 #On ne traite l'ajout de bandeau que si la page n'est pas ignorée
                 jobList = []
