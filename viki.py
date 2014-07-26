@@ -27,17 +27,27 @@ def newPages(all=False):
     
     log = u''
     
-    ignorePage = pywikibot.Page(site,u'Utilisateur:LinedBot/Ignore')
-    ignoreList = list(ignorePage.linkedPages())
+    #BUGFIX
+    bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
+    bugfixTemp = bugfixPage.get()
+    bugfixPage.put(bugfixTemp,'')
+    #END OF FIX
 
     
-    homonCat =  pywikibot.Category(site,u'Homonymie')
-    ebaucheCat = pywikibot.Category(site,u'Ébauche')
-    ebaucheCat = set(ebaucheCat.subcategories(recurse=3))
-    hiddenCat = pywikibot.Category(site,u'Catégorie cachée')
-    hiddenCat  = set(hiddenCat.subcategories())
+    homonCat =  pywikibot.Category(site,u"Homonymie")
     
-    concoursCat = pywikibot.Category(site,'Article VikiConcours')
+    ebaucheCat = pywikibot.Category(site,u"Ébauche")
+    ebaucheCat = set(ebaucheCat.subcategories(recurse=3))
+    
+    hiddenCat = pywikibot.Category(site,u"Catégorie cachée")
+    hiddenCat = set(hiddenCat.subcategories())
+    
+    portalCat = pywikibot.Category(site,u"Liste d'articles")
+    portalCat = set(portalCat.subcategories())
+    
+    ignoreCat = pywikibot.Category(site,u"Page ignorée par les robots")
+    
+    concoursCat = pywikibot.Category(site,u"Article VikiConcours")
     
     deadendPagesList = list(pagegenerators.DeadendPagesPageGenerator(site=site))
     lonelyPagesList = list(pagegenerators.LonelyPagesPageGenerator(site=site))
@@ -67,27 +77,33 @@ def newPages(all=False):
             
             # On ne s'occupe de la page que si elle n'est ni une homonymie ni une page du VikiConcours
             pageCat = page.categories()
-            if not homonCat in pageCat and not concoursCat in pageCat:
+            if (not homonCat in pageCat) and (not concoursCat in pageCat):
                 
                 #On ne traite l'ajout de bandeau que si la page n'est pas ignorée
                 jobList = []
-                if not page in ignoreList:
+                if not ignoreCat in pageCat:
                     
                     # s'il existe des références, on retire le job 'orphelin'
                     if page in lonelyPagesList:
                         jobList.append(u'orphelin')
-                    
+                
                     # s'il n'existe aucune catégorie (directe), on ajoute le job 'catégoriser'
-                    cat = page.categories()
-                    realCat = list(set(cat) - set(hiddenCat) - set(ebaucheCat))
+                    realCat = list(set(pageCat) - set(hiddenCat) - set(ebaucheCat))
                 
                     nbCat = len(list(realCat))
                     if nbCat == 0:
                         jobList.append(u'catégoriser')
                     
-                    # si la page ne pointe vers aucune autre, on l'indique en impasse
+                    # si la page n'appartient à aucun portail, on ajoute le job 'portail'
+                    nbPort = len(set(pageCat) & set(portalCat))
+                    if nbPort == 0:
+                        jobList.append(u'portail')
+                    
+                    
+                    # si la page ne pointe vers aucune autre, on ajoute le job 'impasse'
                     if page in deadendPagesList:
                         jobList.append(u'impasse')
+                    
                     
                     """
                     # si la page fait plus de 2000 octets et ne contient aucun lien externe
@@ -113,7 +129,9 @@ def newPages(all=False):
                         job = ','.join(jobList)
                         banner = u'{{Maintenance|job=' + job + '|date=~~~~~}}\n\n'
                         pageTemp = banner + pageTemp
-                    summary = u'[[VD:Robot|Robot]] : Mise à jour du bandeau de maintenance.'
+                        summary = u'[[VD:Robot|Robot]] : Mise à jour du bandeau de maintenance.'
+                    else:
+                        summary = u'[[VD:Robot|Robot]] : Retrait du bandeau de maintenance.'
 
                     c = callback.Callback()
                     page.put(pageTemp,summary,callback=c)
@@ -141,7 +159,7 @@ def removeBanner(pageTemp):
 
 # Retourne une jobList mise à jour (catégories appliquées par le bot + utilisateurs)
 def updateJobList(oldJobList, newJobList):
-    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'sourcer']
+    botJobList = [u'catégoriser',u'impasse',u'orphelin',u'portail']
     
     tempJobList = list(oldJobList)
     for j in botJobList:
