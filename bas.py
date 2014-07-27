@@ -24,7 +24,8 @@ def clean(page,template,delay):
     if not page.userName() == site.user():
         limite = calcLimit(delay)
         if page.editTime() < limite:
-            page.put(template,summary)
+            page.text = template
+            page.save(summary)
 
 #Calcule la "date" avant laquelle on s'autorise à blanchir le bas
 def calcLimit(delay):

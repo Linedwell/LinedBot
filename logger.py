@@ -45,8 +45,8 @@ def editLog(site,log,page='Utilisateur:LinedBot/Log',summary='',ar=True,cl=False
             summary = summaryHeader[family] + u"Mise à jour du journal (OK:" + str(nbrModif) + ", KO:" + str(nbrTotal - nbrModif) +")"
         else:
             summary= summaryHeader[family] + summary
-
-        pageLog.put(pageLogTemp,summary)
+        pageLog.text = pageLogTemp
+        pageLog.save(summary)
 
 #Archive la page de journalisation du bot et réinitialise la page pour la nouvelle année
 def archive(site,pageLog,pageArchive):
@@ -58,7 +58,8 @@ def archive(site,pageLog,pageArchive):
     pageArchiveTemp = pageArchive.get(force=True,get_redirect=True)
     pageArchiveTemp = pageArchiveTemp.replace(u'{{Mise à jour bot|Linedwell}}\n','',1)
     summary = summaryHeader[family] + u"Retrait de {{Mise à jour bot}}, page d'archive n'étant plus mise à jour"
-    pageArchive.put(pageArchiveTemp,summary,force=True)
+    pageArchive.text = pageArchiveTemp
+    pageArchive.save(summary,force=True)
 	
     pageLogTemp = u'__NOINDEX__\n{{Mise à jour bot|Linedwell}}\n{{Sommaire|niveau=1}}\n' #On réinsère le modèle de màj sur pageLog
     return pageLogTemp

@@ -87,7 +87,8 @@ def update(val):
     template = u"<noinclude>{{Mise à jour bot|Linedwell}}</noinclude>\n<center>\n{{Graphique polygonal" + fields.format(**context) + u"}}\n\n'''Évolution au cours des deux dernières semaines'''\n</center>"
     summary = "[[WP:Bot|Robot]] : mise à jour"
 
-    page.put(template, summary)
+    page.text = template
+    page.save(summary)
     
     gr_log = open("_grapher.log","w")
     for val in last_values:

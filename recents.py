@@ -71,7 +71,8 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                                 
                                 c = callback.Callback()
                                 
-                                page.put(pageTemp,"[[WP:Bot|Robot]] : " + summary, callback=c)
+                                page.text = pageTemp
+                                page.save("[[WP:Bot|Robot]] : " + summary, callback=c)
                                 break
                             else:
                                 summary = u'Aucun modèle trouvé correspondant au motif: ' + str(motif)

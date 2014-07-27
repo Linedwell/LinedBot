@@ -134,7 +134,8 @@ def newPages(all=False):
                         summary = u'[[VD:Robot|Robot]] : Retrait du bandeau de maintenance.'
 
                     c = callback.Callback()
-                    page.put(pageTemp,summary,callback=c)
+                    page.text = pageTemp
+                    page.save(summary,callback=c)
 
                     if c.error == None:
                         nbrModif += 1
@@ -170,12 +171,12 @@ def updateJobList(oldJobList, newJobList):
 
 
 # Exécution
-def main(argv):
+def main():
     
     all = False
     
     try:
-        opts, args = getopt.getopt(argv, 'a', ['all'])
+        opts, args = getopt.getopt(sys.argv[1:], 'a', ['all'])
     except getopt.GetoptError:
         sys.exit(2)
 
@@ -194,6 +195,6 @@ def main(argv):
 
 if __name__ == "__main__":
     try:
-        main(sys.argv[1:])
+        main()
     finally:
         pywikibot.stopme()

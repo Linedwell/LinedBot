@@ -58,7 +58,8 @@ def inter(page):
     pageTemp = updateWPlink(page,pageTemp)
 
     if page.get() != pageTemp:
-        page.put(pageTemp,summary[pageLang])
+        page.text = pageTemp
+        page.save(summary[pageLang])
 
 
     #second tour pour la mettre à jour sur tous les autres vikis
@@ -113,7 +114,8 @@ def inter(page):
 
             if pageLoc.get() != pageLocTemp:
                 try:
-                    pageLoc.put(pageLocTemp, summary[a.site.lang])
+                    pageLoc.text = pageLocTemp
+                    pageLoc.save(summary[a.site.lang])
                 except UnicodeDecodeError:
                     print u"UnicodeDecodeError : Skipping " + pageLoc.title()
 

@@ -107,7 +107,8 @@ def main(args):
             pageTemp = disambigWarningUpdater(pageTemp,newNumber)
             
             if pageTemp != page.get():
-                page.put(pageTemp,"[[WP:Bot|Robot]] : " + u'mise à jour')
+                page.text = pageTemp
+                page.save(u"[[WP:Bot|Robot]] : mise à jour")
             else:
                 print u"Aucune mise à jour n'a été faite."
     else:
