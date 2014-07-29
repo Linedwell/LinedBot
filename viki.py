@@ -29,8 +29,7 @@ def newPages(all=False):
     
     #BUGFIX
     bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
-    bugfixTemp = bugfixPage.get()
-    bugfixPage.put(bugfixTemp,'')
+    bugfixPage.save('')
     #END OF FIX
 
     
