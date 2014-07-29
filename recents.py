@@ -1,8 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Ce script parcourt la [[Catégorie:Événement récent]] et ses sous-catégories pour retirer le bandeau au bout de 15j
-# Auteur : Linedwell
-# Licence : <à définir>
+
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
 
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
@@ -71,7 +76,8 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                                 
                                 c = callback.Callback()
                                 
-                                page.put(pageTemp,"[[WP:Bot|Robot]] : " + summary, callback=c)
+                                page.text = pageTemp
+                                page.save("[[WP:Bot|Robot]] : " + summary, callback=c)
                                 break
                             else:
                                 summary = u'Aucun modèle trouvé correspondant au motif: ' + str(motif)
@@ -107,7 +113,7 @@ def motifFinder(catname):
 		motif = [u'Règle[_ ]des[_ ]3[_ ]révocations', u'Règle[_ ]des[_ ]3[_ ]reverts', u'Règle[_ ]des[_ ]3[_ ]réverts', u'Règle[_ ]des[_ ]trois[_ ]reverts', u'Règle[_ ]des[_ ]trois[_ ]réverts', u'R3R', u'3RR']
 		
 	elif catname == u'Article en travaux':
-		motif = [u'En[_ ]travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe']
+		motif = [u'(En[_ ])?travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe']
 		
 	elif catname == u'Article en cours':
 		motif = [u'En[_ ]cours', u'Plusieurs[_ ]en[_ ]cours']

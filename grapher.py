@@ -1,8 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Script de mise à jour de graphe
-# Auteur: Linedwell
-# Licence: <à définir>
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
 
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
@@ -87,7 +91,8 @@ def update(val):
     template = u"<noinclude>{{Mise à jour bot|Linedwell}}</noinclude>\n<center>\n{{Graphique polygonal" + fields.format(**context) + u"}}\n\n'''Évolution au cours des deux dernières semaines'''\n</center>"
     summary = "[[WP:Bot|Robot]] : mise à jour"
 
-    page.put(template, summary)
+    page.text = template
+    page.save(summary)
     
     gr_log = open("_grapher.log","w")
     for val in last_values:

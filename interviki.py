@@ -1,8 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Script d'ajout des liens interwiki
-# Auteur: Linedwell
-# Licence: <à définir>
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
+
 
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
@@ -58,7 +63,8 @@ def inter(page):
     pageTemp = updateWPlink(page,pageTemp)
 
     if page.get() != pageTemp:
-        page.put(pageTemp,summary[pageLang])
+        page.text = pageTemp
+        page.save(summary[pageLang])
 
 
     #second tour pour la mettre à jour sur tous les autres vikis
@@ -113,7 +119,8 @@ def inter(page):
 
             if pageLoc.get() != pageLocTemp:
                 try:
-                    pageLoc.put(pageLocTemp, summary[a.site.lang])
+                    pageLoc.text = pageLocTemp
+                    pageLoc.save(summary[a.site.lang])
                 except UnicodeDecodeError:
                     print u"UnicodeDecodeError : Skipping " + pageLoc.title()
 

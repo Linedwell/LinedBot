@@ -1,8 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Script de maintenance pour vikidia
-# Auteur: Linedwell
-# Licence: <à définir>
+
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
 
 import sys, getopt
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
@@ -29,8 +34,7 @@ def newPages(all=False):
     
     #BUGFIX
     bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
-    bugfixTemp = bugfixPage.get()
-    bugfixPage.put(bugfixTemp,'')
+    bugfixPage.save('')
     #END OF FIX
 
     
@@ -134,7 +138,8 @@ def newPages(all=False):
                         summary = u'[[VD:Robot|Robot]] : Retrait du bandeau de maintenance.'
 
                     c = callback.Callback()
-                    page.put(pageTemp,summary,callback=c)
+                    page.text = pageTemp
+                    page.save(summary,callback=c)
 
                     if c.error == None:
                         nbrModif += 1
@@ -170,12 +175,12 @@ def updateJobList(oldJobList, newJobList):
 
 
 # Exécution
-def main(argv):
+def main():
     
     all = False
     
     try:
-        opts, args = getopt.getopt(argv, 'a', ['all'])
+        opts, args = getopt.getopt(sys.argv[1:], 'a', ['all'])
     except getopt.GetoptError:
         sys.exit(2)
 
@@ -194,6 +199,6 @@ def main(argv):
 
 if __name__ == "__main__":
     try:
-        main(sys.argv[1:])
+        main()
     finally:
         pywikibot.stopme()

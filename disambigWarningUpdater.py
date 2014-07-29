@@ -1,8 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Script de mise à jour semi-automatique de {{Avertissements d'homonymie restants}}
-# Auteur: Linedwell
-# Licence: <à définir>
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
 
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
@@ -107,7 +111,8 @@ def main(args):
             pageTemp = disambigWarningUpdater(pageTemp,newNumber)
             
             if pageTemp != page.get():
-                page.put(pageTemp,"[[WP:Bot|Robot]] : " + u'mise à jour')
+                page.text = pageTemp
+                page.save(u"[[WP:Bot|Robot]] : mise à jour")
             else:
                 print u"Aucune mise à jour n'a été faite."
     else:
