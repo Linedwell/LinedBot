@@ -1,8 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Script indiquant les changements récents (ajouts / retraits) dans la Catégorie:Admissibilité à vérifier
-# Auteur: Linedwell
-# Licence: <à définir>
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
+
 
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent

@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# author [[fr:User:Linedwell]]
+# Script de nettoyage automatique de la page des PàS
+
+# (C) Linedwell, 2011-2014
+#
+# Distribué sous licence GNU GPLv3
+# Distributed under the terms of the GNU GPLv3 license
+# http://www.gnu.org/licenses/gpl.html
+
 
 import sys, getopt
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
