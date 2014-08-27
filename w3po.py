@@ -87,7 +87,7 @@ def main():
     for sub in subscribers:
         message = "\n\n== Du nouveau sur W3PO ==\n" + banner
         sub.text += message
-        sub.save(u"Du nouveau sur W3PO",botflag=False)
+        sub.save(u"Du nouveau sur W3PO",minor=False)
 
 if __name__ == "__main__":
     try:
