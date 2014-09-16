@@ -7,5 +7,5 @@ https://www.gnu.org/licenses/gpl.html
 
 ---------
 Scripts utilisés par LinedBot (https://fr.wikipedia.org/Utilisateur:LinedBot) sur Wikipédia ainsi que sur Vikidia.<br />
-Ils ont été développés grâce au framework pywikipedia, et qui nécessitent donc ce dernier pour pouvoir fonctionner.<br />
+Ils ont été développés grâce au framework pywikipedia, et nécessitent donc ce dernier pour pouvoir fonctionner.<br />
 Voir https://www.mediawiki.org/wiki/Pywikipediabot pour plus d'informations sur le framework.
