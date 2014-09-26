@@ -39,8 +39,7 @@ def getInactiveSysops(limit):
             duration = calcDuration(lastEdit)
             if lastEdit < limit:
                 hrdate = u"" + str(lastEdit.day) + " " + month[int(lastEdit.month)] + " " + str(lastEdit.year)
-                print hrdate
-                inactiveSysops.append(u"{{u|" + sysopName + u"}} : inactif depuis le " + hrdate + u" (" + str(duration.days) + u" jours)")
+                inactiveSysops.append(u"* {{u|" + sysopName + u"}} : inactif depuis le " + hrdate + u" (" + str(duration.days) + u" jours)")
             break
 
     return inactiveSysops
@@ -79,7 +78,7 @@ def calcDuration(date):
 #Exécution
 def main():
     timeStart = time.time()
-    limit = calcLimit(50)
+    limit = calcLimit(365)
     inactiveSysops = getInactiveSysops(limit)
     reportInactiveSysops(inactiveSysops)
     timeEnd = time.time()
