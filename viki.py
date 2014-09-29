@@ -194,7 +194,7 @@ def main():
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
-    print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
+    print u"%s (of %s) pages were modified in %s s." %(nbrModif,nbrTotal,round(timeEnd-timeStart,2))
 
 
 if __name__ == "__main__":

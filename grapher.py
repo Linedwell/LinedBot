@@ -19,7 +19,7 @@ page = pywikibot.Page(site, u"Projet:Maintenance/Suivi d'admissibilité/graphe")
 
 # Met à jour le graphe de la page passée en paramètre avec la nouvelle valeur
 def update(val):
-    last_values = file("_grapher.log","r").readlines()[-14:]
+    last_values = file('_grapher.log','r').readlines()[-14:]
     last_values = [int(el.strip()) for el in last_values]
     last_values.append(val)
     
@@ -94,7 +94,7 @@ def update(val):
     page.text = template
     page.save(summary)
     
-    gr_log = open("_grapher.log","w")
+    gr_log = open('_grapher.log','w')
     for val in last_values:
         gr_log.write(str(val) + '\n')
     gr_log.close()

@@ -20,40 +20,40 @@ from pywikibot import pagegenerators
 #Variables globales
 site = pywikibot.getSite('fr','wikipedia')
 
-delimiterBegin = u'= Propositions =\n'
-delimiterEnd = u'= <small>Avertissements</small> =\n'
+delimiterBegin = u"= Propositions =\n"
+delimiterEnd = u"= <small>Avertissements</small> =\n"
     
-delimiterBeginRegex = u'=\s*Propositions\s*=\n'
-delimiterEndRegex = u'=\s*<small>Avertissements</small>\s*=\n'
+delimiterBeginRegex = u"=\s*Propositions\s*=\n"
+delimiterEndRegex = u"=\s*<small>Avertissements</small>\s*=\n"
 
 #Créé la section PàS du lendemain
 def pasNewSection(pageTemp):
     global summary
     
-    month = [u'',u'janvier',u'février',u'mars',u'avril',u'mai',u'juin',u'juillet',u'août',u'septembre',u'octobre',u'novembre',u'décembre']
+    month = [u"",u"janvier",u"février",u"mars",u"avril",u"mai",u"juin",u"juillet",u"août",u"septembre",u"octobre",u"novembre",u"décembre"]
     pad = 1 #nombre de jours de decalage que l'on souhaite
     dateD = time.localtime(time.time() + pad * 24 * 3600)
     year = int(dateD.tm_year)
     monthNum = int(dateD.tm_mon)
     dayNum = int(dateD.tm_mday)
     
-    if pageTemp.find(u'== ' + str(dayNum) + ' ' + month[monthNum] + ' ==') == -1: #La section de dans 'pad' n'existe pas encore
+    if pageTemp.find(u"== " + str(dayNum) + " " + month[monthNum] + " ==") == -1: #La section de dans 'pad' n'existe pas encore
         pageTempBegin, pageTempEnd = re.split(delimiterEndRegex,pageTemp)
         pageTempEnd = delimiterEnd + pageTempEnd
         
-        newSection = u'== ' + str(dayNum) + ' ' + month[monthNum] + ' ==\n'
-        newSection += u'{{En-tête section PàS|' + str(dayNum)+ '|' + month[monthNum] + '|' + str(year) + '}}\n\n'
-        newSection += u'{{Boîte déroulante/début|titre=Requêtes traitées}}\n{{Boîte déroulante/fin}}\n\n'
+        newSection = u"== " + str(dayNum) + " " + month[monthNum] + " ==\n"
+        newSection += u"{{En-tête section PàS|" + str(dayNum)+ "|" + month[monthNum] + "|" + str(year) + "}}\n\n"
+        newSection += u"{{Boîte déroulante/début|titre=Requêtes traitées}}\n{{Boîte déroulante/fin}}\n\n"
         
         pageTemp = pageTempBegin + newSection + pageTempEnd
         
         if summary != u'':
-            summary += u" ; initialisation de la section PàS du " + str(dayNum) + ' ' + month[monthNum]
+            summary += u" ; initialisation de la section PàS du %s %s" %(dayNum,month[monthNum])
         else:
-            summary += u"initialisation de la section PàS du " + str(dayNum) + ' ' + month[monthNum]
+            summary += u"initialisation de la section PàS du %s %s" %(dayNum,month[monthNum])
     
     else:
-        print u"Aucune modification, la section du " + str(dayNum) + " " + month[monthNum] + " existe."
+        print u"Aucune modification, la section du %s %s existe." %(daynum,month[monthNum])
 
     return pageTemp
 
@@ -84,7 +84,7 @@ def pasRemoveSection(pageTemp):
             pageTempBody += s
 
         pageTemp = pageTempBegin + pageTempBody + pageTempEnd
-        summary = u"archivage de " + str(count) + " section(s)"
+        summary = u"archivage de %s section(s)" %(count)
 
     return pageTemp
 
@@ -104,7 +104,7 @@ def main(argv):
             archiveOnly = True
 
     summary = u''
-    target = u'Wikipédia:Pages à supprimer'
+    target = u"Wikipédia:Pages à supprimer"
     page = pywikibot.Page(site,target)
 
     try:
