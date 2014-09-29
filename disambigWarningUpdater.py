@@ -78,11 +78,11 @@ def rawMaker(prevRaw, newNumber):
     diffPercent = round(diffPercent,2)
     
     if diffSize > 0:
-        diffColor = '{{rouge|+'
+        diffColor = "{{rouge|+"
     else:
-        diffColor = '{{vert|'
+        diffColor = "{{vert|"
 
-    newRaw = '|-\n| ' + str(oldId+1) + '\n| ' + date + '\n|| ' + duration + '\n| {{formatnum:' + str(newNumber) +'}} || ' + diffColor + str(diffPercent) + '%}}\n|| ' + diffColor + str(diffSize) + '}}\n'
+    newRaw = "|-\n| %s\n| %s\n|| %s\n| {{formatnum:%s}} || %s%s%%}}\n|| %s%s%%}}\n" %((oldId+1),date,duration,newNumber,diffColor,diffPercent,diffColor,diffSize)
     
     return newRaw
 
