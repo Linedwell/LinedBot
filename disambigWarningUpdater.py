@@ -82,7 +82,7 @@ def rawMaker(prevRaw, newNumber):
     else:
         diffColor = "{{vert|"
 
-    newRaw = "|-\n| %s\n| %s\n|| %s\n| {{formatnum:%s}} || %s%s%%}}\n|| %s%s%%}}\n" %((oldId+1),date,duration,newNumber,diffColor,diffPercent,diffColor,diffSize)
+    newRaw = "|-\n| %s\n| %s\n|| %s\n| {{formatnum:%s}} || %s%s%%}}\n|| %s%s}}\n" %((oldId+1),date,duration,newNumber,diffColor,diffPercent,diffColor,diffSize)
     
     return newRaw
 
