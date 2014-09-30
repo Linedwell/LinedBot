@@ -44,7 +44,7 @@ def admissibilite(pagesList):
 
     saveBackupFile(actualList)
 
-    summary = u"Mise à jour (+%s; -%s; =%s)" %s(nbAdd,nbRem,total)
+    summary = u"Mise à jour (+%s; -%s; =%s)" %(nbAdd,nbRem,total)
 
     return log, summary, total
 
