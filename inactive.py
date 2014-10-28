@@ -114,7 +114,7 @@ def main():
     inactiveSysops = getInactiveSysops(sysopLastEdit,hardlimit,softlimit)
     
     print inactiveSysops
-    #reportInactiveSysops(inactiveSysops)
+    reportInactiveSysops(inactiveSysops)
     timeEnd = time.time()
 
 if __name__ == "__main__":
