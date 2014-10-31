@@ -14,7 +14,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import pywikibot
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 page = pywikibot.Page(site, u"Projet:Maintenance/Suivi d'admissibilité/graphe")
 
 # Met à jour le graphe de la page passée en paramètre avec la nouvelle valeur

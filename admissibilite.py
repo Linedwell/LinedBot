@@ -21,7 +21,7 @@ import logger
 import grapher
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 
 def admissibilite(pagesList):
     log = u''

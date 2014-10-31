@@ -18,7 +18,7 @@ import pywikibot
 from pywikibot import pagegenerators
 
 #Variables globales
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 
 delimiterBegin = u"= Propositions =\n"
 delimiterEnd = u"= <small>Avertissements</small> =\n"

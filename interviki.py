@@ -19,11 +19,11 @@ import itertools
 
 # Déclarations
 site = {
-	'fr' : pywikibot.getSite('fr','vikidia'),
-    'en' : pywikibot.getSite('en','vikidia'),
-	'es' : pywikibot.getSite('es','vikidia'),
-	'it' : pywikibot.getSite('it','vikidia'),
-	'ru' : pywikibot.getSite('ru','vikidia'),
+	'fr' : pywikibot.Site('fr','vikidia'),
+    'en' : pywikibot.Site('en','vikidia'),
+	'es' : pywikibot.Site('es','vikidia'),
+	'it' : pywikibot.Site('it','vikidia'),
+	'ru' : pywikibot.Site('ru','vikidia'),
 }
 
 summary = {

@@ -23,7 +23,7 @@ import ignoreList
 import logger
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 nbrModif = 0
 nbrTotal = 0
 ignoreList = ignoreList.ignoreList

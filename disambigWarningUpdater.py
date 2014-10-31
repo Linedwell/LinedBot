@@ -21,7 +21,7 @@ import pywikibot
 from pywikibot import pagegenerators
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 
 #Met à jour le tableau récapitulatif
 def disambigWarningUpdater(pageTemp,newNumber):

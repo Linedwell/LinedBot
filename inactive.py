@@ -18,7 +18,7 @@ from datetime import date, datetime, timedelta
 import pywikibot
 
 # Déclarations
-site = pywikibot.getSite('fr','vikidia')
+site = pywikibot.Site('fr','vikidia')
 nbrModif = 0
 nbrTotal = 0
 

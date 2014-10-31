@@ -14,7 +14,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import pywikibot
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 nbrModif = 0
 nbrTotal = 0
 

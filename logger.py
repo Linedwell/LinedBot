@@ -18,7 +18,7 @@ import pywikibot
 
 #Variables globales
 
-site = pywikibot.getSite()
+site = pywikibot.Site()
 month = [u'',u"Janvier",u"Février",u"Mars",u"Avril",u"Mai",u"Juin",u"Juillet",u"Août",u"Septembre",u"Octobre",u"Novembre",u"Décembre"]
 
 summaryHeader = {
