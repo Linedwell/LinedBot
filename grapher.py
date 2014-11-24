@@ -62,7 +62,7 @@ def update(val):
  | S01V13 = {val13}
  | S01V14 = {val14}
  | S01V15 = {val15}
- | points = oui
+ | points = non
 """
     
     context = {
