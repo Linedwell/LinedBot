@@ -62,7 +62,7 @@ def getInactiveSysops(list, hardlimit, softlimit):
 
 #Notifie un admin ayant presque atteint le seuil d'inactivité de la possible suspension de ses outils
 def notifySysop(sysop,hrdate,hrdeadline):
-    notif = u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|hrdate|hrdeadline}}\n"
+    notif = u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|%s|%s}}\n" %(hrdate,hrdeadline)
 
     page = pywikibot.Page(site,u"Discussion utilisateur:"+sysop)
     page.text = page.text + notif
@@ -113,7 +113,6 @@ def main():
     sysopLastEdit = getSysopsLastEdit()
     inactiveSysops = getInactiveSysops(sysopLastEdit,hardlimit,softlimit)
     
-    print inactiveSysops
     reportInactiveSysops(inactiveSysops)
     timeEnd = time.time()
 
