@@ -1,6 +1,6 @@
 LinedBot
 ========
-© Linedwell, 2011 - 2014<br />
+© Linedwell, 2011 - 2015<br />
 Scripts disponibles sous licence GNU GPLv3 (sauf indication contraire)<br />
 Scripts distributed under the terms of the GNU GPLv3 license (unless otherwise specified)<br />
 https://www.gnu.org/licenses/gpl.html
