@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Script relevant les sysops absents depuis un temps donné
 
-# (C) Linedwell, 2011-2014
+# (C) Linedwell, 2011-2015
 #
 # Distribué sous licence GNU GPLv3
 # Distributed under the terms of the GNU GPLv3 license
@@ -32,7 +32,7 @@ def getSysopsLastEdit():
 
     for sysop in sysopList:
         sysopName = sysop[u'name']
-        uc = site.usercontribs(user=sysopName)
+        uc = site.usercontribs(user=sysopName,total=1)
 
         for c in uc:
             lastEdit = datetime.strptime(c[u'timestamp'],"%Y-%m-%dT%H:%M:%SZ")
