@@ -14,12 +14,12 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import pywikibot
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 page = pywikibot.Page(site, u"Projet:Maintenance/Suivi d'admissibilité/graphe")
 
 # Met à jour le graphe de la page passée en paramètre avec la nouvelle valeur
 def update(val):
-    last_values = file("_grapher.log","r").readlines()[-14:]
+    last_values = file('_grapher.log','r').readlines()[-14:]
     last_values = [int(el.strip()) for el in last_values]
     last_values.append(val)
     
@@ -62,7 +62,7 @@ def update(val):
  | S01V13 = {val13}
  | S01V14 = {val14}
  | S01V15 = {val15}
- | points = oui
+ | points = non
 """
     
     context = {
@@ -94,7 +94,7 @@ def update(val):
     page.text = template
     page.save(summary)
     
-    gr_log = open("_grapher.log","w")
+    gr_log = open('_grapher.log','w')
     for val in last_values:
         gr_log.write(str(val) + '\n')
     gr_log.close()

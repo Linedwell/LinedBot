@@ -23,7 +23,7 @@ import ignoreList
 import logger
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 nbrModif = 0
 nbrTotal = 0
 ignoreList = ignoreList.ignoreList
@@ -72,7 +72,7 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                                 templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
                                 templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
                                 
-                                summary = u"Retrait du bandeau " + templateResult + u" (non modifié depuis " + str(duration.days) + " jours)."
+                                summary = u"Retrait du bandeau %s (non modifié depuis %s jours)." %(templateResult,duration.days)
                                 
                                 c = callback.Callback()
                                 
@@ -80,16 +80,16 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                                 page.save("[[WP:Bot|Robot]] : " + summary, callback=c)
                                 break
                             else:
-                                summary = u'Aucun modèle trouvé correspondant au motif: ' + str(motif)
+                                summary = u"Aucun modèle trouvé correspondant au motif: " + str(motif)
                 
                         if c.error == None:
                             nbrModif += 1
-                            status = '{{Y&}}'
+                            status = "{{Y&}}"
                         else:
-                            status = '{{N&}}'
-                        log += u'*' + status + ' [[' + page.title() + ']] : ' + summary.replace('{{','{{m|') + '\n'
+                            status = "{{N&}}"
+                        log += u"*%s [[%s]] : %s\n" %(status,page.title(),summary.replace('{{','{{m|'))
         else:
-            print u'Skipping [[' + page.title() + ']], page in ignore list.'
+            print u"Skipping [[" + page.title() + "]], page in ignore list."
 
     return log
 	
@@ -97,25 +97,25 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
 #Retourne le motif correspondant au(x) modèle(s) catégorisant(s) dans la catégorie donnée 	
 def motifFinder(catname):
 	motif = []
-	if catname == u'Événement récent':
+	if catname == u"Événement récent":
 		motif = [u'(Section )?[Éé]v[éè]nements?[_ ]récents?']
 
-	elif catname == u'Mort récente':
+	elif catname == u"Mort récente":
 		motif = [u'Mort[_ ]récente?', u'Décès[_ ]récent']
 		
-	elif catname == u'Élection récente':
+	elif catname == u"Élection récente":
 		motif = [u'[Éé]lection[_ ]récente']
 		
-	elif catname == u'Compétition sportive récente':
+	elif catname == u"Compétition sportive récente":
 		motif = [u'Compétition[_ ]sportive[_ ]récente', u'[Éé]v[éè]nement[_ ]sportif[_ ]récent']
 	
-	elif catname == u'Wikipédia:Triple révocation':
+	elif catname == u"Wikipédia:Triple révocation":
 		motif = [u'Règle[_ ]des[_ ]3[_ ]révocations', u'Règle[_ ]des[_ ]3[_ ]reverts', u'Règle[_ ]des[_ ]3[_ ]réverts', u'Règle[_ ]des[_ ]trois[_ ]reverts', u'Règle[_ ]des[_ ]trois[_ ]réverts', u'R3R', u'3RR']
 		
-	elif catname == u'Article en travaux':
+	elif catname == u"Article en travaux":
 		motif = [u'(En[_ ])?travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe']
 		
-	elif catname == u'Article en cours':
+	elif catname == u"Article en cours":
 		motif = [u'En[_ ]cours', u'Plusieurs[_ ]en[_ ]cours']
 		
 	return motif
@@ -161,7 +161,7 @@ def main():
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
 
-    print str(nbrModif) + u' (of ' + str(nbrTotal) + ') pages were modified in '+ str(round(timeEnd - timeStart,2)) + 's.'
+    print u"%s (of %s) pages were modified in %s s." %(nbrModif,nbrTotal,round(timeEnd-timeStart,2))
 
 
 if __name__ == "__main__":

@@ -21,7 +21,7 @@ import logger
 import grapher
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 
 def admissibilite(pagesList):
     log = u''
@@ -35,16 +35,16 @@ def admissibilite(pagesList):
     remList = list(set(backupList) - set(actualList))
 
     for add in addList:
-        log += u"* {{Vert|'''+'''}} ajout du bandeau sur [[" + add + "]]\n"
+        log += u"* {{Vert|'''+'''}} ajout du bandeau sur [[%s]]\n" %(add)
         nbAdd += 1
 
     for rem in remList:
-        log += u"* {{Rouge|'''-'''}} retrait du bandeau sur [[" + rem + "]]\n"
+        log += u"* {{Rouge|'''-'''}} retrait du bandeau sur [[%s]]\n" %(rem)
         nbRem += 1
 
     saveBackupFile(actualList)
 
-    summary = u"Mise à jour (+" + str(nbAdd) + "; -" + str(nbRem) + "; =" + str(total) + ")"
+    summary = u"Mise à jour (+%s; -%s; =%s)" %(nbAdd,nbRem,total)
 
     return log, summary, total
 

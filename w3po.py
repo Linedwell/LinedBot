@@ -14,7 +14,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import pywikibot
 
 # Déclarations
-site = pywikibot.getSite('fr','wikipedia')
+site = pywikibot.Site('fr','wikipedia')
 nbrModif = 0
 nbrTotal = 0
 
@@ -37,8 +37,8 @@ def getSubscribers(group,hs):
 # Retourne le bandeau de notification adapté
 def getBanner(group, link):
     dict = {
-        'article' : "Utilisateur:Orikrin1998/Blog/Annonce",
-        'sondage' : "Utilisateur:Orikrin1998/Blog/Sondage",
+        "article" : "Utilisateur:Orikrin1998/Blog/Annonce",
+        "sondage" : "Utilisateur:Orikrin1998/Blog/Sondage",
     }
     
     template = "{{" + dict[group] + "|lien=" + link + "|date=~~~~~}}"
@@ -64,7 +64,7 @@ def main():
 
 
     if len(args) == 2:
-        if args[0] in ("article", "sondage"):
+        if args[0] in ('article', 'sondage'):
             type = args[0]
         else:
             print "type incorrect : attendu 'blog' ou 'sondage'"
