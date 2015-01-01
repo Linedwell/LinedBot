@@ -22,6 +22,11 @@ template = u"{{subst:Vikidia:Bac à sable/Zéro}}"
 summary = u"[[Vikidia:Robot|Robot]] : Nettoyage du bac à sable"
 delay = 30
 
+#BUGFIX
+bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
+bugfixPage.save('')
+#END OF FIX
+
 
 #Recharge le bac à sable avec un contenu prédéfini
 def clean(page,template,delay):

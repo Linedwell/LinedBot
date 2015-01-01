@@ -50,7 +50,9 @@ def editLog(site,log,page="Utilisateur:LinedBot/Log",summary='',ar=True,cl=False
         if summary == '':
             summary = summaryHeader[family] + u"Mise à jour du journal (OK:%s, KO:%s)" %(nbrModif,(nbrTotal - nbrModif))
         else:
-            summary= summaryHeader[family] + summary
+            summary = summaryHeader[family] + summary
+        
+        pageLog.get(force=True,get_redirect=True)
         pageLog.text = pageLogTemp
         pageLog.save(summary)
 
