@@ -49,7 +49,7 @@ def getBanner(group, link):
 
 #Retourne le titre associé à l'URL
 def getURLTitle(url):
-    webPage = urlib2.urlopen(url)
+    webPage = urllib2.urlopen(url)
     text = webPage.read()
     tt = text.split("<title>") [1]
     titleFull = tt.split("</title>") [0]
