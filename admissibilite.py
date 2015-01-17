@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Script indiquant les changements récents (ajouts / retraits) dans la Catégorie:Admissibilité à vérifier
 
-# (C) Linedwell, 2011-2014
+# (C) Linedwell, 2011-2015
 #
 # Distribué sous licence GNU GPLv3
 # Distributed under the terms of the GNU GPLv3 license

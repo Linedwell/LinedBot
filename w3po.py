@@ -13,6 +13,8 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import pywikibot
 
+import urllib2
+
 # Déclarations
 site = pywikibot.Site('fr','wikipedia')
 nbrModif = 0
@@ -44,6 +46,16 @@ def getBanner(group, link):
     template = "{{" + dict[group] + "|lien=" + link + "|date=~~~~~}}"
 
     return template
+
+#Retourne le titre associé à l'URL
+def getURLTitle(url):
+    webPage = urllib2.urlopen(url)
+    text = webPage.read()
+    tt = text.split("<title>") [1]
+    titleFull = tt.split("</title>") [0]
+    title = titleFull.split(" | W3PO") [0]
+
+    return title
 
 
 #Exécution
@@ -81,13 +93,27 @@ def main():
         sys.exit(2)
     
     banner = getBanner(type,link)
+    billTitle = getURLTitle(link)
     
     subscribers = getSubscribers(type,hs)
 
     for sub in subscribers:
-        message = "\n\n== Du nouveau sur W3PO ==\n" + banner
-        sub.text += message
-        sub.save(u"Du nouveau sur W3PO",minor=False)
+        try:
+            subTemp = sub.get()
+        
+        except pywikibot.NoPage:
+            pywikibot.output(u"Page %s does not exist; skipping."
+                             % page.title(asLink=True))
+        except pywikibot.IsRedirectPage:
+            pywikibot.output(u"Page %s is a redirect; skipping."
+                             % page.title(asLink=True))
+        except pywikibot.LockedPage:
+            pywikibot.output(u"Page %s is locked; skipping."
+                             % page.title(asLink=True))
+        else:
+            message = u"\n\n== Du nouveau sur W3PO : " + billTitle + " ==\n" + banner
+            sub.text += message
+            sub.save(u"Du nouveau sur W3PO",minor=False)
 
 if __name__ == "__main__":
     try:

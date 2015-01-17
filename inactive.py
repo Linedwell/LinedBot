@@ -24,6 +24,11 @@ nbrTotal = 0
 
 month = [u'',u'janvier',u'février',u'mars',u'avril',u'mai',u'juin',u'juillet',u'août',u'septembre',u'octobre',u'novembre',u'décembre']
 
+#BUGFIX
+bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
+bugfixPage.save('')
+#END OF FIX
+
 #Retourne la liste des administrateurs ainsi que la date de leur dernière contribution
 def getSysopsLastEdit():
     
@@ -65,11 +70,14 @@ def notifySysop(sysop,hrdate,hrdeadline):
     notif = u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|%s|%s}}\n" %(hrdate,hrdeadline)
 
     page = pywikibot.Page(site,u"Discussion utilisateur:"+sysop)
-    page.text = page.text + notif
     
-    summary = "[[VD:Robot|Robot]] : Notification de prochaine suspension des outils"
-
-    page.save(summary,minor=False)
+    if page.userName() == site.user():
+        print u"%s already warned; skipping." % page.title(asLink=True)
+    
+    else:
+        summary = "[[VD:Robot|Robot]] : Notification de prochaine suspension des outils"
+        page.text = page.text + notif
+        page.save(summary,minor=False)
 
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
