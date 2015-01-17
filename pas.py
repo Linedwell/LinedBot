@@ -53,7 +53,7 @@ def pasNewSection(pageTemp):
             summary += u"initialisation de la section PàS du %s %s" %(dayNum,month[monthNum])
     
     else:
-        print u"Aucune modification, la section du %s %s existe." %(daynum,month[monthNum])
+        print u"Aucune modification, la section du %s %s existe." %(dayNum,month[monthNum])
 
     return pageTemp
 
@@ -67,7 +67,7 @@ def pasRemoveSection(pageTemp):
     pageTempBody, pageTempEnd = re.split(delimiterEndRegex,pageTempBody)
     pageTempEnd = delimiterEnd + pageTempEnd
     
-    section = re.split('(==\s*(\d*|\d*er) \w*\s*==\n)',pageTempBody,flags=re.U)
+    section = re.split('(==\s*\d*(?:er)? \w*\s*==\n)',pageTempBody,flags=re.U)
     parser = re.compile(ur'{{En-tête section PàS\|.*?}}\s*{{Boîte déroulante\/début\|.*?}}', re.U | re.I | re.M)
     
     pageTempBody = u''
