@@ -38,11 +38,21 @@ projects = ['commons', 'incubator', 'mediawiki', 'meta', 'species', 'test',
             'wikibooks', 'wikidata', 'wikinews', 'wikipedia', 'wikiquote',
             'wikisource', 'wikiversity', 'wiktionary']
 
+### debug ###
+#for s in site:
+#    site[s].login()
+### end debug
+
 
 def inter(page):
     pageTemp = page.get()
     iwList = list(getInterwiki(page))
     ewList = list(getExterwiki(page))
+    
+    print "iw: " + str(iwList)
+    print "ew: " + str(ewList)
+    
+    sys.exit(0)
     
     pageLang = page.site.lang
     
@@ -128,13 +138,18 @@ def inter(page):
 #Récupération de la liste des interwikis "réguliers"
 def getInterwiki(page):
     text = page.text
-    for linkmatch in pywikibot.link_regex.finditer(pywikibot.removeDisabledParts(text)):
+    
+    for linkmatch in pywikibot.link_regex.finditer(pywikibot.textlib.removeDisabledParts(text)):
         linktitle = linkmatch.group("title")
+        
         link = pywikibot.Link(linktitle, page.site)
+        
+        print link.site
 
         try:
             if link.site != page.site:
-                if not link.site.family.name in projects:
+                if link.site.family.name in projects:
+                    print link
                     yield link
         except pywikibot.Error:
             continue
@@ -154,7 +169,7 @@ def getExterwiki(page):
 def updateWPlink(page,pageTemp):
     pageTemp = pageTemp.replace("{{FULLPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
     pageTemp = pageTemp.replace("{{PAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
-    wpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),page.title())
+    wpPage = pywikibot.Page(pywikibot.Site(page.site.lang,"wikipedia"),page.title())
     wpLink = ''
 
     if wpPage.exists():
@@ -163,7 +178,7 @@ def updateWPlink(page,pageTemp):
     m = re.search(r"\[\[wp\:(?P<ln>.*?)\]\]",pageTemp)
 
     if m != None:
-        oldWpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),m.group('ln'))
+        oldWpPage = pywikibot.Page(pywikibot.Site(page.site.lang,"wikipedia"),m.group('ln'))
         if not oldWpPage.exists():
             pageTemp.replace(m.group(),wpLink)
 
@@ -178,8 +193,8 @@ def updateWPlink(page,pageTemp):
 
 #Exécution
 def main():
-    source = pywikibot.getSite('fr','vikidia')
-    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"")
+    source = pywikibot.getSite('en','vikidia')
+    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"Ancient Greece")
     for page in pagesList:
         print page.title()
         inter(page)

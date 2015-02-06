@@ -32,12 +32,6 @@ def newPages(all=False):
     
     log = u''
     
-    #BUGFIX
-    bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
-    bugfixPage.save('')
-    #END OF FIX
-
-    
     homonCat =  pywikibot.Category(site,u"Homonymie")
     
     ebaucheCat = pywikibot.Category(site,u"Ébauche")
