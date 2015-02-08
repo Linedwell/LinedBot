@@ -44,7 +44,9 @@ def newPages(all=False):
     portalCat = set(portalCat.subcategories())
     
     ignoreCat = pywikibot.Category(site,u"Page ignorée par les robots")
-    
+    ignorePage = pywikibot.Page(site,u"Utilisateur:LinedBot/Ignore")
+    ignoreList = list(ignorePage.linkedPages())
+        
     concoursCat = pywikibot.Category(site,u"Article VikiConcours")
     
     deadendPagesList = list(pagegenerators.DeadendPagesPageGenerator(site=site))
@@ -79,7 +81,7 @@ def newPages(all=False):
                 
                 #On ne traite l'ajout de bandeau que si la page n'est pas ignorée
                 jobList = []
-                if not ignoreCat in pageCat:
+                if (not ignoreCat in pageCat) and (not page in ignoreList):
                     
                     # s'il existe des références, on retire le job 'orphelin'
                     if page in lonelyPagesList:
