@@ -24,6 +24,7 @@ site = {
 	'es' : pywikibot.Site('es','vikidia'),
 	'it' : pywikibot.Site('it','vikidia'),
 	'ru' : pywikibot.Site('ru','vikidia'),
+    'ca' : pywikibot.Site('ca','vikidia'),
 }
 
 summary = {
@@ -32,112 +33,152 @@ summary = {
     'es' : u"Bot : interwiki update",
     'en' : u"Bot : interwiki update",
     'ru' : u"Bot : interwiki update",
+    'ca' : u"Bot : interwiki update",
 }
 
 projects = ['commons', 'incubator', 'mediawiki', 'meta', 'species', 'test',
             'wikibooks', 'wikidata', 'wikinews', 'wikipedia', 'wikiquote',
             'wikisource', 'wikiversity', 'wiktionary']
 
+### debug ###
+for s in site:
+    site[s].login()
+### end debug
+
 
 def inter(page):
     pageTemp = page.get()
-    iwList = list(getInterwiki(page))
+    
+    pageTemp = removeDuplicates(pageTemp)
+
+    iwDict = getInterwiki(page)
+    iwList = iwDict.values()
     ewList = list(getExterwiki(page))
     
-    pageLang = page.site.lang
+    try:
+        for iw in iwList:
+            _errChk = pywikibot.Page(site[iw.site.lang],iw.title)
+            _errChk.exists()
+    except ValueError:
+        pywikibot.output(u"Page %s has interwiki issues; skipping."
+                                % page.title(asLink=True))
+    except ValueError:
+        pywikibot.output(u"Page %s has unknown issues; skipping."
+                                % page.title(asLink=True))
     
-    allList = []
-    allList.append(pywikibot.Link(page.title(), page.site))
+    else:
     
-    #premier tour pour récupérer la liste des intervikis (valides)
-    for iw in iwList:
-        lang = iw.site.lang
-        pageExt = pywikibot.Page(site[lang],iw.title)
-        if not pageExt.exists():
-            link = iw.astext()
-            pageTemp = pageTemp.replace(link+'\n','')
-            pageTemp = pageTemp.replace(link,'') #necessaire si dernier lien
-        else:
-            allList.append(iw)
-
-    pageTemp = updateWPlink(page,pageTemp)
-
-    if page.get() != pageTemp:
-        page.text = pageTemp
-        page.save(summary[pageLang])
-
-
-    #second tour pour la mettre à jour sur tous les autres vikis
-    for a in allList[1:]:
-        linkList = list(allList)
-        linkList.remove(a)
+        #print "iw: " + str(iwList)
+        #print "ew: " + str(ewList)
         
-        pageLoc = pywikibot.Page(a.site,a.title)
+        #sys.exit(0)
         
-        localIwList = list(getInterwiki(pageLoc))
-        localEwList = list(getExterwiki(pageLoc))
+        pageLang = page.site.lang
         
-        try:
-            pageLocTemp = pageLoc.get()
-                
-        except pywikibot.NoPage:
-            pywikibot.output(u"Page %s does not exist; skipping."
-                                     % pageLoc.title(asLink=True))
-        except pywikibot.IsRedirectPage:
-            pywikibot.output(u"Page %s is a redirect; skipping."
-                                     % pageLoc.title(asLink=True))
-        except pywikibot.LockedPage:
-            pywikibot.output(u"Page %s is locked; skipping."
-                                     % pageLoc.title(asLink=True))
-        else:
+        allList = {page.site:pywikibot.Link(page.title(),page.site)}
+        #allList.append(pywikibot.Link(page.title(), page.site))
         
-            #retrait des interviki non valides
-            for liw in localIwList:
-                pageExt = pywikibot.Page(liw)
-                if not pageExt.exists():
-                    link = liw.astext()
-                    pageLocTemp = pageLocTemp.replace(link+'\n','')
-                    pageLocTemp = pageLocTemp.replace(link,'') #necessaire si dernier lien
+        #premier tour pour récupérer la liste des intervikis (valides)
+        for iw in iwList:
+            lang = iw.site.lang
+            pageExt = pywikibot.Page(site[lang],iw.title)
+            if not pageExt.exists():
+                link = iw.astext()
+                pageTemp = pageTemp.replace(link+'\n','')
+                pageTemp = pageTemp.replace(link,'') #necessaire si dernier lien
+            else:
+                allList.update({iw.site:iw})
 
-            for lew in localEwList:
-                if not lew in ewList:
-                    pageLocTemp = pageLocTemp.replace(lew+'\n','')
-                    pageLocTemp = pageLocTemp.replace(lew,'') #necessaire si dernier lien
+        pageTemp = updateWPlink(page,pageTemp)
+
+        if page.get() != pageTemp:
+            page.text = pageTemp
+            page.save(summary[pageLang])
 
 
-            #ajout des nouveaux interviki
-            for lnk in linkList:
-                if not lnk in localIwList:
-                    link = lnk.astext(onsite=a.site) #on force le lien à être "vu" depuis le wiki de destination
-                    pageLocTemp += '\n' + link
+        #second tour pour la mettre à jour sur tous les autres vikis
+        for key in allList:
+            if key == page.site:
+                continue #On saute le wiki de départ
+            linkList = dict(allList)
+            del linkList[key]
+            
+            pageLoc = pywikibot.Page(allList[key])
 
-            for lnk in ewList:
-                if not lnk in localEwList:
-                    pageLocTemp += '\n' + lnk
+            localIwDict = getInterwiki(pageLoc)
+            localIwList = list(getInterwiki(pageLoc))
+            localEwList = list(getExterwiki(pageLoc))
 
-            pageLocTemp = updateWPlink(pageLoc,pageLocTemp)
+            try:
+                pageLocTemp = pageLoc.get()
+                pageLocTemp = removeDuplicates(pageLocTemp)
+                    
+            except pywikibot.NoPage:
+                pywikibot.output(u"Page %s does not exist; skipping."
+                                         % pageLoc.title(asLink=True))
+            except pywikibot.IsRedirectPage:
+                pywikibot.output(u"Page %s is a redirect; skipping."
+                                         % pageLoc.title(asLink=True))
+            except pywikibot.LockedPage:
+                pywikibot.output(u"Page %s is locked; skipping."
+                                         % pageLoc.title(asLink=True))
+            else:
+            
+                #retrait des interviki non valides
+                for liw in localIwDict:
+                    pageExt = pywikibot.Page(localIwDict[liw])
+                    if not pageExt.exists():
+                        link = liw.astext()
+                        pageLocTemp = pageLocTemp.replace(link+'\n','')
+                        pageLocTemp = pageLocTemp.replace(link,'') #necessaire si dernier lien
 
-            if pageLoc.get() != pageLocTemp:
-                try:
-                    pageLoc.text = pageLocTemp
-                    pageLoc.save(summary[a.site.lang])
-                except UnicodeDecodeError:
-                    print u"UnicodeDecodeError : Skipping " + pageLoc.title()
+                for lew in localEwList:
+                    if not lew in ewList:
+                        pageLocTemp = pageLocTemp.replace(lew+'\n','')
+                        pageLocTemp = pageLocTemp.replace(lew,'') #necessaire si dernier lien
+
+
+                #ajout des nouveaux interviki
+                for lnk in linkList:
+                    if not lnk in localIwDict:
+                        link = linkList[lnk].astext(onsite=allList[key].site) #on force le lien à être "vu" depuis le wiki de destination
+                        pageLocTemp += '\n' + link
+
+                for lnk in ewList:
+                    if not lnk in localEwList:
+                        pageLocTemp += '\n' + lnk
+
+                pageLocTemp = updateWPlink(pageLoc,pageLocTemp)
+
+                if pageLoc.get() != pageLocTemp:
+                    try:
+                        pageLoc.text = pageLocTemp
+                        pageLoc.save(summary[allList[key].site.lang])
+                    except UnicodeDecodeError:
+                        print u"UnicodeDecodeError : Skipping " + pageLoc.title()
 
 
 #Récupération de la liste des interwikis "réguliers"
 def getInterwiki(page):
     text = page.text
-    for linkmatch in pywikibot.link_regex.finditer(pywikibot.removeDisabledParts(text)):
+    iwDict = {}
+    
+    for linkmatch in pywikibot.link_regex.finditer(pywikibot.textlib.removeDisabledParts(text)):
+        
         linktitle = linkmatch.group("title")
         link = pywikibot.Link(linktitle, page.site)
+        #print link.site
 
         try:
             if link.site != page.site:
                 if not link.site.family.name in projects:
-                    yield link
+                    iwDict[link.site] = link
+                    #yield link
         except pywikibot.Error:
             continue
+
+    return iwDict
+
 
 #Récupération de la liste des interwikis "exotiques"
 def getExterwiki(page):
@@ -154,7 +195,8 @@ def getExterwiki(page):
 def updateWPlink(page,pageTemp):
     pageTemp = pageTemp.replace("{{FULLPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
     pageTemp = pageTemp.replace("{{PAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
-    wpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),page.title())
+    pageTemp = pageTemp.replace("{{BASEPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
+    wpPage = pywikibot.Page(pywikibot.Site(page.site.lang,"wikipedia"),page.title())
     wpLink = ''
 
     if wpPage.exists():
@@ -163,7 +205,7 @@ def updateWPlink(page,pageTemp):
     m = re.search(r"\[\[wp\:(?P<ln>.*?)\]\]",pageTemp)
 
     if m != None:
-        oldWpPage = pywikibot.Page(pywikibot.getSite(page.site.lang,"wikipedia"),m.group('ln'))
+        oldWpPage = pywikibot.Page(pywikibot.Site(page.site.lang,"wikipedia"),m.group('ln'))
         if not oldWpPage.exists():
             pageTemp.replace(m.group(),wpLink)
 
@@ -172,8 +214,13 @@ def updateWPlink(page,pageTemp):
 
     return pageTemp
 
-
-
+#Retire les occurences multiples de liens vers la même langue
+def removeDuplicates(pageTemp):
+    for key in site:
+        occurences = len(re.findall(r"\[\[" + key + ":.*?\]\]",pageTemp))
+        if occurences > 1:
+            pageTemp = re.sub(r"\[\[" + key + ":.*?\]\](\n)?",'',pageTemp,count=occurences-1,flags=re.I | re.U)
+    return pageTemp
 
 
 #Exécution

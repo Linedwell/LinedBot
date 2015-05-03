@@ -23,8 +23,7 @@ summary = u"[[Vikidia:Robot|Robot]] : Nettoyage du bac à sable"
 delay = 30
 
 #BUGFIX
-bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
-bugfixPage.save('')
+site.login()
 #END OF FIX
 
 

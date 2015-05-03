@@ -36,17 +36,6 @@ def getSubscribers(group,hs):
 
     return subscribers
 
-# Retourne le bandeau de notification adapté
-def getBanner(group, link):
-    dict = {
-        "article" : "Utilisateur:Orikrin1998/Blog/Annonce",
-        "sondage" : "Utilisateur:Orikrin1998/Blog/Sondage",
-    }
-    
-    template = "{{" + dict[group] + "|lien=" + link + "|date=~~~~~}}"
-
-    return template
-
 #Retourne le titre associé à l'URL
 def getURLTitle(url):
     webPage = urllib2.urlopen(url)
@@ -76,10 +65,10 @@ def main():
 
 
     if len(args) == 2:
-        if args[0] in ('article', 'sondage'):
+        if args[0] in ('article', 'sondage', 'interview'):
             type = args[0]
         else:
-            print "type incorrect : attendu 'blog' ou 'sondage'"
+            print "type incorrect : attendu 'article', 'sondage' ou 'interview'"
             sys.exit(2)
 
         if args[1] != '':
@@ -92,8 +81,10 @@ def main():
         print u"usage : python " + sys.argv[0] + " [--hs] type_de_billet lien"
         sys.exit(2)
     
-    banner = getBanner(type,link)
+    banner = "{{Utilisateur:Orikrin1998/Blog/Annonce|type=" + type + "|lien=" + link + "|date=~~~~~}}"
     billTitle = getURLTitle(link)
+    if type == "interview":
+        billTitle = "Interview de " + billTitle
     
     subscribers = getSubscribers(type,hs)
 

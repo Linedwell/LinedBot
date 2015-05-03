@@ -52,7 +52,7 @@ def admissibilite(pagesList):
 def getCategoryContent(catname):
     cat = pywikibot.Category(site,catname)
     pagesInCat = list(cat.articles(False))
-    pagesList = pagegenerators.PreloadingGenerator(pagesInCat) # On génère la liste des pages incluses dans la catégorie
+    pagesList = pagegenerators.PreloadingGenerator(pagesInCat,step=100) # On génère la liste des pages incluses dans la catégorie
     pagesList = pagegenerators.NamespaceFilterPageGenerator(pagesList,[0]) #On ne garde que les articles (Namespace 0)
     
     return pagesList

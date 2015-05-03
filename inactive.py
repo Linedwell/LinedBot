@@ -25,8 +25,7 @@ nbrTotal = 0
 month = [u'',u'janvier',u'février',u'mars',u'avril',u'mai',u'juin',u'juillet',u'août',u'septembre',u'octobre',u'novembre',u'décembre']
 
 #BUGFIX
-bugfixPage = pywikibot.Page(site,u"Utilisateur:LinedBot")
-bugfixPage.save('')
+site.login()
 #END OF FIX
 
 #Retourne la liste des administrateurs ainsi que la date de leur dernière contribution
@@ -54,6 +53,7 @@ def getInactiveSysops(list, hardlimit, softlimit):
     for sysop in sorted(list.iterkeys()):
         lastEdit = list[sysop]
         duration = calcDuration(lastEdit)
+        print "%s : %s" %(sysop,str(duration))
         hrdate = u"%s %s %s (%s jours)" %(lastEdit.day,month[int(lastEdit.month)],lastEdit.year,duration.days)
         
         if lastEdit < hardlimit:
