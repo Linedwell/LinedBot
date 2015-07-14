@@ -96,7 +96,7 @@ def reportInactiveSysops(list):
         page.text = page.text + report
         summary = "[[VD:Robot|Robot]] : Liste des administrateurs inactifs depuis au moins un an"
 
-        page.save(summary,minor=False)
+        page.save(summary,minor=False,botflag=False)
 
 
 #Retourne la date avant laquelle on considère obsolète l'usage du modèle
