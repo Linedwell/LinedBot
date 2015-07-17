@@ -163,7 +163,7 @@ def main():
     logger.editLog(site,log)
 
     pywikibot.output(u"%s (of %s) pages were modified in %s s."
-    			%(nbrModif,nbrTotal,round(timeEnd-timeStart,2))
+    			%(nbrModif,nbrTotal,round(timeEnd-timeStart,2)))
 
 
 if __name__ == "__main__":
