@@ -53,7 +53,8 @@ def pasNewSection(pageTemp):
             summary += u"initialisation de la section PàS du %s %s" %(dayNum,month[monthNum])
     
     else:
-        print u"Aucune modification, la section du %s %s existe." %(dayNum,month[monthNum])
+        pywikibot.output(u"Aucune modification, la section du %s %s existe."
+                         %(dayNum,month[monthNum]))
 
     return pageTemp
 
