@@ -112,8 +112,8 @@ def newPages(all=False):
                     """
             
                 else:
-                    pywikibot.output(u"Skipping %s page in ignore list."
-                                     % page.title(asLink=True))
+                    pywikibot.output(u"Page %s in ignore list; skipping."
+                                 % page.title(asLink=True))
 
 
                 pageTemp, oldJobList = removeBanner(pageTemp)
