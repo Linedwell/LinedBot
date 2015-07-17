@@ -132,7 +132,7 @@ def main(argv):
             page.save("[[WP:Bot|Robot]] : " + summary)
 
         else:
-            print "Aucune action aujourd'hui, archivage et section du lendemain non requis."
+            pywikibot.output("Aucune action aujourd'hui, archivage et section du lendemain non requis.")
     
 
 
