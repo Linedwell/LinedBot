@@ -20,6 +20,14 @@ site = pywikibot.Site('fr','vikidia')
 page = pywikibot.Page(site,u"Vikidia:Bac à sable")
 template = u"{{subst:Vikidia:Bac à sable/Zéro}}"
 summary = u"[[Vikidia:Robot|Robot]] : Nettoyage du bac à sable"
+
+
+siteit = pywikibot.Site('it','vikidia')
+pageit = pywikibot.Page(siteit,u"Vikidia:Area giochi")
+templateit = u"{{subst:Vikidia:Area giochi/Zero}}"
+summaryit = u"[[Vikidia:Bot|Bot]] : Pulizia dell'area giochi"
+
+
 delay = 30
 
 #BUGFIX
@@ -28,7 +36,7 @@ site.login()
 
 
 #Recharge le bac à sable avec un contenu prédéfini
-def clean(page,template,delay):
+def clean(page,template,summary,delay):
     if not page.userName() == site.user():
         limite = calcLimit(delay)
         if page.editTime() < limite:
@@ -44,7 +52,8 @@ def calcLimit(delay):
 
 #Exécution
 def main():
-    clean(page,template,delay)
+    clean(page,template,summary,delay) #nettoyage fr
+    clean(pageit,templateit,summaryit,delay) #nettoyage it
 
 if __name__ == "__main__":
     try:

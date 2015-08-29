@@ -53,7 +53,8 @@ def pasNewSection(pageTemp):
             summary += u"initialisation de la section PàS du %s %s" %(dayNum,month[monthNum])
     
     else:
-        print u"Aucune modification, la section du %s %s existe." %(dayNum,month[monthNum])
+        pywikibot.output(u"Aucune modification, la section du %s %s existe."
+                         %(dayNum,month[monthNum]))
 
     return pageTemp
 
@@ -131,7 +132,7 @@ def main(argv):
             page.save("[[WP:Bot|Robot]] : " + summary)
 
         else:
-            print "Aucune action aujourd'hui, archivage et section du lendemain non requis."
+            pywikibot.output("Aucune action aujourd'hui, archivage et section du lendemain non requis.")
     
 
 

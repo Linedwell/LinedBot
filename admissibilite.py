@@ -93,7 +93,7 @@ def main():
     log, summary, total = admissibilite(pagesList)
     grapher.update(total)
     logger.editLog(site,log,page=u"Projet:Maintenance/Suivi d'admissibilité",summary=summary,ar=False,cl=15)
-    print summary
+    pywikibot.output(summary)
     timeEnd = time.time()
 
 if __name__ == "__main__":

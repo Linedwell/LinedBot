@@ -13,6 +13,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import pywikibot
 
+import cgi
 import urllib2
 
 # Déclarations
@@ -39,7 +40,9 @@ def getSubscribers(group,hs):
 #Retourne le titre associé à l'URL
 def getURLTitle(url):
     webPage = urllib2.urlopen(url)
-    text = webPage.read()
+    _, params = cgi.parse_header(webPage.headers.get('Content-Type', ''))
+    encoding = params.get('charset', 'utf-8')
+    text = webPage.read().decode(encoding)
     tt = text.split("<title>") [1]
     titleFull = tt.split("</title>") [0]
     title = titleFull.split(" | W3PO") [0]

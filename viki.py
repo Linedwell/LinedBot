@@ -112,7 +112,8 @@ def newPages(all=False):
                     """
             
                 else:
-                    print u'Skipping [[' + page.title() + ']], page in ignore list.'
+                    pywikibot.output(u"Page %s in ignore list; skipping."
+                                 % page.title(asLink=True))
 
 
                 pageTemp, oldJobList = removeBanner(pageTemp)
@@ -190,7 +191,7 @@ def main():
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
-    print u"%s (of %s) pages were modified in %s s." %(nbrModif,nbrTotal,round(timeEnd-timeStart,2))
+    pywikibot.output(u"%s (of %s) pages were modified in %s s." %(nbrModif,nbrTotal,round(timeEnd-timeStart,2)))
 
 
 if __name__ == "__main__":
