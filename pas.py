@@ -21,10 +21,10 @@ from pywikibot import pagegenerators
 site = pywikibot.Site('fr','wikipedia')
 
 delimiterBegin = u"= Propositions =\n"
-delimiterEnd = u"= <small>Avertissements</small> =\n"
+delimiterEnd = u"{{Palette|Donnez votre avis}}\n"
     
 delimiterBeginRegex = u"=\s*Propositions\s*=\n"
-delimiterEndRegex = u"=\s*<small>Avertissements</small>\s*=\n"
+delimiterEndRegex = u"\{\{Palette\|Donnez votre avis\}\}"
 
 #Créé la section PàS du lendemain
 def pasNewSection(pageTemp):
