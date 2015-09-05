@@ -24,7 +24,7 @@ delimiterBegin = u"= Propositions =\n"
 delimiterEnd = u"{{Palette|Donnez votre avis}}\n"
     
 delimiterBeginRegex = u"=\s*Propositions\s*=\n"
-delimiterEndRegex = u"\{\{Palette\|Donnez votre avis\}\}"
+delimiterEndRegex = u"\{\{Palette\|Donnez votre avis\}\}\n"
 
 #Créé la section PàS du lendemain
 def pasNewSection(pageTemp):
