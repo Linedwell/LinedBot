@@ -40,7 +40,7 @@ dicoWP = {
 dicoVD = {
     'site' : pywikibot.Site('fr','vikidia'),
     'pagesList' : [u'Vikidia:Bavardages/%s/%s' % (str(yr),str(wk)), u'Vikidia:La cabane/%s/%s' % (str(yr), str(mt)), u'Vikidia:Bulletin des administrateurs/%s %s' % (str(yr),str(mt)), u'Vikidia:Demandes aux administrateurs/%s %s' % (str(yr),str(mt))],
-    'pagesHeader' : [u'<noinclude>{{Vikidia:Bavardages/Semaines}}</noinclude>',u'<noinclude>{{Vikidia:La cabane/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>'],
+    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>'],
     'summary' : u'[[VD:Robot|Robot]] : initialisation de sous-page périodique'
 }
 
@@ -49,7 +49,6 @@ dicoVD = {
 def initPages(dico):
     index = 0
     for pageName in dico['pagesList']:
-        print pageName
         page = pywikibot.Page(dico['site'],pageName)
 
         if not page.exists():
@@ -58,7 +57,11 @@ def initPages(dico):
             page.text = pageTemp
             page.save(summary,force=True)
 
-        index += 1
+	else:
+	    pywikibot.output(u"Page %s already exists; skipping."
+                         % page.title(asLink=True))
+
+	index += 1
 
 #Exécution
 def main():
