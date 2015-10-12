@@ -31,7 +31,7 @@ if wk < 10:
 ## Wikipedia
 dicoWP = {
     'site' : pywikibot.Site('fr','wikipedia'),
-    'pagesList' : [u'Wikipédia:Bulletin des administrateurs/Semaine %s' % str(wk)],
+    'pagesList' : [u'Wikipédia:Bulletin des administrateurs/%s/Semaine %s' % (str(yr),str(wk))],
     'pagesHeader' : [u'<noinclude>{{Wikipédia:Bulletin des administrateurs/en-tête court|année='+ str(yr) +u'}}</noinclude>'],
     'summary' : u'[[WP:Bot|Robot]] : initialisation de sous-page périodique'
 }
