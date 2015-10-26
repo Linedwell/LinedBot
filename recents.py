@@ -40,7 +40,7 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
     motif = motifFinder(catname)
     
     for page in pagesList:
-        if not page.title() in ignoreList:
+        if not page in ignoreList:
             
             try:
                 pageTemp = page.get()
