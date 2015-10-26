@@ -19,14 +19,16 @@ import pywikibot
 from pywikibot import pagegenerators
 
 import callback
-import ignoreList
+#import ignoreList
 import logger
 
 # Déclarations
 site = pywikibot.Site('fr','wikipedia')
 nbrModif = 0
 nbrTotal = 0
-ignoreList = ignoreList.ignoreList
+#ignoreList = ignoreList.ignoreList
+ignorePage = pywikibot.Page(site,u"Utilisateur:LinedBot/Ignore")
+ignoreList = list(ignorePage.linkedPages())
 
 # Modification du wiki
 def removeTemplate(pagesList,catname,delay,checkTalk=False):
