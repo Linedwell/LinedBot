@@ -45,7 +45,7 @@ def getURLTitle(url):
     text = webPage.read().decode(encoding)
     tt = text.split("<title>") [1]
     titleFull = tt.split("</title>") [0]
-    title = titleFull.split(" | W3PO") [0]
+    title = titleFull.split(" | Blog d'un geek polyglotte") [0]
 
     return title
 
