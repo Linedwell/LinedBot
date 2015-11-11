@@ -16,7 +16,7 @@ import re, time
 from datetime import date, datetime, timedelta
 
 import pywikibot
-from pywikibot import pagegenerators
+from pywikibot import pagegenerators, textlib
 
 import callback
 #import ignoreList
@@ -31,13 +31,15 @@ ignorePage = pywikibot.Page(site,u"Utilisateur:LinedBot/Ignore")
 ignoreList = list(ignorePage.linkedPages())
 
 # Modification du wiki
-def removeTemplate(pagesList,catname,delay,checkTalk=False):
+def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
     global nbrModif,nbrTotal
     
     log = u''
     summary = u''
+    templateFound = False
     limit = calcLimit(delay)
     motif = motifFinder(catname)
+    regex = [re.compile(m) for m in motif]
     
     for page in pagesList:
         if not page in ignoreList:
@@ -55,26 +57,36 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                 pywikibot.output(u"Page %s is locked; skipping."
                              % page.title(asLink=True))
             else:
-            
-                if page.editTime() < limit:
+
+            	lastEdit = page.editTime()
+
+            	if sinceAdd:
+            		_, _, added_timestamp = find_add(page,motif)
+            		if added_timestamp:
+            			lastEdit = added_timestamp
+      
+                if lastEdit < limit:
                     if checkTalk:
                         talk = page.toggleTalkPage()
                     if not checkTalk or not talk.exists() or talk.editTime() < limit:
                         nbrTotal += 1
-                        lastEdit = page.editTime()
                         duration = calcDuration(lastEdit)
                         c = callback.Callback() #(re)init de c
                         for m in motif:
                             parser = re.compile(r'{{' + m + r'.*?}}(\r\n|\n|\ |(?={{))',re.I | re.U | re.DOTALL)
                             searchResult = parser.search(pageTemp) #On cherche si le motif {{m}} existe dans la page
                             if searchResult:
+                            	templateFound = True
                                 templateResult = searchResult.group()
                                 pageTemp = parser.sub('',pageTemp,1) #Retire la 1re occurrence du motif dans la page
                                 
                                 templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
                                 templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
                                 
-                                summary = u"Retrait du bandeau %s (non modifié depuis %s jours)." %(templateResult,duration.days)
+                                if sinceAdd:
+                                	summary = u"Retrait du bandeau %s (ajouté il y a %s jours)." %(templateResult,duration.days)
+                                else:
+                                	summary = u"Retrait du bandeau %s (non modifié depuis %s jours)." %(templateResult,duration.days)
                                 
                                 c = callback.Callback()
                                 
@@ -82,9 +94,10 @@ def removeTemplate(pagesList,catname,delay,checkTalk=False):
                                 page.save("[[WP:Bot|Robot]] : " + summary, callback=c)
                                 break
                             else:
+                            	templateFound = False
                                 summary = u"Aucun modèle trouvé correspondant au motif: " + str(motif)
                 
-                        if c.error == None:
+                        if c.error == None and templateFound:
                             nbrModif += 1
                             status = "{{Y&}}"
                         else:
@@ -134,21 +147,88 @@ def calcDuration(date):
 	today = datetime.utcnow()
 	duration = today - date
 	return duration
+
+
+#Retourne la date à laquelle le motif donné est apparu dans la page
+#Fonction adaptée de https://github.com/Toto-Azero/Wikipedia/blob/master/pywikibot/mort_recente.py
+#(C) Toto Azéro
+
+def find_add(page,motif):
+	regex = [re.compile(m) for m in motif]
+	death_found = True
+	history = page.getVersionHistory()
+
+	if len(history) == 1:
+		[(id, timestamp, user, comment)] = history
+		return (pywikibot.User(site, user), id)
+	
+	oldid = None
+	requester = None
+	timestamp = None
+	previous_timestamp = None
+
+	for (id, timestamp, user, comment) in history:
+		#pywikibot.output("Analyzing id %i: timestamp is %s and user is %s" % (id, timestamp, user))
+	
+		text = page.getOldVersion(id)
+		try:	
+			templates_params_list = textlib.extract_templates_and_params(text)
+		except Exception:
+			pywikibot.output("Skipping id %i; page content is hidden" % (id))
+			continue
+
+		death_found = False
+		for (template_name, dict_param) in templates_params_list:
+			try:
+				template_page = pywikibot.Page(pywikibot.Link(template_name, site, defaultNamespace=10), site)
+				
+                # TODO : auto-finding redirections
+				if any(r.match(template_page.title(withNamespace=False)) for r in regex):
+					death_found = True
+					break
+			except Exception, myexception:
+				pywikibot.output(u'An error occurred while analyzing template %s' % template_name)
+				pywikibot.output(u'%s %s'% (type(myexception), myexception.args))
+	
+		# if oldid:
+		# 	print("id is %i ; oldid is %i" % (id, oldid))
+		# else:
+		# 	print("id is %i ; no oldid" % id)
+		if not death_found:
+			if id == oldid:
+				pywikibot.output(u"Last revision does not contain any %s template!" % motif)
+				return None
+			else:
+				pywikibot.output(u"-------------------------------------")
+				triplet = (requester, oldid, previous_timestamp)
+				try:
+					pywikibot.output(u"Page : %s" % page.title())
+					pywikibot.output(u"Found it: user is %s; oldid is %i and timestamp is %s" % triplet)
+				except:
+					pass
+				return triplet
+		else:
+			requester = pywikibot.User(site, user)
+			oldid = id
+			previous_timestamp = timestamp
+
+	# Si on arrive là, c'est que la première version de la page contenait déjà le modèle
+	return (pywikibot.User(site, user), id, timestamp)
 	
 # Récupération des pages de la catégorie
-def crawlerCat(category, delay,subcat=False,checkTalk=False):
+def crawlerCat(category, delay,sinceAdd=False,subcat=False,checkTalk=False):
     log = u''
     cat = pywikibot.Category(site,category)
     pagesInCat = list(cat.articles(False))
     pagesList = pagegenerators.PreloadingGenerator(pagesInCat) # On génère la liste des pages incluses dans la catégorie
     pagesList = pagegenerators.NamespaceFilterPageGenerator(pagesList,[0]) #On ne garde que les articles (Namespace 0)
-    log += removeTemplate(pagesList,cat.title(withNamespace=False),delay,checkTalk)
+    log += removeTemplate(pagesList,cat.title(withNamespace=False),delay,sinceAdd,checkTalk)
     
     if subcat:
         subcat -= 1
         subcategories = list(cat.subcategories())
         for subc in subcategories:
-            log += crawlerCat(subc.title(withNamespace=False), delay, subcat, checkTalk)
+            log += crawlerCat(subc.title(withNamespace=False), delay, sinceAdd, subcat, checkTalk)
 
     return log
 
@@ -156,10 +236,11 @@ def crawlerCat(category, delay,subcat=False,checkTalk=False):
 def main():
     log = u''
     timeStart = time.time()
-    log += crawlerCat(u'Événement récent',1296000,1,False) #15 jours, inclusion des sous-catégories de 1er niveau
-    log += crawlerCat(u'Catégorie:Wikipédia:Triple révocation',2592000,False,True) #30 jours, inclusion des PdD associées aux articles
-    log += crawlerCat(u'Article en travaux',1296000,False,True) #15 jours, inclusion des PdD associées aux articles
-    log += crawlerCat(u'Article en cours',604800,False,True) #7 jours, inclusion des PdD associées aux articles
+    log += crawlerCat(category=u'Événement récent',delay=1296000,sinceAdd=True,subcat=1) #15 jours, inclusion des sous-catégories de 1er niveau
+    log += crawlerCat(category=u'Catégorie:Wikipédia:Triple révocation',delay=2592000,checkTalk=True) #30 jours, inclusion des PdD associées aux articles
+    log += crawlerCat(category=u'Article en travaux',delay=1296000,checkTalk=True) #15 jours, inclusion des PdD associées aux articles
+    log += crawlerCat(category=u'Article en cours',delay=604800,checkTalk=True) #7 jours, inclusion des PdD associées aux articles
+
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
