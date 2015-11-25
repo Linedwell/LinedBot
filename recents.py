@@ -83,7 +83,7 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
                                 templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
                                 templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
                                 
-                                if sinceAdd:
+                                if sinceAdd and added_timestamp:
                                 	summary = u"Retrait du bandeau %s (ajouté il y a %s jours)." %(templateResult,duration.days)
                                 else:
                                 	summary = u"Retrait du bandeau %s (non modifié depuis %s jours)." %(templateResult,duration.days)
@@ -156,19 +156,24 @@ def calcDuration(date):
 def find_add(page,motif):
 	regex = [re.compile(m) for m in motif]
 	death_found = True
-	history = page.getVersionHistory()
+	maxrevision = 100
+	history = page.getVersionHistory(total=maxrevision)
 
 	if len(history) == 1:
 		[(id, timestamp, user, comment)] = history
 		return (pywikibot.User(site, user), id)
 	
+	pywikibot.output(u"=====================================")
+	pywikibot.output(u"Page : %s" % page.title())
+
 	oldid = None
 	requester = None
 	timestamp = None
 	previous_timestamp = None
 
 	for (id, timestamp, user, comment) in history:
-		#pywikibot.output("Analyzing id %i: timestamp is %s and user is %s" % (id, timestamp, user))
+
+		pywikibot.output("Analyzing id %i: timestamp is %s and user is %s" % (id, timestamp, user))
 	
 		text = page.getOldVersion(id)
 		try:	
@@ -190,10 +195,10 @@ def find_add(page,motif):
 				pywikibot.output(u'An error occurred while analyzing template %s' % template_name)
 				pywikibot.output(u'%s %s'% (type(myexception), myexception.args))
 	
-		# if oldid:
-		# 	print("id is %i ; oldid is %i" % (id, oldid))
-		# else:
-		# 	print("id is %i ; no oldid" % id)
+		if oldid:
+		 	print("id is %i ; oldid is %i" % (id, oldid))
+		else:
+		 	print("id is %i ; no oldid" % id)
 		if not death_found:
 			if id == oldid:
 				pywikibot.output(u"Last revision does not contain any %s template!" % motif)
@@ -212,7 +217,7 @@ def find_add(page,motif):
 			oldid = id
 			previous_timestamp = timestamp
 
-	# Si on arrive là, c'est que la première version de la page contenait déjà le modèle
+	# Si on arrive là, c'est que la version la plus ancienne de la page contenait déjà le modèle
 	return (pywikibot.User(site, user), id, timestamp)
 	
 # Récupération des pages de la catégorie
