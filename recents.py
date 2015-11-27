@@ -15,6 +15,8 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import re, time
 from datetime import date, datetime, timedelta
 
+import sqlite3, hashlib
+
 import pywikibot
 from pywikibot import pagegenerators, textlib
 
@@ -61,7 +63,7 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
             	lastEdit = page.editTime()
 
             	if sinceAdd:
-            		_, _, added_timestamp = find_add(page,motif)
+            		added_timestamp = db_check_add(page,motif)
             		if added_timestamp:
             			lastEdit = added_timestamp
       
@@ -103,6 +105,7 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
                         else:
                             status = "{{N&}}"
                         log += u"*%s [[%s]] : %s\n" %(status,page.title(),summary.replace('{{','{{m|'))
+			db_del_entry(page.title(),motif)
         else:
             pywikibot.output(u"Page %s in ignore list; skipping."
                                  % page.title(asLink=True))
@@ -219,6 +222,49 @@ def find_add(page,motif):
 
 	# Si on arrive là, c'est que la version la plus ancienne de la page contenait déjà le modèle
 	return (pywikibot.User(site, user), id, timestamp)
+
+# Vérifie si la date d'ajout du motif est déjà présente en base. Si oui, la retourne, sinon parcourt l'historique de la page
+# et ajoute les informations à la base
+def db_check_add(page, motif):
+	hash_motif = hashlib.md5(str(motif)).hexdigest()
+
+	conn = sqlite3.connect('db/recents.db')
+	cursor = conn.cursor()
+	cursor.execute("""
+	SELECT * FROM recents
+	WHERE page = ? AND
+	pattern = ?
+	""",(page.title(),hash_motif,))
+	result = cursor.fetchone()
+	
+	if not result:
+		pywikibot.output(u"No timestamp for %s add to %s in DB; checking page revisions"%(motif,page.title()))
+		_,_,added = find_add(page,motif)
+		if not added:
+			return None
+		timestamp = added.strftime("%Y-%m-%d %H:%M:%S")
+		cursor.execute("""
+		INSERT INTO recents(page,added,pattern) VALUES(?,?,?)""", (page.title(),timestamp,hash_motif))
+		conn.commit()
+		return added
+	else:
+                pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
+		return pywikibot.Timestamp.strptime(result[1],"%Y-%m-%d %H:%M:%S")
+
+	conn.close()
+
+# Supprime de la base les informations sur l'ajout du motif sur la page
+def db_del_entry(page,motif):
+	hash_motif = hashlib.md5(str(motif)).hexdigest()
+        conn = sqlite3.connect('db/recents.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+        DELETE FROM recents
+        WHERE page = ? AND
+        pattern = ?
+        """,(page.title(),hash_motif,))
+	conn.commit()
+	conn.close()
 	
 # Récupération des pages de la catégorie
 def crawlerCat(category, delay,sinceAdd=False,subcat=False,checkTalk=False):
