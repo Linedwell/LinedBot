@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Script de mise à jour de graphe
 
-# (C) Linedwell, 2011-2015
+# (C) Linedwell, 2011-2016
 #
 # Distribué sous licence GNU GPLv3
 # Distributed under the terms of the GNU GPLv3 license
