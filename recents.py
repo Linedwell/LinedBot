@@ -249,8 +249,7 @@ def db_check_add(page, motif):
 		return added
 	else:
                 pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
-		return pywikibot.Timestamp.strptime(result[1],"%Y-%m-%d %H:%M:%S")
-
+                
 	conn.close()
 
 # Supprime de la base les informations sur l'ajout du motif sur la page
@@ -263,6 +262,20 @@ def db_del_entry(page,motif):
         WHERE page = ? AND
         pattern = ?
         """,(page.title(),hash_motif,))
+	conn.commit()
+	conn.close()
+
+# Supprime de la base les entrées plus anciennes que X jours	
+def db_clean_old(jours):
+	today = datetime.utcnow()
+	older = today - timedelta(seconds=jours * 86400)
+	oldfrmt = older.strftime("%Y-%m-%d")
+	conn = sqlite3.connect('db/recents.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+        DELETE FROM recents
+        WHERE added < ?
+        """,(oldfrmt,))
 	conn.commit()
 	conn.close()
 	
@@ -295,6 +308,7 @@ def main():
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
+    db_clean_old(60)
 
     pywikibot.output(u"%s (of %s) pages were modified in %s s."
     			%(nbrModif,nbrTotal,round(timeEnd-timeStart,2)))
