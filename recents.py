@@ -110,7 +110,6 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
             pywikibot.output(u"Page %s in ignore list; skipping."
                                  % page.title(asLink=True))
 
-    db_clean_old(60)	
     return log
 	
 
@@ -269,14 +268,14 @@ def db_del_entry(page,motif):
 # Supprime de la base les entrées plus anciennes que X jours	
 def db_clean_old(jours):
 	today = datetime.utcnow()
-	older = today - timedelta(jours * 86400)
-	oldfrmt = old2.strftime("%Y-%m-%d")
+	older = today - timedelta(seconds=jours * 86400)
+	oldfrmt = older.strftime("%Y-%m-%d")
 	conn = sqlite3.connect('db/recents.db')
         cursor = conn.cursor()
         cursor.execute("""
         DELETE FROM recents
-        WHERE added like '%?%'
-        """,(oldfrmt,))
+        WHERE added like ?
+        """,('%'+oldfrmt+'%',))
 	conn.commit()
 	conn.close()
 	
@@ -309,6 +308,7 @@ def main():
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)
+    db_clean_old(60)
 
     pywikibot.output(u"%s (of %s) pages were modified in %s s."
     			%(nbrModif,nbrTotal,round(timeEnd-timeStart,2)))
