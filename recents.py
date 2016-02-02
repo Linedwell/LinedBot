@@ -274,8 +274,8 @@ def db_clean_old(jours):
         cursor = conn.cursor()
         cursor.execute("""
         DELETE FROM recents
-        WHERE added like ?
-        """,('%'+oldfrmt+'%',))
+        WHERE added < ?
+        """,(oldfrmt,))
 	conn.commit()
 	conn.close()
 	
