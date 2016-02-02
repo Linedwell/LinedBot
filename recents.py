@@ -110,6 +110,7 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
             pywikibot.output(u"Page %s in ignore list; skipping."
                                  % page.title(asLink=True))
 
+    db_clean_old(60)	
     return log
 	
 
@@ -249,8 +250,7 @@ def db_check_add(page, motif):
 		return added
 	else:
                 pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
-		return pywikibot.Timestamp.strptime(result[1],"%Y-%m-%d %H:%M:%S")
-
+                
 	conn.close()
 
 # Supprime de la base les informations sur l'ajout du motif sur la page
@@ -263,6 +263,20 @@ def db_del_entry(page,motif):
         WHERE page = ? AND
         pattern = ?
         """,(page.title(),hash_motif,))
+	conn.commit()
+	conn.close()
+
+# Supprime de la base les entrées plus anciennes que X jours	
+def db_clean_old(jours):
+	today = datetime.utcnow()
+	older = today - timedelta(jours * 86400)
+	oldfrmt = old2.strftime("%Y-%m-%d")
+	conn = sqlite3.connect('db/recents.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+        DELETE FROM recents
+        WHERE added like '%?%'
+        """,(oldfrmt,))
 	conn.commit()
 	conn.close()
 	
