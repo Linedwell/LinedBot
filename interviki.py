@@ -20,20 +20,20 @@ import itertools
 # Déclarations
 site = {
 	'fr' : pywikibot.Site('fr','vikidia'),
-    'en' : pywikibot.Site('en','vikidia'),
+	'en' : pywikibot.Site('en','vikidia'),
 	'es' : pywikibot.Site('es','vikidia'),
 	'it' : pywikibot.Site('it','vikidia'),
 	'ru' : pywikibot.Site('ru','vikidia'),
-    'ca' : pywikibot.Site('ca','vikidia'),
+	'ca' : pywikibot.Site('ca','vikidia'),
 }
 
 summary = {
-    'fr' : u"[[Vikidia:Robot|Robot]] : mise à jour des interwikis",
-    'it' : u"Bot : interwiki update",
-    'es' : u"Bot : interwiki update",
-    'en' : u"Bot : interwiki update",
-    'ru' : u"Bot : interwiki update",
-    'ca' : u"Bot : interwiki update",
+	'fr' : u"[[Vikidia:Robot|Robot]] : mise à jour des interwikis",
+	'it' : u"Bot : interwiki update",
+	'es' : u"Bot : interwiki update",
+	'en' : u"Bot : interwiki update",
+	'ru' : u"Bot : interwiki update",
+	'ca' : u"Bot : interwiki update",
 }
 
 projects = ['commons', 'incubator', 'mediawiki', 'meta', 'species', 'test',
