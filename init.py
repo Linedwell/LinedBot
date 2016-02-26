@@ -19,7 +19,7 @@ from datetime import date
 dt = date.today()
 yr = int(dt.strftime('%Y'))
 mt = dt.strftime('%m')
-wk = int(dt.strftime('%W')) + 1
+wk = dt.isocalendar()[1]
 if wk > 52:
     yr += 1
     wk -= 52
