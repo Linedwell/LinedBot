@@ -18,19 +18,47 @@ from datetime import date, datetime, timedelta
 import pywikibot
 
 # Déclarations
-site = pywikibot.Site('fr','vikidia')
-nbrModif = 0
-nbrTotal = 0
+dico = ''
+currentYear = datetime.utcnow().year
+currentMonth = datetime.utcnow().month
 
-month = [u'',u'janvier',u'février',u'mars',u'avril',u'mai',u'juin',u'juillet',u'août',u'septembre',u'octobre',u'novembre',u'décembre']
+dicoFR = {
+    'site' : pywikibot.Site('fr','vikidia'),
+    'page' : u"Vikidia:Demandes aux bureaucrates/%s" % str(currentYear),
+    'month' : [u'',u'janvier',u'février',u'mars',u'avril',u'mai',u'juin',u'juillet',u'août',u'septembre',u'octobre',u'novembre',u'décembre'],
+    'days' : u"jours",
+    'since' : u" inactif depuis le ",
+    'template' : u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|%s|%s}}\n",
+    'section' : u"\n\n== Administrateurs inactifs depuis au moins un an ==\n\n",
+    'notifsummary' : "[[VD:Robot|Robot]] : Notification de prochaine suspension des outils",
+    'reportsummary' : "[[VD:Robot|Robot]] : Liste des administrateurs inactifs depuis au moins un an",
+    'hard' : 365,
+    'soft' : 300,
+}
+
+itmonth = [u'',u'gennaio',u'febbraio',u'marzo',u'aprile',u'maggio',u'giugno',u'luglio',u'agosto',u'settembre',u'ottobre',u'novembre',u'dicembre']
+
+dicoIT = {
+    'site' : pywikibot.Site('it','vikidia'),
+    'page' : u"Vikidia:Richieste agli amministratori/%s %s" % (str(itmonth[currentMonth]), str(currentYear)),
+    'month' : [u'',u'gennaio',u'febbraio',u'marzo',u'aprile',u'maggio',u'giugno',u'luglio',u'agosto',u'settembre',u'ottobre',u'novembre',u'dicembre'],
+    'days' : u"giorni",
+    'since' : u" inattivo dal ",
+    'template' : u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|%s|%s}}\n",
+    'section' : u"\n\n== Amministratori inattivi da al meno un anno ==\n\n",
+    'notifsummary' : "[[VD:Bot|Bot]] : Notifica di sospensione prossima degli strumenti di amministratore",
+    'reportsummary' : "[[VD:Bot|Bot]] : Lista dei amministratori inattivi da più di un anno",
+    'hard' : 365,
+    'soft' : 300,
+}
 
 #BUGFIX
-site.login()
+#site.login()
 #END OF FIX
 
 #Retourne la liste des administrateurs ainsi que la date de leur dernière contribution
 def getSysopsLastEdit():
-    
+    site = dico['site']
     sysopList = site.allusers(group="sysop")
     sysopLastEdit = {}
 
@@ -46,57 +74,65 @@ def getSysopsLastEdit():
     return sysopLastEdit
 
 #Retourne la liste des administrateurs inactifs depuis <hardlimit>, notifie ceux inactifs depuis <softlimit>
-def getInactiveSysops(list, hardlimit, softlimit):
-    
+def getInactiveSysops(list):
+    hardlimit = calcLimit(dico['hard'])
+    softlimit = calcLimit(dico['soft'])
     inactiveSysops = []
 
     for sysop in sorted(list.iterkeys()):
         lastEdit = list[sysop]
         duration = calcDuration(lastEdit)
         print "%s : %s" %(sysop,str(duration))
-        hrdate = u"%s %s %s (%s jours)" %(lastEdit.day,month[int(lastEdit.month)],lastEdit.year,duration.days)
+        hrdate = u"%s %s %s (%s %s)" %(lastEdit.day,dico['month'][int(lastEdit.month)],lastEdit.year,duration.days,dico['days'])
         
         if lastEdit < hardlimit:
-            inactiveSysops.append(u"* {{u|" + sysop + u"}} : inactif depuis le " + hrdate)
+            inactiveSysops.append(u"* {{u|" + sysop + u"}} : " + dico['since'] + hrdate)
         elif lastEdit < softlimit:
             deadline = lastEdit + timedelta(days=365)
-            hrdeadline = u"%s %s %s" %(deadline.day,month[int(deadline.month)],deadline.year)
+            hrdeadline = u"%s %s %s" %(deadline.day,dico['month'][int(deadline.month)],deadline.year)
             notifySysop(sysop,hrdate,hrdeadline)
 
     return inactiveSysops
 
 #Notifie un admin ayant presque atteint le seuil d'inactivité de la possible suspension de ses outils
 def notifySysop(sysop,hrdate,hrdeadline):
-    notif = u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|%s|%s}}\n" %(hrdate,hrdeadline)
-
-    page = pywikibot.Page(site,u"Discussion utilisateur:"+sysop)
+    notif = dico['template'] %(hrdate,hrdeadline)
+    site = dico['site']
+    page = pywikibot.Page(site,u"User talk:"+sysop)
     
     if page.userName() == site.user():
         print u"%s already warned; skipping." % page.title(asLink=True)
     
     else:
-        summary = "[[VD:Robot|Robot]] : Notification de prochaine suspension des outils"
-        page.text = page.text + notif
-        page.save(summary,minor=False)
+        summary = dico['notifsummary']
+        print page.text + notif
+        #page.text = page.text + notif
+        #page.save(summary,minor=False)
 
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
 def reportInactiveSysops(list):
     
     if len(list) > 0:
-        
-        currentYear = datetime.utcnow().year
-
-        report = u"\n\n== Administrateurs inactifs depuis au moins un an ==\n\n"
+        report = dico['section']
 
         for s in list:
             report += s + "\n"
         
-        page = pywikibot.Page(site,u"Vikidia:Demandes aux bureaucrates/" + str(currentYear))
+        page = pywikibot.Page(dico['site'],dico['page'])
         page.text = page.text + report
-        summary = "[[VD:Robot|Robot]] : Liste des administrateurs inactifs depuis au moins un an"
-
+        summary = dico['reportsummary']
+        
         page.save(summary,minor=False,botflag=False)
+
+
+#Lanceur principal
+def inactiveSysopsManager(loc):
+    global dico
+    dico = loc
+    sysopLastEdit = getSysopsLastEdit()
+    inactiveSysops = getInactiveSysops(sysopLastEdit)
+    reportInactiveSysops(inactiveSysops)
 
 
 #Retourne la date avant laquelle on considère obsolète l'usage du modèle
@@ -115,13 +151,8 @@ def calcDuration(date):
 #Exécution
 def main():
     timeStart = time.time()
-    hardlimit = calcLimit(365) #Seuil pour lequel le retrait des outils sera demandé
-    softlimit = calcLimit(300) #Seuil pour lequel une notification sera envoyée à l'admin
-    
-    sysopLastEdit = getSysopsLastEdit()
-    inactiveSysops = getInactiveSysops(sysopLastEdit,hardlimit,softlimit)
-    
-    reportInactiveSysops(inactiveSysops)
+    inactiveSysopsManager(dicoFR)
+    #inactiveSysopsManager(dicoIT)
     timeEnd = time.time()
 
 if __name__ == "__main__":
