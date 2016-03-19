@@ -111,23 +111,29 @@ def notifySysop(sysop,hrdate,hrdeadline):
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
 def reportInactiveSysops(list):
+    page = pywikibot.Page(dico['site'],dico['page'])
     
     if len(list) > 0:
-        report = dico['section']
-
-        for s in list:
-            report += s + "\n"
         
-        page = pywikibot.Page(dico['site'],dico['page'])
-        page.text = page.text + report
-        summary = dico['reportsummary']
-        page.save(summary,minor=False,botflag=False)
+        if page.userName() == dico['site'].user():
+            print u"List already reported; skipping"
+        
+        else:
+            report = dico['section']
+
+            for s in list:
+                report += s + "\n"
+
+            page.text = page.text + report
+            summary = dico['reportsummary']
+            page.save(summary,minor=False,botflag=False)
 
 
 #Lanceur principal
 def inactiveSysopsManager(loc):
     global dico
     dico = loc
+    dico['site'].login()
     sysopLastEdit = getSysopsLastEdit()
     inactiveSysops = getInactiveSysops(sysopLastEdit)
     reportInactiveSysops(inactiveSysops)
