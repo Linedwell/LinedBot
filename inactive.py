@@ -44,10 +44,10 @@ dicoIT = {
     'month' : [u'',u'gennaio',u'febbraio',u'marzo',u'aprile',u'maggio',u'giugno',u'luglio',u'agosto',u'settembre',u'ottobre',u'novembre',u'dicembre'],
     'days' : u"giorni",
     'since' : u" inattivo dal ",
-    'template' : u"\n\n{{subst:Utilisateur:LinedBot/NotifAdminInactif|%s|%s}}\n",
+    'template' : u"\n\n{{subst:Utente:LinedBot/NotificaAdminInattivo|%s|%s}}\n",
     'section' : u"\n\n== Amministratori inattivi da al meno un anno ==\n\n",
-    'notifsummary' : "[[VD:Bot|Bot]] : Notifica di sospensione prossima degli strumenti di amministratore",
-    'reportsummary' : "[[VD:Bot|Bot]] : Lista dei amministratori inattivi da più di un anno",
+    'notifsummary' : "[[Vikidia:Bot|Bot]] : Notifica di sospensione prossima degli strumenti di amministratore",
+    'reportsummary' : "[[Vikidia:Bot|Bot]] : Lista dei amministratori inattivi da più di un anno",
     'hard' : 365,
     'soft' : 300,
 }
@@ -105,9 +105,8 @@ def notifySysop(sysop,hrdate,hrdeadline):
     
     else:
         summary = dico['notifsummary']
-        print page.text + notif
-        #page.text = page.text + notif
-        #page.save(summary,minor=False)
+        page.text = page.text + notif
+        page.save(summary,minor=False)
 
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
@@ -122,7 +121,6 @@ def reportInactiveSysops(list):
         page = pywikibot.Page(dico['site'],dico['page'])
         page.text = page.text + report
         summary = dico['reportsummary']
-        
         page.save(summary,minor=False,botflag=False)
 
 
@@ -152,7 +150,7 @@ def calcDuration(date):
 def main():
     timeStart = time.time()
     inactiveSysopsManager(dicoFR)
-    #inactiveSysopsManager(dicoIT)
+    inactiveSysopsManager(dicoIT)
     timeEnd = time.time()
 
 if __name__ == "__main__":
