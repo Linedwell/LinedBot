@@ -234,7 +234,7 @@ def db_check_add(page, motif):
 	SELECT * FROM recents
 	WHERE page = ? AND
 	pattern = ?
-	""",(page.title(),hash_motif,))
+	""",[page.title(),hash_motif])
 	result = cursor.fetchone()
 	
 	if not result:
@@ -248,7 +248,7 @@ def db_check_add(page, motif):
 		conn.commit()
 		return added
 	else:
-                pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
+        pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
                 
 	conn.close()
 
@@ -261,7 +261,7 @@ def db_del_entry(page,motif):
         DELETE FROM recents
         WHERE page = ? AND
         pattern = ?
-        """,(page.title(),hash_motif,))
+        """,[page.title(),hash_motif])
 	conn.commit()
 	conn.close()
 
