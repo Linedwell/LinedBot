@@ -15,6 +15,8 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import time
 from datetime import date, datetime, timedelta
 
+import sqlite3
+
 import pywikibot
 
 # Déclarations
@@ -69,44 +71,49 @@ def getSysopsLastEdit():
         for c in uc:
             lastEdit = datetime.strptime(c[u'timestamp'],"%Y-%m-%dT%H:%M:%SZ")
             sysopLastEdit[sysopName] = lastEdit
+            print "%s : %s" %(sysopName, calcDuration(lastEdit))
             break
-
     return sysopLastEdit
 
 #Retourne la liste des administrateurs inactifs depuis <hardlimit>, notifie ceux inactifs depuis <softlimit>
 def getInactiveSysops(list):
     hardlimit = calcLimit(dico['hard'])
     softlimit = calcLimit(dico['soft'])
-    inactiveSysops = []
+    inactiveSysopsHard = []
+    inactiveSysopsSoft = []
 
     for sysop in sorted(list.iterkeys()):
         lastEdit = list[sysop]
-        duration = calcDuration(lastEdit)
-        print "%s : %s" %(sysop,str(duration))
-        hrdate = u"%s %s %s (%s %s)" %(lastEdit.day,dico['month'][int(lastEdit.month)],lastEdit.year,duration.days,dico['days'])
-        
         if lastEdit < hardlimit:
-            inactiveSysops.append(u"* {{u|" + sysop + u"}} : " + dico['since'] + hrdate)
+            inactiveSysopsHard.append([sysop,lastEdit])
         elif lastEdit < softlimit:
-            deadline = lastEdit + timedelta(days=365)
-            hrdeadline = u"%s %s %s" %(deadline.day,dico['month'][int(deadline.month)],deadline.year)
-            notifySysop(sysop,hrdate,hrdeadline)
+            inactiveSysopsSoft.append([sysop,lastEdit])
 
-    return inactiveSysops
+    return inactiveSysopsHard, inactiveSysopsSoft
 
-#Notifie un admin ayant presque atteint le seuil d'inactivité de la possible suspension de ses outils
-def notifySysop(sysop,hrdate,hrdeadline):
-    notif = dico['template'] %(hrdate,hrdeadline)
-    site = dico['site']
-    page = pywikibot.Page(site,u"User talk:"+sysop)
-    
-    if page.userName() == site.user():
-        print u"%s already warned; skipping." % page.title(asLink=True)
-    
-    else:
-        summary = dico['notifsummary']
-        page.text = page.text + notif
-        page.save(summary,minor=False)
+#Notifie la liste des admins ayant presque atteint le seuil d'inactivité de la possible suspension de leurs outils
+def notifySysop(list):
+    if len(list) > 0:
+        site = dico['site']
+        for i in list:
+            sysop, lastEdit = i
+            page = pywikibot.Page(site,u"User talk:"+sysop)
+            status = db_check_status(sysop,lastEdit)
+            if not status:
+                duration = calcDuration(lastEdit)
+                hrdate = u"%s %s %s (%s %s)" %(lastEdit.day,dico['month'][int(lastEdit.month)],lastEdit.year,duration.days,dico['days'])
+                deadline = lastEdit + timedelta(days=dico['hard'])
+                hrdeadline = u"%s %s %s" %(deadline.day,dico['month'][int(deadline.month)],deadline.year)
+                notif = dico['template'] %(hrdate,hrdeadline)
+            
+                summary = dico['notifsummary']
+                page.text = page.text + notif
+                page.save(summary,minor=False)
+                db_upsert_status(sysop,lastEdit,"N")
+                
+            else:
+                print u"%s already notified; skipping." % page.title(asLink=True)
+
 
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
@@ -114,20 +121,60 @@ def reportInactiveSysops(list):
     page = pywikibot.Page(dico['site'],dico['page'])
     
     if len(list) > 0:
-        
-        if page.userName() == dico['site'].user():
-            print u"List already reported; skipping"
-        
-        else:
-            report = dico['section']
+        section = dico['section']
+        report = ''
 
-            for s in list:
-                report += s + "\n"
-
-            page.text = page.text + report
+        for i in list:
+            sysop, lastEdit = i
+            status = db_check_status(sysop,lastEdit)
+            
+            # Si l'administrateur n'a pas déjà été reporté pour cette absence
+            if not status or not status[0] == "R":
+                db_upsert_status(sysop,lastEdit,"R")
+                duration = calcDuration(lastEdit)
+                hrdate = u"%s %s %s (%s %s)" %(lastEdit.day,dico['month'][int(lastEdit.month)],lastEdit.year,duration.days,dico['days'])
+                report += u"* {{u|" + sysop + u"}} : " + dico['since'] + hrdate + "\n"
+            else:
+                print u"%s already reported; skipping." % sysop
+        
+        if len(report):
+            page.text = page.text + section + report
             summary = dico['reportsummary']
             page.save(summary,minor=False,botflag=False)
+        else:
+            print u"Nobody to report."
 
+# Vérifie si l'admin a déjà été notifié / signalé pour inactivité
+def db_check_status(sysop, lastEdit):
+    table = "inactive_%s" %dico['site'].lang
+    conn = sqlite3.connect('db/inactive.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+    SELECT status FROM """ + table + """
+    WHERE username = ? AND
+    lastedit = ?
+    """,[sysop,str(lastEdit)])
+    result = cursor.fetchone()
+    conn.close()
+    return result
+
+# Ajoute (INSERT) ou modifie (UPDATE) le statut du signalement d'un admin
+def db_upsert_status(sysop,lastEdit,status):
+    table = "inactive_%s" %dico['site'].lang
+    conn = sqlite3.connect('db/inactive.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+    INSERT OR IGNORE INTO """ + table + """(username,lastedit,status)
+    VALUES(?,?,?)
+    """,[sysop,str(lastEdit),status])
+    cursor.execute("""
+    UPDATE """ + table + """
+    SET status = ?
+    WHERE username = ? AND
+    lastedit = ?
+    """,[status,sysop,str(lastEdit)])
+    conn.commit()
+    conn.close()
 
 #Lanceur principal
 def inactiveSysopsManager(loc):
@@ -135,8 +182,10 @@ def inactiveSysopsManager(loc):
     dico = loc
     dico['site'].login()
     sysopLastEdit = getSysopsLastEdit()
-    inactiveSysops = getInactiveSysops(sysopLastEdit)
-    reportInactiveSysops(inactiveSysops)
+    inactiveSysopsHard, inactiveSysopsSoft = getInactiveSysops(sysopLastEdit)
+    
+    notifySysop(inactiveSysopsSoft)
+    reportInactiveSysops(inactiveSysopsHard)
 
 
 #Retourne la date avant laquelle on considère obsolète l'usage du modèle
