@@ -248,7 +248,7 @@ def db_check_add(page, motif):
 		conn.commit()
 		return added
 	else:
-        pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
+        	pywikibot.output(u"Timestamp for %s add to %s found in DB"%(motif,page.title()))
                 
 	conn.close()
 
