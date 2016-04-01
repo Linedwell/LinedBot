@@ -164,7 +164,7 @@ def find_add(page,motif):
 
 	if len(history) == 1:
 		[(id, timestamp, user, comment)] = history
-		return (pywikibot.User(site, user), id)
+		return (pywikibot.User(site, user), id, timestamp)
 	
 	pywikibot.output(u"=====================================")
 	pywikibot.output(u"Page : %s" % page.title())
