@@ -24,12 +24,15 @@ import mailer
 sites = {
     'fr' : pywikibot.Site('fr','vikidia'),
     'it' : pywikibot.Site('it','vikidia'),
+    'de' : pywikibot.Site('de','vikidia'),
     'en' : pywikibot.Site('en','vikidia'),
     'es' : pywikibot.Site('es','vikidia'),
     'ru' : pywikibot.Site('ru','vikidia'),
     'ca' : pywikibot.Site('ca','vikidia'),
     'eu' : pywikibot.Site('eu','vikidia'),
     'scn' : pywikibot.Site('scn','vikidia'),
+    'test' : pywikibot.Site('test','vikidia'),
+    'central' : pywikibot.Site('central','vikidia'),
 }
 
 ### debug ###
@@ -56,13 +59,14 @@ def rights_logs(end):
             # Si l'un des droits modifiés figure dans la liste des droits surveillés
             if (set(diff).intersection(watched_rights)):
             
-                report += "[" + site.lang + "][" + str(le.timestamp()) + "] " + le.user() + " -> " + le.page().title()  + " (" + str(oldgroups) + " -> " + str(newgroups) + ")\n"
+                report += "[" + site.code + "][" + str(le.timestamp()) + "] " + le.user() + " -> " + le.page().title()  + " (" + str(oldgroups) + " -> " + str(newgroups) + ")\n"
 
     return report
 
 #Envoie par mail le rapport de modification des droits
 def mail_report(report):
     if report != "":
+	#print report
         mailer.send('[RW] Modification de droits sur Vikidia.',report)
 
 #Exécution
