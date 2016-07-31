@@ -122,8 +122,8 @@ def motifFinder(catname):
 	elif catname == u"Mort récente":
 		motif = [u'Mort[_ ]récente?', u'Décès[_ ]récent']
 		
-	elif catname == u"Élection récente":
-		motif = [u'[EÉé]lection[_ ]récente']
+	elif catname == u"Scrutin récent":
+		motif = [u'Scrutin[_ ]récent', u'[EÉé]lection[_ ]récente']
 		
 	elif catname == u"Compétition sportive récente":
 		motif = [u'Compétition[_ ]sportive[_ ]récente', u'[Éé]v[éè]nement[_ ]sportif[_ ]récent']
