@@ -40,7 +40,7 @@ dicoWP = {
 dicoVD = {
     'site' : pywikibot.Site('fr','vikidia'),
     'pagesList' : [u'Vikidia:Bavardages/%s/%s' % (str(yr),str(wk)), u'Vikidia:La cabane/%s/%s' % (str(yr), str(mt)), u'Vikidia:Bulletin des administrateurs/%s %s' % (str(yr),str(mt)), u'Vikidia:Demandes aux administrateurs/%s %s' % (str(yr),str(mt))],
-    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>'],
+    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>\n__TOC__\n{{clr}}'],
     'summary' : u'[[VD:Robot|Robot]] : initialisation de sous-page périodique'
 }
 
