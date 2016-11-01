@@ -11,10 +11,13 @@
 import sys, getopt
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
-import pywikibot
+import logging
+logging.basicConfig(filename='log/w3po.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
 
 import cgi
 import urllib2
+
+import pywikibot
 
 # Déclarations
 site = pywikibot.Site('fr','wikipedia')
