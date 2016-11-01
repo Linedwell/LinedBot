@@ -12,10 +12,13 @@
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
-import pywikibot
-from pywikibot import pagegenerators
+import logging
+logging.basicConfig(filename='log/rights-watcher.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
 
 from datetime import datetime
+
+import pywikibot
+from pywikibot import pagegenerators
 
 import mailer
 
