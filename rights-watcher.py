@@ -34,7 +34,7 @@ sites = {
     'ca' : pywikibot.Site('ca','vikidia'),
     'eu' : pywikibot.Site('eu','vikidia'),
     'scn' : pywikibot.Site('scn','vikidia'),
-    'test' : pywikibot.Site('test','vikidia'),
+    #'test' : pywikibot.Site('test','vikidia'),
     'central' : pywikibot.Site('central','vikidia'),
 }
 
