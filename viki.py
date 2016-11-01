@@ -12,6 +12,9 @@
 import sys, getopt
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
+import logging
+logging.basicConfig(filename='log/viki.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
+
 import re, time
 
 import pywikibot
