@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Script XXXX
+# Script de génération de liste d'articles à traduire
 
 # (C) Linedwell, 2011-2016
 #
