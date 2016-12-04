@@ -11,8 +11,7 @@
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
-import logging
-logging.basicConfig(filename='log/grapher.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
+import mylogging
 
 import pywikibot
 
@@ -22,7 +21,7 @@ page = pywikibot.Page(site, u"Projet:Maintenance/Suivi d'admissibilité/graphe")
 
 # Met à jour le graphe de la page passée en paramètre avec la nouvelle valeur
 def update(val):
-    last_values = file('_grapher.log','r').readlines()[-14:]
+    last_values = file('_grapher.dat','r').readlines()[-14:]
     last_values = [int(el.strip()) for el in last_values]
     last_values.append(val)
     
@@ -97,10 +96,10 @@ def update(val):
     page.text = template
     page.save(summary)
     
-    gr_log = open('_grapher.log','w')
+    gr_dat = open('_grapher.dat','w')
     for val in last_values:
-        gr_log.write(str(val) + '\n')
-    gr_log.close()
+        gr_dat.write(str(val) + '\n')
+    gr_dat.close()
 
 if __name__ == "__main__":
     try:
