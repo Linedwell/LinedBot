@@ -11,8 +11,7 @@
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
-import logging
-logging.basicConfig(filename='log/init.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
+import mylogging
 
 import time
 from datetime import date

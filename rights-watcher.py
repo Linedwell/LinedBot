@@ -12,8 +12,7 @@
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
-import logging
-logging.basicConfig(filename='log/rights-watcher.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
+import mylogging
 
 from datetime import datetime
 
@@ -34,7 +33,7 @@ sites = {
     'ca' : pywikibot.Site('ca','vikidia'),
     'eu' : pywikibot.Site('eu','vikidia'),
     'scn' : pywikibot.Site('scn','vikidia'),
-    'test' : pywikibot.Site('test','vikidia'),
+    #'test' : pywikibot.Site('test','vikidia'),
     'central' : pywikibot.Site('central','vikidia'),
 }
 

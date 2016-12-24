@@ -12,8 +12,7 @@
 import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
-import logging
-logging.basicConfig(filename='log/interviki.log', format='%(asctime)s :: %(levelname)s :: %(message)s', level=logging.INFO)
+import mylogging
 
 import pywikibot
 from pywikibot import pagegenerators
