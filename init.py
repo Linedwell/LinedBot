@@ -20,30 +20,26 @@ import pywikibot
 
 # Variables temporelles
 dt = date.today()
-yr = int(dt.strftime('%Y'))
+yr = dt.strftime('%Y')
 mt = dt.strftime('%m')
-wk = dt.isocalendar()[1]
-if wk > 52:
-    yr += 1
-    wk -= 52
-if wk < 10:
-    wk = '0'+ str(wk)
-    wk = str(wk)
+wk = dt.strftime('%V')
+if wk > dt.strftime('%W'): #Si le numéro de semaine au format ISO est supérieur à celui au format "standard" alors on est la semaine 52 (ou 53) de l'année précédente
+    yr = str(int(yr)-1)
 
 # Listes de pages
 ## Wikipedia
 dicoWP = {
     'site' : pywikibot.Site('fr','wikipedia'),
-    'pagesList' : [u'Wikipédia:Bulletin des administrateurs/%s/Semaine %s' % (str(yr),str(wk))],
-    'pagesHeader' : [u'<noinclude>{{Wikipédia:Bulletin des administrateurs/en-tête court|année='+ str(yr) +u'}}</noinclude>'],
+    'pagesList' : [u'Wikipédia:Bulletin des administrateurs/%s/Semaine %s' % (yr,str(int(wk)))],
+    'pagesHeader' : [u'<noinclude>{{Wikipédia:Bulletin des administrateurs/en-tête court|année='+ yr + u'}}</noinclude>'],
     'summary' : u'[[WP:Bot|Robot]] : initialisation de sous-page périodique'
 }
 
 ##Vikidia
 dicoVD = {
     'site' : pywikibot.Site('fr','vikidia'),
-    'pagesList' : [u'Vikidia:Bavardages/%s/%s' % (str(yr),str(wk)), u'Vikidia:La cabane/%s/%s' % (str(yr), str(mt)), u'Vikidia:Bulletin des administrateurs/%s %s' % (str(yr),str(mt)), u'Vikidia:Demandes aux administrateurs/%s %s' % (str(yr),str(mt))],
-    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année='+str(yr)+u'}}</noinclude>\n__TOC__\n{{clr}}'],
+    'pagesList' : [u'Vikidia:Bavardages/%s/%s' % (yr,wk), u'Vikidia:La cabane/%s/%s' % (yr,mt), u'Vikidia:Bulletin des administrateurs/%s %s' % (yr,mt), u'Vikidia:Demandes aux administrateurs/%s %s' % (yr,mt)],
+    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année=' + yr + u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+ yr + u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année=' + yr + u'}}</noinclude>\n__TOC__\n{{clr}}'],
     'summary' : u'[[VD:Robot|Robot]] : initialisation de sous-page périodique'
 }
 
