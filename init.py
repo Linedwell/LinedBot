@@ -31,7 +31,7 @@ if wk > dt.strftime('%W'): #Si le numéro de semaine au format ISO est supérieu
 dicoWP = {
     'site' : pywikibot.Site('fr','wikipedia'),
     'pagesList' : [u'Wikipédia:Bulletin des administrateurs/%s/Semaine %s' % (yr,wk)],
-    'pagesHeader' : [u'<noinclude>{{Wikipédia:Bulletin des administrateurs/en-tête court|année='+ yr +u'}}</noinclude>'],
+    'pagesHeader' : [u'<noinclude>{{Wikipédia:Bulletin des administrateurs/en-tête court|année='+ yr + u'}}</noinclude>'],
     'summary' : u'[[WP:Bot|Robot]] : initialisation de sous-page périodique'
 }
 
@@ -39,7 +39,7 @@ dicoWP = {
 dicoVD = {
     'site' : pywikibot.Site('fr','vikidia'),
     'pagesList' : [u'Vikidia:Bavardages/%s/%s' % (yr,wk), u'Vikidia:La cabane/%s/%s' % (yr,mt), u'Vikidia:Bulletin des administrateurs/%s %s' % (yr,mt), u'Vikidia:Demandes aux administrateurs/%s %s' % (yr,mt)],
-    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année='yr+u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+yr+u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année='+yr+u'}}</noinclude>\n__TOC__\n{{clr}}'],
+    'pagesHeader' : [u'{{subst:Vikidia:Bavardages/Initialisation}}',u'<noinclude>{{Vikidia:La cabane/Navigation|année=' + yr + u'}}</noinclude>',u'<noinclude>{{Vikidia:Bulletin des administrateurs/Navigation|année='+ yr + u'}}</noinclude>',u'<noinclude>{{Vikidia:Demandes aux administrateurs/Navigation|année=' + yr + u'}}</noinclude>\n__TOC__\n{{clr}}'],
     'summary' : u'[[VD:Robot|Robot]] : initialisation de sous-page périodique'
 }
 
