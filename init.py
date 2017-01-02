@@ -30,7 +30,7 @@ if wk > dt.strftime('%W'): #Si le numéro de semaine au format ISO est supérieu
 ## Wikipedia
 dicoWP = {
     'site' : pywikibot.Site('fr','wikipedia'),
-    'pagesList' : [u'Wikipédia:Bulletin des administrateurs/%s/Semaine %s' % (yr,wk)],
+    'pagesList' : [u'Wikipédia:Bulletin des administrateurs/%s/Semaine %s' % (yr,str(int(wk)))],
     'pagesHeader' : [u'<noinclude>{{Wikipédia:Bulletin des administrateurs/en-tête court|année='+ yr + u'}}</noinclude>'],
     'summary' : u'[[WP:Bot|Robot]] : initialisation de sous-page périodique'
 }
