@@ -33,7 +33,7 @@ globalsettings = {
     'reqEditCount' : 1, 		#number of edits required to welcome an user
     'timeoffset' : 60,			#skip users newer than # minutes
     'defaultSign' : '--~~~~',		#default signature
-    'randomSign' : True,		#pick a random signature instead of default
+    'randomSign' : False,		#pick a random signature instead of default
     'queryLimit' : 50,			#number of users loaded by the bot
 }
 
