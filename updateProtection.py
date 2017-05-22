@@ -38,16 +38,16 @@ def getPagesList():
 def updatePage(page):
 	protlev = getProtectionLevel(page)
 	pywikibot.output(u"Current protection level: %s"
-                                 % protlev)
+                                 % (protlev,))
 	pageTemp = page.get()
-	pageTempNew = updateProtectionTemplate(pageTemp, protlev)
+	pageTempNew = updateEditProtectionTemplate(pageTemp, protlev[0])
+	pageTempNew = updateMoveProtectionTemplate(pageTempNew, protlev[1])
 	pywikibot.showDiff(pageTemp, pageTempNew)
-	
 	summary = u"[[WP:Bot|Robot]] : Mise à jour du modèle de protection"
 	page.text = pageTempNew
 	page.save(summary)
 
-# Récupère le niveau de protection en écriture de la page, None si aucune protection en cours
+# Récupère sous forme de tuple les niveaux de protection en écriture et en renommage de la page, None si aucune protection en cours
 def getProtectionLevel(page):
         prot = page.protection()
 	pl_ed = None
@@ -58,10 +58,10 @@ def getProtectionLevel(page):
 	if u'move' in prot: # Si la page est actuellement protégée en renommage
 		pl_mv = prot[u'move'][0]
 
-        return pl_ed
+        return (pl_ed, pl_mv)
 
 # Retrait du modèle précédent et ajout si nécessaire du modèle de protection adéquat
-def updateProtectionTemplate(text, protlev):
+def updateEditProtectionTemplate(text, protlev):
 	motif = [u'SP(E)?',u'Semi-protégé',u'(Semi[- ])?protection([_ ](étendue|(?P<SPL>longue)))?']
 
 	protTemplate = {
@@ -71,7 +71,7 @@ def updateProtectionTemplate(text, protlev):
 	}
 
         for m in motif:
-	        parser = re.compile(r'{{' + m + r'}}(\s*?|(?={{))',re.I | re.U | re.DOTALL)
+	        parser = re.compile(r'{{' + m + r'.*?}}(\s*?|(?={{))',re.I | re.U | re.DOTALL)
               	searchResult = parser.search(text) #On cherche si le motif {{m}} existe dans la page
                 if searchResult:
 			result = pywikibot.output(u"Template found: %s" % searchResult.group())
@@ -80,6 +80,22 @@ def updateProtectionTemplate(text, protlev):
 				text = protTemplate[protlev] + '\n' + text
 	#print text
 	return text
+
+def updateMoveProtectionTemplate(text, protlev):
+        motif = [u'Nom[_ ]protégé']
+
+        for m in motif:
+                parser = re.compile(r'{{' + m + r'}}(\s*?|(?={{))',re.I | re.U | re.DOTALL)
+                searchResult = parser.search(text) #On cherche si le motif {{m}} existe dans la page
+                if searchResult:
+                        result = pywikibot.output(u"Template found: %s" % searchResult.group())
+			if not protlev:
+                        	text = parser.sub('',text,1) #Retire la 1re occurrence du motif dans la page
+        #print text
+        return text
+
+
+
 
 #Exécution
 def main():
