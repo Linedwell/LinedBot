@@ -26,6 +26,32 @@ dico = ''
 currentYear = datetime.utcnow().year
 currentMonth = datetime.utcnow().month
 
+dicoCA = {
+    'site' : pywikibot.Site('ca','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+}
+
+
+dicoEN = {
+    'site' : pywikibot.Site('en','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+}
+
+dicoES = {
+    'site' : pywikibot.Site('es','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+}
+
+dicoEU = {
+    'site' : pywikibot.Site('eu','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+}
+
+
 dicoFR = {
     'site' : pywikibot.Site('fr','vikidia'),
     'page' : u"Vikidia:Demandes aux bureaucrates/%s" % str(currentYear),
@@ -55,6 +81,13 @@ dicoIT = {
     'hard' : 365,
     'soft' : 300,
 }
+
+dicoSCN = {
+    'site' : pywikibot.Site('scn','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+}
+
 
 #BUGFIX
 #site.login()
@@ -179,15 +212,16 @@ def db_upsert_status(sysop,lastEdit,status):
     conn.close()
 
 #Lanceur principal
-def inactiveSysopsManager(loc):
+def inactiveSysopsManager(loc, simulation=False):
     global dico
     dico = loc
     dico['site'].login()
     sysopLastEdit = getSysopsLastEdit()
     inactiveSysopsHard, inactiveSysopsSoft = getInactiveSysops(sysopLastEdit)
     
-    notifySysop(inactiveSysopsSoft)
-    reportInactiveSysops(inactiveSysopsHard)
+    if not simulation:
+        notifySysop(inactiveSysopsSoft)
+        reportInactiveSysops(inactiveSysopsHard)
 
 
 #Retourne la date avant laquelle on considère obsolète l'usage du modèle
@@ -206,8 +240,19 @@ def calcDuration(date):
 #Exécution
 def main():
     timeStart = time.time()
-    inactiveSysopsManager(dicoFR)
-    inactiveSysopsManager(dicoIT)
+    #inactiveSysopsManager(dicoFR)
+    #inactiveSysopsManager(dicoIT)
+    print "CA"
+    inactiveSysopsManager(dicoCA,True)
+    print "EN"
+    inactiveSysopsManager(dicoEN,True)
+    print "ES"
+    inactiveSysopsManager(dicoES,True)
+    print "EU"
+    inactiveSysopsManager(dicoEU,True)
+    print "SCN"
+    inactiveSysopsManager(dicoSCN,True)
+
     timeEnd = time.time()
 
 if __name__ == "__main__":

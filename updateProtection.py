@@ -43,6 +43,9 @@ def updatePage(page):
 	pageTempNew = updateEditProtectionTemplate(pageTemp, protlev[0])
 	pageTempNew = updateMoveProtectionTemplate(pageTempNew, protlev[1])
 	pywikibot.showDiff(pageTemp, pageTempNew)
+	sk = raw_input()
+	if sk != '':
+		return
 	summary = u"[[WP:Bot|Robot]] : Mise à jour du modèle de protection"
 	page.text = pageTempNew
 	page.save(summary)
@@ -62,7 +65,7 @@ def getProtectionLevel(page):
 
 # Retrait du modèle précédent et ajout si nécessaire du modèle de protection adéquat
 def updateEditProtectionTemplate(text, protlev):
-	motif = [u'SP(E)?',u'Semi-protégé',u'(Semi[- ])?protection([_ ](étendue|(?P<SPL>longue)))?']
+	motif = [u'SP(E)?',u'[Ss]emi-protégé',u'([Ss]emi[- ])?[Pp]rotection([_ ](étendue|(?P<SPL>longue)))?']
 
 	protTemplate = {
 		'autoconfirmed' : u'{{Semi-protection}}',
@@ -71,12 +74,14 @@ def updateEditProtectionTemplate(text, protlev):
 	}
 
         for m in motif:
-	        parser = re.compile(r'{{' + m + r'.*?}}(\s*?|(?={{))',re.I | re.U | re.DOTALL)
+	        parser = re.compile(r'{{' + m + r'.*?}}(\s*?|(?={{))', re.U | re.DOTALL)
               	searchResult = parser.search(text) #On cherche si le motif {{m}} existe dans la page
                 if searchResult:
 			result = pywikibot.output(u"Template found: %s" % searchResult.group())
                         text = parser.sub('',text,1) #Retire la 1re occurrence du motif dans la page
-			if protlev: 
+			if protlev and searchResult.group('SPL'):
+				text = u'{{Semi-protection longue}}' + '\n' + text
+			elif protlev: 
 				text = protTemplate[protlev] + '\n' + text
 	#print text
 	return text
