@@ -89,7 +89,7 @@ def newPages(all=False):
                     
                     # s'il existe des références, on retire le job 'orphelin'
                     #if page in lonelyPagesList:    ##DESACTIVE TANT QUE LA PAGE SPECIALE NE SE MET PLUS A JOUR##
-		    if len(page.backlinks(namespaces=0)) < 1:
+		    if len(set(page.backlinks(namespaces=0))) < 1:
                         jobList.append(u'orphelin')
                 
                     # s'il n'existe aucune catégorie (directe), on ajoute le job 'catégoriser'
@@ -107,7 +107,7 @@ def newPages(all=False):
                     
                     # si la page ne pointe vers aucune autre, on ajoute le job 'impasse'
                     #if page in deadendPagesList:
-                    if len(page.linkedPages(namespaces=0)) < 1: ##DESACTIVE TANT QUE LA PAGE SPECIALE NE SE MET PLUS A JOUR##
+                    if len(set(page.linkedPages(namespaces=0))) < 1: ##DESACTIVE TANT QUE LA PAGE SPECIALE NE SE MET PLUS A JOUR##
                         jobList.append(u'impasse')
                     
                     
