@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Script de génération de liste d'articles à traduire
 
-# (C) Linedwell, 2011-2016
+# (C) Linedwell, 2011-2018
 #
 # Distribué sous licence GNU GPLv3
 # Distributed under the terms of the GNU GPLv3 license
