@@ -240,7 +240,9 @@ def calcDuration(date):
 #Exécution
 def main():
     timeStart = time.time()
+    print "FR"
     inactiveSysopsManager(dicoFR)
+    print "IT"
     inactiveSysopsManager(dicoIT)
     print "CA"
     inactiveSysopsManager(dicoCA,True)
