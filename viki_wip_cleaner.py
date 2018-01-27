@@ -61,6 +61,7 @@ def cleanWIP(delay):
 				pageTemp, templateResult = removeTemplate(pageTemp)
 				summary = u"[[VD:Robot|Robot]] : Retrait du bandeau %s (article non modifié depuis plus de %s jours)" %(templateResult,duration.days)
 				pywikibot.showDiff(page.text, pageTemp)
+				page.text = pageTemp
 				print summary
 				page.save(summary)
             
