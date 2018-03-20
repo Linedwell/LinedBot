@@ -129,11 +129,10 @@ def getInactiveSysops(list):
 #Notifie la liste des admins ayant presque atteint le seuil d'inactivité de la possible suspension de leurs outils
 def notifySysop(list):
     if len(list) > 0:
-        site = dico['site']
         for i in list:
             sysop, lastEdit = i
-            page = pywikibot.Page(site,u"User talk:"+sysop)
-            status = db_check_status(sysop,lastEdit)
+            page = pywikibot.Page(dico['site'],u"User talk:"+sysop)
+            status = db_check_status(dico['site'].lang,sysop)
             if not status:
                 duration = calcDuration(lastEdit)
                 hrdate = u"%s %s %s (%s %s)" %(lastEdit.day,dico['month'][int(lastEdit.month)],lastEdit.year,duration.days,dico['days'])
@@ -144,7 +143,7 @@ def notifySysop(list):
                 summary = dico['notifsummary']
                 page.text = page.text + notif
                 page.save(summary,minor=False)
-                db_upsert_status(sysop,lastEdit,"N")
+                db_upsert_status(dico['site'].lang,sysop,lastEdit,"N")
                 
             else:
                 print u"%s already notified; skipping." % page.title(asLink=True)
@@ -161,7 +160,7 @@ def reportInactiveSysops(list):
 
         for i in list:
             sysop, lastEdit = i
-            status = db_check_status(sysop,lastEdit)
+            status = db_check_status(dico['site'].lang,sysop)
             
             # Si l'administrateur n'a pas déjà été reporté pour cette absence
             if not status or not status[0] == "R":
@@ -180,34 +179,28 @@ def reportInactiveSysops(list):
             print u"Nobody to report."
 
 # Vérifie si l'admin a déjà été notifié / signalé pour inactivité
-def db_check_status(sysop, lastEdit):
-    table = "inactive_%s" %dico['site'].lang
+def db_check_status(project, sysop):
+    table = "inactive"
     conn = sqlite3.connect('db/inactive.db')
     cursor = conn.cursor()
     cursor.execute("""
     SELECT status FROM """ + table + """
-    WHERE username = ? AND
-    lastedit = ?
-    """,[sysop,str(lastEdit)])
+    WHERE project = ? AND
+    username = ?
+    """,[project,sysop])
     result = cursor.fetchone()
     conn.close()
     return result
 
-# Ajoute (INSERT) ou modifie (UPDATE) le statut du signalement d'un admin
-def db_upsert_status(sysop,lastEdit,status):
-    table = "inactive_%s" %dico['site'].lang
+# Ajoute (INSERT) ou modifie (REPLACE) le statut du signalement d'un admin
+def db_upsert_status(project,sysop,lastEdit,status):
+    table = "inactive"
     conn = sqlite3.connect('db/inactive.db')
     cursor = conn.cursor()
     cursor.execute("""
-    INSERT OR IGNORE INTO """ + table + """(username,lastedit,status)
-    VALUES(?,?,?)
-    """,[sysop,str(lastEdit),status])
-    cursor.execute("""
-    UPDATE """ + table + """
-    SET status = ?
-    WHERE username = ? AND
-    lastedit = ?
-    """,[status,sysop,str(lastEdit)])
+    INSERT OR REPLACE INTO """ + table + """(project,username,lastedit,status)
+    VALUES(?,?,?,?)
+    """,[project,sysop,str(lastEdit),status])
     conn.commit()
     conn.close()
 
