@@ -164,7 +164,7 @@ def reportInactiveSysops(list):
             
             # Si l'administrateur n'a pas déjà été reporté pour cette absence
             if not status or not status[0] == "R":
-                db_upsert_status(sysop,lastEdit,"R")
+                db_upsert_status(dico['site'].lang,sysop,lastEdit,"R")
                 duration = calcDuration(lastEdit)
                 hrdate = u"%s %s %s (%s %s)" %(lastEdit.day,dico['month'][int(lastEdit.month)],lastEdit.year,duration.days,dico['days'])
                 report += u"* {{u|" + sysop + u"}} : " + dico['since'] + hrdate + "\n"
