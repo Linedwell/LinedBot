@@ -119,10 +119,10 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
 def motifFinder(catname):
 	motif = []
 	if catname == u"Événement récent":
-		motif = [u'(Section )?[Éé]v[éè]nements?[_ ]récents?']
+		motif = [u'(Section )?[Éé]v[éè]nement[_ ](récent|actuel|en[_ ]cours)']
 
 	elif catname == u"Mort récente":
-		motif = [u'Mort[_ ]récente?', u'Décès[_ ]récent']
+		motif = [u'(Mort|Décès)[_ ]récente?']
 		
 	elif catname == u"Scrutin récent ou en cours":
 		motif = [u'Scrutin[_ ](récent|en[_ ]cours)', u'[EÉé]lection[_ ](récente|en[_ ]cours)']
