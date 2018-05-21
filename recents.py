@@ -119,13 +119,13 @@ def removeTemplate(pagesList,catname,delay,sinceAdd=False,checkTalk=False):
 def motifFinder(catname):
 	motif = []
 	if catname == u"Événement récent":
-		motif = [u'(Section )?[Éé]v[éè]nements?[_ ]récents?']
+		motif = [u'(Section )?[Éé]v[éè]nement[_ ](récent|actuel|en[_ ]cours)']
 
 	elif catname == u"Mort récente":
-		motif = [u'Mort[_ ]récente?', u'Décès[_ ]récent']
+		motif = [u'(Mort|Décès)[_ ]récente?']
 		
-	elif catname == u"Scrutin récent":
-		motif = [u'Scrutin[_ ]récent', u'[EÉé]lection[_ ]récente']
+	elif catname == u"Scrutin récent ou en cours":
+		motif = [u'Scrutin[_ ](récent|en[_ ]cours)', u'[EÉé]lection[_ ](récente|en[_ ]cours)']
 		
 	elif catname == u"Compétition sportive récente":
 		motif = [u'Compétition[_ ]sportive[_ ]récente', u'[Éé]v[éè]nement[_ ]sportif[_ ]récent']
@@ -134,7 +134,7 @@ def motifFinder(catname):
 		motif = [u'Règle[_ ]des[_ ]3[_ ]révocations', u'Règle[_ ]des[_ ]3[_ ]reverts', u'Règle[_ ]des[_ ]3[_ ]réverts', u'Règle[_ ]des[_ ]trois[_ ]reverts', u'Règle[_ ]des[_ ]trois[_ ]réverts', u'R3R', u'3RR']
 		
 	elif catname == u"Article en travaux":
-		motif = [u'(En[_ ])?travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe']
+		motif = [u'(En[_ ])?travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe', u'Recyclage[_ ]en[_ ]cours']
 		
 	elif catname == u"Article en cours":
 		motif = [u'En[_ ]cours', u'Plusieurs[_ ]en[_ ]cours']
