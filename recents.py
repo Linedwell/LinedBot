@@ -134,7 +134,7 @@ def motifFinder(catname):
 		motif = [u'Règle[_ ]des[_ ]3[_ ]révocations', u'Règle[_ ]des[_ ]3[_ ]reverts', u'Règle[_ ]des[_ ]3[_ ]réverts', u'Règle[_ ]des[_ ]trois[_ ]reverts', u'Règle[_ ]des[_ ]trois[_ ]réverts', u'R3R', u'3RR']
 		
 	elif catname == u"Article en travaux":
-		motif = [u'(En[_ ])?travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe']
+		motif = [u'(En[_ ])?travaux', u'En[_ ]construction', u'Pas[_ ]fini', u'Travail[_ ]de[_ ]groupe', u'Recyclage[_ ]en[_ ]cours']
 		
 	elif catname == u"Article en cours":
 		motif = [u'En[_ ]cours', u'Plusieurs[_ ]en[_ ]cours']
