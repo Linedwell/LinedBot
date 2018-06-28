@@ -7,6 +7,6 @@ pylint:
   stage: check
   image: clburlison/pylint:py2-alpine
   script:
-   - pylint init.py
-
+   - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
+       ./*.py
 ...
