@@ -99,13 +99,13 @@ def main():
         
         except pywikibot.NoPage:
             pywikibot.output(u"Page %s does not exist; skipping."
-                             % page.title(asLink=True))
+                             % sub.title(asLink=True))
         except pywikibot.IsRedirectPage:
             pywikibot.output(u"Page %s is a redirect; skipping."
-                             % page.title(asLink=True))
+                             % sub.title(asLink=True))
         except pywikibot.LockedPage:
             pywikibot.output(u"Page %s is locked; skipping."
-                             % page.title(asLink=True))
+                             % sub.title(asLink=True))
         else:
             message = u"\n\n== Du nouveau sur W3PO : " + billTitle + " ==\n" + banner
             sub.text += message
