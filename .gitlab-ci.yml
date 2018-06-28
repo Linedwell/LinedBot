@@ -7,6 +7,6 @@ pylint:
   stage: check
   image: clburlison/pylint:py2-alpine
   script:
-   - pylint ./
+   - find . -name *.py -exec pylint {} \;
 
 ...
