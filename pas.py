@@ -28,6 +28,8 @@ delimiterEnd = u"= Maintenance : mise à jour =\n"
 delimiterBeginRegex = u"=\s*Propositions\s*=\n"
 delimiterEndRegex = u"=\s*Maintenance : mise à jour\s*=\n"
 
+summary = ""
+
 #Créé la section PàS du lendemain
 def pasNewSection(pageTemp):
     global summary
