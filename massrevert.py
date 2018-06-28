@@ -75,9 +75,6 @@ def getRecentEdits(userName,timestamp):
             except pywikibot.PageNotSaved, error:
                 pywikibot.output(u"Error putting page: %s"
                                 % (error.args,))
-            except pywikibot.LockedPage:
-                pywikibot.output(u"Skipping %s (locked page)"
-                                % (page.title(),))
 
 
 

@@ -100,9 +100,3 @@ def update(val):
     for val in last_values:
         gr_dat.write(str(val) + '\n')
     gr_dat.close()
-
-if __name__ == "__main__":
-    try:
-        main()
-    finally:
-        pywikibot.stopme()

@@ -77,7 +77,7 @@ def updateEditProtectionTemplate(text, protlev):
 	        parser = re.compile(r'{{' + m + r'.*?}}(\s*?|(?={{))', re.U | re.DOTALL)
               	searchResult = parser.search(text) #On cherche si le motif {{m}} existe dans la page
                 if searchResult:
-			result = pywikibot.output(u"Template found: %s" % searchResult.group())
+		        pywikibot.output(u"Template found: %s" % searchResult.group())
                         text = parser.sub('',text,1) #Retire la 1re occurrence du motif dans la page
 			if protlev and searchResult.group('SPL'):
 				text = u'{{Semi-protection longue}}' + '\n' + text
@@ -93,7 +93,7 @@ def updateMoveProtectionTemplate(text, protlev):
                 parser = re.compile(r'{{' + m + r'}}(\s*?|(?={{))',re.I | re.U | re.DOTALL)
                 searchResult = parser.search(text) #On cherche si le motif {{m}} existe dans la page
                 if searchResult:
-                        result = pywikibot.output(u"Template found: %s" % searchResult.group())
+                        pywikibot.output(u"Template found: %s" % searchResult.group())
 			if not protlev:
                         	text = parser.sub('',text,1) #Retire la 1re occurrence du motif dans la page
         #print text

@@ -54,33 +54,33 @@ def admissibilite(pagesList):
 def getCategoryContent(catname):
     cat = pywikibot.Category(site,catname)
     pagesInCat = list(cat.articles(False))
-    pagesList = pagegenerators.PreloadingGenerator(pagesInCat,step=100) # On génère la liste des pages incluses dans la catégorie
+    pagesList = pagegenerators.PreloadingGenerator(pagesInCat) # On génère la liste des pages incluses dans la catégorie
     pagesList = pagegenerators.NamespaceFilterPageGenerator(pagesList,[0]) #On ne garde que les articles (Namespace 0)
     
     return pagesList
 
 #Return the list of titles from pagesList
 def titleList(pagesList):
-    list = []
+    tlist = []
     for page in pagesList:
-        list.append(page.title())
+        tlist.append(page.title())
     
-    return list
+    return tlist
 
 #Save a list to the backup file
-def saveBackupFile(list):
-    file = open('_admissibilite.bak','w+')
-    for s in list:
-        file.write(s.encode('utf-8') + '\n')
-    file.close()
+def saveBackupFile(tlist):
+    bfile = open('_admissibilite.bak','w+')
+    for s in tlist:
+        bfile.write(s.encode('utf-8') + '\n')
+    bfile.close()
 
 #Load a list from the backup file
 def loadBackupFile():
-    file = open('_admissibilite.bak','r')
-    oldList = file.readlines()
+    bfile = open('_admissibilite.bak','r')
+    oldList = bfile.readlines()
     oldList = [s.strip('\n') for s in oldList]
     oldList = [s.decode('utf-8') for s in oldList]
-    file.close()
+    bfile.close()
     
     return oldList
 
