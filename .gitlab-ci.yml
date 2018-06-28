@@ -1,0 +1,12 @@
+---
+
+stages:  # Defining main steps of the continous integration
+  - check
+
+pylint:
+  stage: check
+  image: clburlison/pylint
+  script:
+   - pylint --disable=all --reports=n --enable=spelling --spelling-dict=en_US --ignore-comments=no --spelling-private-dict-file=tests/words ./
+
+...
