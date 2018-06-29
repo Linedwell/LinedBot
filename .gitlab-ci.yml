@@ -10,7 +10,7 @@ pylint:
    - pylint 
        --rcfile=.pylint-rcfile
        --output-format=colorized
-       --disable C,R,import-error
+       --disable C,R,W,import-error
        --reports=n
        ./*.py
 ...
