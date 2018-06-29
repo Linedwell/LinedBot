@@ -19,17 +19,17 @@ import urllib2
 import pywikibot
 
 # Déclarations
-site = pywikibot.Site('fr','wikipedia')
+site = pywikibot.Site('fr', 'wikipedia')
 nbrModif = 0
 nbrTotal = 0
 
 # Retourne la liste des personnes à qui envoyer la notification
-def getSubscribers(group,hs):
+def getSubscribers(group, hs):
 
-    pageGroup = pywikibot.Page(site,u"Utilisateur:Orikrin1998/Blog/Abonnés/"+group.title()+"s")
-    pageTotal = pywikibot.Page(site,u"Utilisateur:Orikrin1998/Blog/Abonnés/Wikipédia seulement")
+    pageGroup = pywikibot.Page(site, u"Utilisateur:Orikrin1998/Blog/Abonnés/"+group.title()+"s")
+    pageTotal = pywikibot.Page(site, u"Utilisateur:Orikrin1998/Blog/Abonnés/Wikipédia seulement")
     
-    pageHS = pywikibot.Page(site,u"Utilisateur:Orikrin1998/Blog/Abonnés/Tous les articles")
+    pageHS = pywikibot.Page(site, u"Utilisateur:Orikrin1998/Blog/Abonnés/Tous les articles")
     
     if not hs:
         subscribers = set(list(pageGroup.linkedPages(namespaces=3)) + list(pageTotal.linkedPages(namespaces=3)) + list(pageHS.linkedPages(namespaces=3)))
@@ -55,7 +55,7 @@ def getURLTitle(url):
 #Exécution
 def main():
     
-    type = ''
+    subtype = ''
     link = ''
     hs = False
     
@@ -71,7 +71,7 @@ def main():
 
     if len(args) == 2:
         if args[0] in ('article', 'sondage', 'interview'):
-            type = args[0]
+            subtype = args[0]
         else:
             print "type incorrect : attendu 'article', 'sondage' ou 'interview'"
             sys.exit(2)
@@ -86,12 +86,12 @@ def main():
         print u"usage : python " + sys.argv[0] + " [--hs] type_de_billet lien"
         sys.exit(2)
     
-    banner = "{{Utilisateur:Orikrin1998/Blog/Annonce|type=" + type + "|lien=" + link + "|date=~~~~~}}"
+    banner = "{{Utilisateur:Orikrin1998/Blog/Annonce|type=" + subtype + "|lien=" + link + "|date=~~~~~}}"
     billTitle = getURLTitle(link)
     if type == "interview":
         billTitle = "Interview de " + billTitle
     
-    subscribers = getSubscribers(type,hs)
+    subscribers = getSubscribers(subtype,hs)
 
     for sub in subscribers:
         try:

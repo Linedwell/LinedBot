@@ -150,14 +150,14 @@ def getSysopsLastEdit():
     return sysopLastEdit
 
 #Retourne la liste des administrateurs inactifs depuis <hardlimit>, notifie ceux inactifs depuis <softlimit>
-def getInactiveSysops(list):
+def getInactiveSysops(sysop_list):
     hardlimit = calcLimit(dico['hard'])
     softlimit = calcLimit(dico['soft'])
     inactiveSysopsHard = []
     inactiveSysopsSoft = []
 
-    for sysop in sorted(list.iterkeys()):
-        lastEdit = list[sysop]
+    for sysop in sorted(sysop_list.iterkeys()):
+        lastEdit = sysop_list[sysop]
         if lastEdit < hardlimit:
             inactiveSysopsHard.append([sysop,lastEdit])
         elif lastEdit < softlimit:
@@ -166,9 +166,9 @@ def getInactiveSysops(list):
     return inactiveSysopsHard, inactiveSysopsSoft
 
 #Notifie la liste des admins ayant presque atteint le seuil d'inactivité de la possible suspension de leurs outils
-def notifySysop(list):
-    if len(list) > 0:
-        for i in list:
+def notifySysop(sysop_list):
+    if len(sysop_list) > 0:
+        for i in sysop_list:
             sysop, lastEdit = i
             page = pywikibot.Page(dico['site'],u"User talk:"+sysop)
             status = db_check_status(dico['site'].lang,sysop)
@@ -190,14 +190,14 @@ def notifySysop(list):
 
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
-def reportInactiveSysops(list):
+def reportInactiveSysops(sysop_list):
     page = pywikibot.Page(dico['site'],dico['page'])
     
-    if len(list) > 0:
+    if len(sysop_list) > 0:
         section = dico['section']
         report = ''
 
-        for i in list:
+        for i in sysop_list:
             sysop, lastEdit = i
             status = db_check_status(dico['site'].lang,sysop)
             

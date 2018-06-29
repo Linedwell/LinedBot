@@ -14,7 +14,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import mylogging
 
-import re, time
+import re
 from datetime import timedelta
 
 from random import choice
@@ -30,11 +30,11 @@ import logger
 # Déclarations
 
 globalsettings = {
-    'reqEditCount' : 1, 		#number of edits required to welcome an user
-    'timeoffset' : 60,			#skip users newer than # minutes
-    'defaultSign' : '--~~~~',		#default signature
-    'randomSign' : False,		#pick a random signature instead of default
-    'queryLimit' : 50,			#number of users loaded by the bot
+    'reqEditCount' : 1,         #number of edits required to welcome an user
+    'timeoffset' : 60,          #skip users newer than # minutes
+    'defaultSign' : '--~~~~',   #default signature
+    'randomSign' : False,       #pick a random signature instead of default
+    'queryLimit' : 50,          #number of users loaded by the bot
 }
 
 welcomemsg = {
@@ -60,7 +60,7 @@ class WelcomeBot:
         self.site = pywikibot.Site(viki,'vikidia')
         self.checkManagedSites()
         if globalsettings['randomSign']:
-	    self.signList = self.getSignList()
+            self.signList = self.getSignList()
         self.welcomed_users = list()    
 
     # chek if "autowelcome" is enabled or not on the wiki
@@ -76,10 +76,10 @@ class WelcomeBot:
         signPageName = creg = i18n.translate(self.site, random_sign)
         if not signPageName:
             pywikibot.output("Random signature disabled on %s; disabling random sign" % self.site)
-	    globalsettings['randomSign'] = False
+            globalsettings['randomSign'] = False
             return
 
-	signPage = pywikibot.Page(self.site, signPageName)
+        signPage = pywikibot.Page(self.site, signPageName)
 
         if signPage.exists():
             sign = u''
@@ -100,8 +100,8 @@ class WelcomeBot:
 
     def run(self):
         for user in self.parseNewUserLog():
-	    #print user.name()
-	    if user.isBlocked():
+            #print user.name()
+            if user.isBlocked():
                 #showStatus(3)
                 pywikibot.output(u" %s is blocked; skipping." % user.name())
                 continue
@@ -124,14 +124,14 @@ class WelcomeBot:
                 else:
                     welcome_text = i18n.translate(self.site, welcomemsg)
                     if globalsettings['randomSign'] and len(self.signList) > 0:
-			sign = choice(self.signList)
-		    else:
+                        sign = choice(self.signList)
+                    else:
                         sign = globalsettings['defaultSign']
 
                     welcome_text = (welcome_text % sign)
                     welcome_cmnt = u"Robot: " + i18n.twtranslate(self.site,'welcome-welcome')
 
-		    #print welcome_text
+                    #print welcome_text
                     #print welcome_cmnt
                     ustp.text = welcome_text
                     

@@ -69,8 +69,8 @@ class TranslationDrive:
 
     # Recupere la liste des traductions demandées
     def getList(self):
-        input = textlib.extract_templates_and_params(self.translationPage.text)
-        for row in input:
+        input_requests = textlib.extract_templates_and_params(self.translationPage.text)
+        for row in input_requests:
             if row[0] == templateName:
                 dicoTrans = {}
                 for p in self.translationParam:

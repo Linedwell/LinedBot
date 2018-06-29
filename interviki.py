@@ -64,9 +64,6 @@ def inter(page):
     except ValueError:
         pywikibot.output(u"Page %s has interwiki issues; skipping."
                                 % page.title(asLink=True))
-    except ValueError:
-        pywikibot.output(u"Page %s has unknown issues; skipping."
-                                % page.title(asLink=True))
     
     else:
     
@@ -185,31 +182,31 @@ def getInterwiki(page):
 #Récupération de la liste des interwikis "exotiques"
 def getExterwiki(page):
     text = page.text
-    extraLang = ['nl','de']
+    extraLang = ['nl', 'de']
     
     for el in extraLang:
-        exIw = re.search(r"\[\[" + el + "\:(?P<ln>.*)\]\]", text)
+        exIw = re.search(r"\[\[" + el + r"\:(?P<ln>.*)\]\]", text)
         if exIw != None:
             yield u"[[" + el + ":" + exIw.group('ln') + "]]"
 
 
 #Mise à jour de l'interwiki (éventuel) vers Wikipédia
 def updateWPlink(page,pageTemp):
-    pageTemp = pageTemp.replace("{{FULLPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
-    pageTemp = pageTemp.replace("{{PAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
-    pageTemp = pageTemp.replace("{{BASEPAGENAME}}",page.title()) #Nécessaire pour corriger les flemmards
-    wpPage = pywikibot.Page(pywikibot.Site(page.site.lang,"wikipedia"),page.title())
+    pageTemp = pageTemp.replace("{{FULLPAGENAME}}", page.title()) #Nécessaire pour corriger les flemmards
+    pageTemp = pageTemp.replace("{{PAGENAME}}", page.title()) #Nécessaire pour corriger les flemmards
+    pageTemp = pageTemp.replace("{{BASEPAGENAME}}", page.title()) #Nécessaire pour corriger les flemmards
+    wpPage = pywikibot.Page(pywikibot.Site(page.site.lang, "wikipedia"),page.title())
     wpLink = ''
 
     if wpPage.exists():
         wpLink = u"[[wp:" + wpPage.title() + "]]"
                          
-    m = re.search(r"\[\[wp\:(?P<ln>.*?)\]\]",pageTemp)
+    m = re.search(r"\[\[wp\:(?P<ln>.*?)\]\]", pageTemp)
 
     if m != None:
-        oldWpPage = pywikibot.Page(pywikibot.Site(page.site.lang,"wikipedia"),m.group('ln'))
+        oldWpPage = pywikibot.Page(pywikibot.Site(page.site.lang, "wikipedia"),m.group('ln'))
         if not oldWpPage.exists():
-            pageTemp.replace(m.group(),wpLink)
+            pageTemp.replace(m.group(), wpLink)
 
     else:
         pageTemp += '\n' + wpLink
@@ -219,16 +216,16 @@ def updateWPlink(page,pageTemp):
 #Retire les occurences multiples de liens vers la même langue
 def removeDuplicates(pageTemp):
     for key in site:
-        occurences = len(re.findall(r"\[\[" + key + ":.*?\]\]",pageTemp))
+        occurences = len(re.findall(r"\[\[" + key + r":.*?\]\]", pageTemp))
         if occurences > 1:
-            pageTemp = re.sub(r"\[\[" + key + ":.*?\]\](\n)?",'',pageTemp,count=occurences-1,flags=re.I | re.U)
+            pageTemp = re.sub(r"\[\[" + key + r":.*?\]\](\n)?", '', pageTemp, count=occurences-1, flags=re.I | re.U)
     return pageTemp
 
 
 #Exécution
 def main():
-    source = pywikibot.getSite('fr','vikidia')
-    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=source,start=u"")
+    source = pywikibot.getSite('fr', 'vikidia')
+    pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False, site=source, start=u"")
     for page in pagesList:
         print page.title()
         inter(page)

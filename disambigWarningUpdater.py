@@ -20,17 +20,16 @@ import time
 from datetime import datetime
 
 import pywikibot
-from pywikibot import pagegenerators
 
 # Déclarations
 site = pywikibot.Site('fr','wikipedia')
 
 #Met à jour le tableau récapitulatif
 def disambigWarningUpdater(pageTemp,newNumber):
-    pageTemp = re.split('(\|-\n)', pageTemp, maxsplit=3)
+    pageTemp = re.split(r'(\|-\n)', pageTemp, maxsplit=3)
     pageTempBegin = u''.join(pageTemp[:-1])
     pageTempBody = u''.join(pageTemp[-1:])
-    pageTempBody = re.split('\|\}\n',pageTempBody)
+    pageTempBody = re.split(r'\|\}\n',pageTempBody)
     pageTempEnd = u'|}\n' + u''.join(pageTempBody[-1:])
     pageTempBody = u''.join(pageTempBody[:-1])
     lastRaw = pageTempBody.rsplit('|-\n',1)[1]
@@ -47,12 +46,12 @@ def disambigWarningUpdater(pageTemp,newNumber):
 def rawParser(raw):
     rawItems = raw.split('|')
     
-    id = ''.join(rawItems[1].split())
+    ident = ''.join(rawItems[1].split())
     date = ''.join(rawItems[2].split())
-    number = ''.join(re.findall('\d+',rawItems[5]))
+    number = ''.join(re.findall(r'\d+',rawItems[5]))
     
     rawObj = {
-        'id' : id,
+        'id' : ident,
         'date' : date,
         'number' : number
     }

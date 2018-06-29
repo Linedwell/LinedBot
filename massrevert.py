@@ -47,7 +47,7 @@ def getRecentEdits(userName,timestamp):
         pywikibot.output(u"\n\n>>> \03{lightpurple}%s\03{default} <<<"
                  % page.title())
         pywikibot.showDiff(page.text,oldVersion)
-        summary = u"Révocation massive des modifications de %s (retour à la version de %s)" %(userName,previous_revision[1]);
+        summary = u"Révocation massive des modifications de %s (retour à la version de %s)" %(userName,previous_revision[1])
         
 
         if not acceptAll:
@@ -86,6 +86,7 @@ def main():
         timestamp = sys.argv[2]
         getRecentEdits(user,timestamp)
         timeEnd = time.time()
+        pywikibot.output("Action performed in %s s." %(round(timeEnd-timeStart,2)))
     else:
         print "usage: python " + sys.argv[0] + " <target> <YYYY-mm-ddTHH:MM:SSZ>"
         exit(2)

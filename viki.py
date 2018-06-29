@@ -29,7 +29,7 @@ nbrModif = 0
 nbrTotal = 0
 
 # Traitement des nouvelles pages
-def newPages(all=False):
+def newPages(allPages=False):
     global nbrModif, nbrTotal
     
     log = u''
@@ -57,7 +57,7 @@ def newPages(all=False):
     lonelyPagesList = list(pagegenerators.LonelyPagesPageGenerator(site=site))
     
     
-    if all:
+    if allPages:
         pagesList = pagegenerators.AllpagesPageGenerator(namespace=0,includeredirects=False,site=site)
     else:
         pagesList = pagegenerators.NewpagesPageGenerator(total=50,site=site)
@@ -89,7 +89,7 @@ def newPages(all=False):
                     
                     # s'il existe des références, on retire le job 'orphelin'
                     #if page in lonelyPagesList:    ##DESACTIVE TANT QUE LA PAGE SPECIALE NE SE MET PLUS A JOUR##
-		    if len(set(page.backlinks(namespaces=0))) < 1:
+                    if len(set(page.backlinks(namespaces=0))) < 1:
                         jobList.append(u'orphelin')
                 
                     # s'il n'existe aucune catégorie (directe), on ajoute le job 'catégoriser'
@@ -180,7 +180,7 @@ def updateJobList(oldJobList, newJobList):
 # Exécution
 def main():
     
-    all = False
+    allPages = False
     
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'a', ['all'])
@@ -189,11 +189,11 @@ def main():
 
     for opt, arg in opts:
         if opt in ('-a', '--all'):
-            all = True
+            allPages = True
 
     log = u''
     timeStart = time.time()
-    log += newPages(all)
+    log += newPages(allPages)
     timeEnd = time.time()
     logger.setValues(nbrTotal,nbrModif)
     logger.editLog(site,log)

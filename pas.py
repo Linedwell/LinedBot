@@ -17,7 +17,6 @@ import mylogging
 import re
 import time
 import pywikibot
-from pywikibot import pagegenerators
 
 #Variables globales
 site = pywikibot.Site('fr','wikipedia')
@@ -25,8 +24,8 @@ site = pywikibot.Site('fr','wikipedia')
 delimiterBegin = u"= Propositions =\n"
 delimiterEnd = u"= Maintenance : mise à jour =\n"
     
-delimiterBeginRegex = u"=\s*Propositions\s*=\n"
-delimiterEndRegex = u"=\s*Maintenance : mise à jour\s*=\n"
+delimiterBeginRegex = ur"=\s*Propositions\s*=\n"
+delimiterEndRegex = ur"=\s*Maintenance : mise à jour\s*=\n"
 
 summary = ""
 
@@ -72,7 +71,7 @@ def pasRemoveSection(pageTemp):
     pageTempBody, pageTempEnd = re.split(delimiterEndRegex,pageTempBody)
     pageTempEnd = delimiterEnd + pageTempEnd
     
-    section = re.split('(==\s*\d*(?:er)? \w*\s*==\n)',pageTempBody,flags=re.U)
+    section = re.split(r'(==\s*\d*(?:er)? \w*\s*==\n)',pageTempBody,flags=re.U)
     parser = re.compile(ur'{{En-tête section PàS\|.*?}}\s*{{Boîte déroulante\/début\|.*?}}', re.U | re.I | re.M)
     
     pageTempBody = u''
