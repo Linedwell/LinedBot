@@ -9,7 +9,7 @@ pylint:
   before_script:
     - apk update && apk add py-pip gcc
     - pip install -U setuptools pip
-    - pip install pylint-exit
+    - pip install --egg pylint-exit
   script:
     - pylint 
       --rcfile=.pylint-rcfile
