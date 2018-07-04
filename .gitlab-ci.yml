@@ -6,11 +6,15 @@ stages:  # Defining main steps of the continous integration
 pylint:
   stage: check
   image: clburlison/pylint:py2-alpine
+  before_script:
+    - pip install pylint-exit
   script:
-   - pylint 
-       --rcfile=.pylint-rcfile
-       --output-format=colorized
-       --disable C,R,W,import-error
-       --reports=n
-       ./*.py
+    - pylint 
+      --rcfile=.pylint-rcfile
+      --output-format=colorized
+      --disable C,R,W,import-error
+      --reports=n
+      ./*.py
+    - pylint-exit $?
+  when: manual
 ...
