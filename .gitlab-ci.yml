@@ -10,6 +10,10 @@ pylint:
     - apk update && apk add --upgrade curl libcurl gcc py-pip python-dev build-base
     - pip install pylint-exit
   script:
-    - pylint --rcfile=.pylint-rcfile --output-format=colorized --disable C,R,import-error --reports=y ./*.py
-    - pylint-exit $?
+    - pylint
+      --rcfile=.pylint-rcfile
+      --output-format=colorized
+      --disable C,R,import-error
+      --reports=y
+      ./*.py ||pylint-exit $?
 ...
