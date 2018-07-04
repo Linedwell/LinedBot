@@ -7,12 +7,13 @@ pylint:
   stage: check
   image: clburlison/pylint:py2-alpine
   before_script:
-    - curl -o pylint-exit https://raw.githubusercontent.com/jongracecox/pylint-exit/master/pylint_exit.py && chmod +x pylint_exit.py
+    - apk install pip
+    - pip install pylint-exit
   script:
     - pylint 
       --rcfile=.pylint-rcfile
       --output-format=colorized
-      --disable C,R,W,import-error
+      --disable import-error
       --reports=n
       ./*.py
     - pylint-exit $?
