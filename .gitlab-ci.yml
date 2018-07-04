@@ -7,7 +7,7 @@ pylint:
   stage: check
   image: clburlison/pylint:py2-alpine
   before_script:
-    - apk add py-pip
+    - apk update && apk add pip
     - pip install pylint-exit
   script:
     - pylint 
