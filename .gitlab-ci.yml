@@ -14,8 +14,9 @@ pylint:
       --rcfile=.pylint-rcfile
       --output-format=colorized
       --disable import-error
-      --reports=n
+      --reports=y
       ./*.py
+  after_script:
     - pylint-exit $?
   when: manual
 ...
