@@ -7,7 +7,7 @@ pylint:
   stage: check
   image: clburlison/pylint:py2-alpine
   before_script:
-    - apk update && apk add -U curl libcurl
+    - apk update && apk add --upgrade curl libcurl
     - curl -o pylint-exit https://raw.githubusercontent.com/jongracecox/pylint-exit/master/pylint_exit.py && chmod +x pylint-exit
   script:
     - pylint 
