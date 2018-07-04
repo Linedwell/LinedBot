@@ -9,7 +9,6 @@ pylint:
   before_script:
     - apk update && apk add --upgrade curl libcurl gcc py-pip python-dev build-base
     - pip install pylint-exit
-    - curl -o pylint-exit https://raw.githubusercontent.com/jongracecox/pylint-exit/master/pylint_exit.py && chmod +x pylint-exit
   script:
     - pylint 
       --rcfile=.pylint-rcfile
@@ -17,6 +16,5 @@ pylint:
       --disable C,R,import-error
       --reports=y
       ./*.py
-      || pylint-exit $?
-  when: manual
+    - pylint-exit $?
 ...
