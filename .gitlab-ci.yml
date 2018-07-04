@@ -17,6 +17,6 @@ pylint:
       --reports=y
       ./*.py
   after_script:
-    - pylint-exit $?
+    - ./pylint-exit $?
   when: manual
 ...
