@@ -8,7 +8,7 @@ pylint:
   image: clburlison/pylint:py2-alpine
   before_script:
     - apk update && apk add --upgrade gcc py-pip python-dev build-base
-    - pip install pylint-exit
+    - pip install --no-cache-dir pylint-exit
   script:
     - pylint
       --rcfile=.pylint-rcfile
