@@ -26,6 +26,5 @@ deploy_linedbot:
         git checkout $CI_COMMIT_SHA &&"
   only:
     - master
-  when:
-    - manual
+  when: manual
 ...
