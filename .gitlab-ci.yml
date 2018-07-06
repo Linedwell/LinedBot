@@ -2,6 +2,7 @@
 
 stages:  # Defining main steps of the continous integration
   - check
+  - deploy
 
 pylint:
   stage: check
@@ -15,4 +16,16 @@ pylint:
       --disable C,R,import-error
       --reports=y
       ./*.py || pylint-exit $?
+      
+deploy_linedbot:
+  stage: deploy
+  script:
+    - ssh $SSH_TOKEN_L "cd $BOTDIR_L &&
+        git checkout master &&
+        git fetch &&
+        git checkout $CI_COMMIT_SHA &&"
+  only:
+    - master
+  when:
+    - manual
 ...
