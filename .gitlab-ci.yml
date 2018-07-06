@@ -21,6 +21,7 @@ deploy_linedbot:
   stage: deploy
   script:
     - echo $SSH_KEY > ./sshkey
+    - chmod 600 ./sshkey
     - ssh -i ./sshkey $SSH_TOKEN_L "cd $BOTDIR_L &&
         git checkout master &&
         git fetch &&
