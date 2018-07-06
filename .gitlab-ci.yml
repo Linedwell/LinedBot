@@ -20,7 +20,7 @@ pylint:
 deploy_linedbot:
   stage: deploy
   script:
-    - ssh $SSH_TOKEN_L "cd $BOTDIR_L &&
+    - ssh -i $SSH_KEY $SSH_TOKEN_L "cd $BOTDIR_L &&
         git checkout master &&
         git fetch &&
         git checkout $CI_COMMIT_SHA &&"
