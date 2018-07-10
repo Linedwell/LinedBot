@@ -16,8 +16,6 @@ pylint:
       --disable C,R,import-error
       --reports=y
       ./*.py || pylint-exit $?
-  only:
-    - tag
 
 linedbot:
   stage: deploy
