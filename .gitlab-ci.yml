@@ -20,12 +20,16 @@ pylint:
 linedbot:
   stage: deploy
   before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    ## Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
+    ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    - #mkdir -p ~/.ssh
+    - #chmod 700 ~/.ssh
   script:
-    - ssh -o StrictHostKeyChecking=no -t $SSH_TOKEN_L "cd $BOTDIR_L && git fetch && git checkout $CI_COMMIT_SHA"
+    - ssh -o StrictHostKeyChecking=no $SSH_TOKEN_L "cd $BOTDIR_L &&
+        git checkout master&&
+        git fetch &&
+        git checkout $CI_COMMIT_SHA"
   when: manual
 ...
