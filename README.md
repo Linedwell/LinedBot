@@ -1,3 +1,4 @@
+[![Build Status](https://gitlab.com/linedwell/linedbot/badges/master/build.svg)](https://gitlab.com/linedwell/linedbot)<br/>
 LinedBot
 ========
 © Linedwell, 2011 - 2018<br />
