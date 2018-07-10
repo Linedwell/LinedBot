@@ -16,4 +16,12 @@ pylint:
       --disable C,R,import-error
       --reports=y
       ./*.py || pylint-exit $?
+
+linedbot:
+  stage: deploy
+  before_script:
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  script:
+    - ssh -o StrictHostKeyChecking=no -t $SSH_TOKEN_L "cd $BOTDIR_L && git fetch && git checkout $CI_COMMIT_SHA"
+  when: manual
 ...
