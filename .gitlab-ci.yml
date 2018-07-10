@@ -24,8 +24,8 @@ linedbot:
     - eval $(ssh-agent -s)
     ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - #mkdir -p ~/.ssh
-    - #chmod 700 ~/.ssh
+    #- mkdir -p ~/.ssh
+    #- chmod 700 ~/.ssh
   script:
     - ssh -o StrictHostKeyChecking=no $SSH_TOKEN_L "cd $BOTDIR_L &&
         git checkout master&&
