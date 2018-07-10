@@ -12,7 +12,7 @@ import sys
 sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 
 import time
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 import pywikibot
 
@@ -85,6 +85,6 @@ def clean(pageTemp, days=30):
     return pageTemp
 
 def setValues(nbTotal, nbModif):
-	global nbrTotal, nbrModif
-	nbrTotal = nbTotal
-	nbrModif = nbModif
+    global nbrTotal, nbrModif
+    nbrTotal = nbTotal
+    nbrModif = nbModif

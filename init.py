@@ -56,11 +56,11 @@ def initPages(dico):
             page.text = pageTemp
             page.save(summary,force=True)
 
-	else:
-	    pywikibot.output(u"Page %s already exists; skipping."
+        else:
+            pywikibot.output(u"Page %s already exists; skipping."
                          % page.title(asLink=True))
 
-	index += 1
+        index += 1
 
 #Exécution
 def main():

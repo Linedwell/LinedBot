@@ -30,6 +30,22 @@ dicoCA = {
     'site' : pywikibot.Site('ca','vikidia'),
     'hard' : 365,
     'soft' : 300,
+    'simulation' : True,
+}
+
+dicoDE = {
+    'site' : pywikibot.Site('en','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+    'simulation' : True,
+}
+
+
+dicoEL = {
+    'site' : pywikibot.Site('el','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+    'simulation' : True,
 }
 
 
@@ -37,18 +53,21 @@ dicoEN = {
     'site' : pywikibot.Site('en','vikidia'),
     'hard' : 365,
     'soft' : 300,
+    'simulation' : True,
 }
 
 dicoES = {
     'site' : pywikibot.Site('es','vikidia'),
     'hard' : 365,
     'soft' : 300,
+    'simulation' : True,
 }
 
 dicoEU = {
     'site' : pywikibot.Site('eu','vikidia'),
     'hard' : 365,
     'soft' : 300,
+    'simulation' : True,
 }
 
 
@@ -64,7 +83,17 @@ dicoFR = {
     'reportsummary' : "[[VD:Robot|Robot]] : Liste des administrateurs inactifs depuis au moins un an",
     'hard' : 365,
     'soft' : 300,
+    'simulation' : False,
 }
+
+dicoHY = {
+    'site' : pywikibot.Site('hy','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+    'simulation' : True,
+}
+
+
 
 itmonth = [u'',u'gennaio',u'febbraio',u'marzo',u'aprile',u'maggio',u'giugno',u'luglio',u'agosto',u'settembre',u'ottobre',u'novembre',u'dicembre']
 
@@ -80,12 +109,22 @@ dicoIT = {
     'reportsummary' : "[[Vikidia:Bot|Bot]] : Lista dei amministratori inattivi da più di un anno",
     'hard' : 365,
     'soft' : 300,
+    'simulation' : False,
 }
+
+dicoRU = {
+    'site' : pywikibot.Site('ru','vikidia'),
+    'hard' : 365,
+    'soft' : 300,
+    'simulation' : True,
+}
+
 
 dicoSCN = {
     'site' : pywikibot.Site('scn','vikidia'),
     'hard' : 365,
     'soft' : 300,
+    'simulation' : True,
 }
 
 
@@ -111,14 +150,14 @@ def getSysopsLastEdit():
     return sysopLastEdit
 
 #Retourne la liste des administrateurs inactifs depuis <hardlimit>, notifie ceux inactifs depuis <softlimit>
-def getInactiveSysops(list):
+def getInactiveSysops(sysop_list):
     hardlimit = calcLimit(dico['hard'])
     softlimit = calcLimit(dico['soft'])
     inactiveSysopsHard = []
     inactiveSysopsSoft = []
 
-    for sysop in sorted(list.iterkeys()):
-        lastEdit = list[sysop]
+    for sysop in sorted(sysop_list.iterkeys()):
+        lastEdit = sysop_list[sysop]
         if lastEdit < hardlimit:
             inactiveSysopsHard.append([sysop,lastEdit])
         elif lastEdit < softlimit:
@@ -127,9 +166,9 @@ def getInactiveSysops(list):
     return inactiveSysopsHard, inactiveSysopsSoft
 
 #Notifie la liste des admins ayant presque atteint le seuil d'inactivité de la possible suspension de leurs outils
-def notifySysop(list):
-    if len(list) > 0:
-        for i in list:
+def notifySysop(sysop_list):
+    if len(sysop_list) > 0:
+        for i in sysop_list:
             sysop, lastEdit = i
             page = pywikibot.Page(dico['site'],u"User talk:"+sysop)
             status = db_check_status(dico['site'].lang,sysop)
@@ -151,14 +190,14 @@ def notifySysop(list):
 
 
 #Envoie sur VD:DB la liste des administrateurs inactifs ainsi que la durée de leur inactivité
-def reportInactiveSysops(list):
+def reportInactiveSysops(sysop_list):
     page = pywikibot.Page(dico['site'],dico['page'])
     
-    if len(list) > 0:
+    if len(sysop_list) > 0:
         section = dico['section']
         report = ''
 
-        for i in list:
+        for i in sysop_list:
             sysop, lastEdit = i
             status = db_check_status(dico['site'].lang,sysop)
             
@@ -233,21 +272,10 @@ def calcDuration(date):
 #Exécution
 def main():
     timeStart = time.time()
-    print "FR"
-    inactiveSysopsManager(dicoFR)
-    print "IT"
-    inactiveSysopsManager(dicoIT)
-    print "CA"
-    inactiveSysopsManager(dicoCA,True)
-    print "EN"
-    inactiveSysopsManager(dicoEN,True)
-    print "ES"
-    inactiveSysopsManager(dicoES,True)
-    print "EU"
-    inactiveSysopsManager(dicoEU,True)
-    print "SCN"
-    inactiveSysopsManager(dicoSCN,True)
-
+    for i in ["FR","IT","CA","DE","EL","EN","ES","EU","HY","RU","SCN"]:
+        iwiki = eval("dico" + str(i))
+        print i
+        inactiveSysopsManager(iwiki,iwiki['simulation'])
     timeEnd = time.time()
 
 if __name__ == "__main__":

@@ -15,7 +15,6 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import mylogging
 
 import pywikibot
-import time
 
 # Déclarations
 site = pywikibot.Site('fr','wikipedia')

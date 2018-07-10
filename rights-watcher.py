@@ -17,7 +17,6 @@ import mylogging
 from datetime import datetime
 
 import pywikibot
-from pywikibot import pagegenerators
 
 import mailer
 
@@ -74,17 +73,17 @@ def mail_report(report):
 #Exécution
 def main():
     last_check_file = 'rights-watcher.last'
-    file = open(last_check_file,'r')
-    last_check = file.read()
-    file.close()
+    bfile = open(last_check_file,'r')
+    last_check = bfile.read()
+    bfile.close()
 
     report = rights_logs(last_check)
     mail_report(report)
     
     now = datetime.utcnow()
-    file = open(last_check_file,'w')
-    file.write(now.isoformat())
-    file.close()
+    bfile = open(last_check_file,'w')
+    bfile.write(now.isoformat())
+    bfile.close()
 
 if __name__ == "__main__":
     try:

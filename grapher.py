@@ -16,12 +16,12 @@ import mylogging
 import pywikibot
 
 # Déclarations
-site = pywikibot.Site('fr','wikipedia')
+site = pywikibot.Site('fr', 'wikipedia')
 page = pywikibot.Page(site, u"Projet:Maintenance/Suivi d'admissibilité/graphe")
 
 # Met à jour le graphe de la page passée en paramètre avec la nouvelle valeur
 def update(val):
-    last_values = file('_grapher.dat','r').readlines()[-14:]
+    last_values = file('_grapher.dat', 'r').readlines()[-14:]
     last_values = [int(el.strip()) for el in last_values]
     last_values.append(val)
     
@@ -87,7 +87,6 @@ def update(val):
         "val13": last_values[12],
         "val14": last_values[13],
         "val15": last_values[14],
-
     }
     
     template = u"<noinclude>{{Mise à jour bot|Linedwell}}</noinclude>\n<center>\n{{Graphique polygonal" + fields.format(**context) + u"}}\n\n'''Évolution au cours des deux dernières semaines'''\n</center>"
@@ -96,13 +95,7 @@ def update(val):
     page.text = template
     page.save(summary)
     
-    gr_dat = open('_grapher.dat','w')
-    for val in last_values:
-        gr_dat.write(str(val) + '\n')
+    gr_dat = open('_grapher.dat', 'w')
+    for value in last_values:
+        gr_dat.write(str(value) + '\n')
     gr_dat.close()
-
-if __name__ == "__main__":
-    try:
-        main()
-    finally:
-        pywikibot.stopme()

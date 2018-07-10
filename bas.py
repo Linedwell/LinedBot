@@ -14,8 +14,7 @@ sys.path.insert(1, '..') #ajoute au PYTHONPATH le répertoire parent
 import mylogging
 
 import pywikibot
-import time
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 # Déclarations
 dicoFR = {

@@ -1,6 +1,7 @@
+[![Build Status](https://gitlab.com/linedwell/linedbot/badges/master/build.svg)](https://gitlab.com/linedwell/linedbot)<br/>
 LinedBot
 ========
-© Linedwell, 2011 - 2016<br />
+© Linedwell, 2011 - 2018<br />
 Scripts disponibles sous licence GNU GPLv3 (sauf indication contraire)<br />
 Scripts distributed under the terms of the GNU GPLv3 license (unless otherwise specified)<br />
 https://www.gnu.org/licenses/gpl.html
