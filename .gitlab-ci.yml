@@ -16,11 +16,17 @@ pylint:
       --disable C,R,import-error
       --reports=y
       ./*.py || pylint-exit $?
+  only:
+    - tag
 
 linedbot:
   stage: deploy
   before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
   script:
     - ssh -o StrictHostKeyChecking=no -t $SSH_TOKEN_L "cd $BOTDIR_L && git fetch && git checkout $CI_COMMIT_SHA"
   when: manual
