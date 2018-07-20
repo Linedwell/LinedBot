@@ -42,6 +42,14 @@ welcomemsg = {
     'it' : u'{{Benvenuto}}%s',
 }
 
+welcomeschoolmsg = {
+    'fr' : u'{{Bienvenue école}}%s',
+}
+
+schooldiscriminator = {
+    'fr' : ur'coll[eè]ge|[eé]cole|cdi|lyc[eé]|prof',
+}
+
 welcomelog = {
     'fr' : u'User:LinedBot/Welcome/Log',
     'it' : u'User:LinedBot/Welcome/Log',
@@ -103,7 +111,7 @@ class WelcomeBot:
             #print user.name()
             if user.isBlocked():
                 #showStatus(3)
-                pywikibot.output(u" %s is blocked; skipping." % user.name())
+                pywikibot.output(u"%s is blocked; skipping." % user.name())
                 continue
             if "bot" in user.groups():
                 #showStatus(3)
@@ -123,6 +131,12 @@ class WelcomeBot:
                     continue
                 else:
                     welcome_text = i18n.translate(self.site, welcomemsg)
+                    welcome_school_text = i18n.translate(self.site, welcomeschoolmsg)
+                    if welcome_school_text != None:
+                        discrim = i18n.translate(self.site, schooldiscriminator)
+                        if discrim != None and re.match(discrim, user.name().lower()): #if the discriminator exists and is present in username
+                            pywikibot.output(u"%s is a maybe a school related account; using school welcoming templatei instead." % user.name())
+                            welcome_text = welcome_school_text
                     if globalsettings['randomSign'] and len(self.signList) > 0:
                         sign = choice(self.signList)
                     else:
