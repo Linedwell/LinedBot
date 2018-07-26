@@ -21,6 +21,9 @@ pylint:
       
 pages:
   stage: build
+  image: registry.gitlab.com/pages/hugo:latest
+  script:
+    - hugo
   artifacts:
     paths:
     - public
@@ -42,4 +45,5 @@ linedbot:
         git fetch &&
         git checkout $CI_COMMIT_SHA"
   when: manual
+  allow_failure: false
 ...
