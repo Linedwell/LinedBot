@@ -7,8 +7,12 @@ stages:  # Defining main steps of the continous integration
 pylint:
   stage: check
   image: linedwell/pylint:py2
+  before_script:
+    - pip install anybadge
   script:
     - ( pylint --output-format=colorized --disable C,R,import-error --reports=y ./*.py || pylint-exit $? ) | tee pylint.txt
+    - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
+    - anybadge --value=$score --file=public/pylint.svg pylint
 
 linedbot:
   stage: deploy
