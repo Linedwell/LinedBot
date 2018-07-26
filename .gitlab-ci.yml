@@ -19,7 +19,7 @@ pylint:
     paths:
       - public/pylint.svg
       
-build_pages:
+pages:
   stage: build
   artifacts:
     paths:
