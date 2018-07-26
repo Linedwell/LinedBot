@@ -8,7 +8,7 @@ pylint:
   stage: check
   image: linedwell/pylint:py2
   script:
-    - '( pylint --output-format=colorized --disable C,R,import-error --reports=y ./*.py ; pylint-exit $? ) | tee pylint.txt'
+    - ( pylint --output-format=colorized --disable C,R,import-error --reports=y ./*.py || pylint-exit $? ) | tee pylint.txt
 
 linedbot:
   stage: deploy
