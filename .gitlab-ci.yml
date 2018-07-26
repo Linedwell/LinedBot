@@ -12,7 +12,8 @@ pylint:
       --output-format=colorized
       --disable C,R,import-error
       --reports=y
-      ./*.py || pylint-exit $?
+      ./*.py
+    - pylint-exit $?
 
 linedbot:
   stage: deploy
