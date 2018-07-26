@@ -2,7 +2,6 @@
 
 stages:  # Defining main steps of the continous integration
   - check
-  - build
   - deploy
 
 pylint:
@@ -20,7 +19,7 @@ pylint:
       - public/pylint.svg
       
 pages:
-  stage: build
+  stage: deploy
   script:
     - mkdir .public
     - cp -r * .public
