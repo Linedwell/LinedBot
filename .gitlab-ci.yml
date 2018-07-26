@@ -13,6 +13,9 @@ pylint:
     - ( pylint --output-format=colorized --disable C,R,import-error --reports=y ./*.py || pylint-exit $? ) | tee pylint.txt
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
     - anybadge --value=$score --file=public/pylint.svg pylint
+  artifacts:
+    paths:
+      - public/pylint.svg
 
 linedbot:
   stage: deploy
