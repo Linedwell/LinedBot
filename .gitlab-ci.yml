@@ -2,6 +2,7 @@
 
 stages:  # Defining main steps of the continous integration
   - check
+  - build
   - deploy
 
 pylint:
@@ -17,6 +18,14 @@ pylint:
   artifacts:
     paths:
       - public/pylint.svg
+      
+build_pages:
+  stage: build
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
 
 linedbot:
   stage: deploy
