@@ -24,15 +24,15 @@ pylint_badge:
     GIT_STRATEGY: none
   before_script:
     - pip install anybadge
-    - mkdir -p public/badges
+    - mkdir -p badges
   script:
     - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
-    - anybadge --value=$score --file=public/badges/pylint.svg pylint
+    - anybadge --value=$score --file=badges/pylint.svg pylint
   dependencies:
     - pylint
   artifacts:
     paths:
-      - public/badges/pylint.svg
+      - badges/pylint.svg
     expire_in: 5 min  
     
 pages:
@@ -48,6 +48,7 @@ pages:
   artifacts:
     paths:
     - public/
+    expire_in: 5 min  
   only:
     - master
 
