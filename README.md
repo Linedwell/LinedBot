@@ -1,5 +1,5 @@
 [![Build Status](https://gitlab.com/linedwell/linedbot/badges/master/build.svg)](https://gitlab.com/linedwell/linedbot)
-[![PyLint](https://linedwell.gitlab.io/LinedBot/pylint.svg)] (https://gitlab.com/linedwell/linedbot)<br/>
+[![PyLint](https://linedwell.gitlab.io/LinedBot/badges/pylint.svg)] (https://gitlab.com/linedwell/linedbot)<br/>
 LinedBot
 ========
 © Linedwell, 2011 - 2018<br />
