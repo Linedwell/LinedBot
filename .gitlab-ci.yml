@@ -19,6 +19,7 @@ pylint:
 
 pylint_badge:
   stage: build
+  image: python2:alpine
   variables:
     GIT_STRATEGY: none
   before_script:
