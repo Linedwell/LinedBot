@@ -1,5 +1,4 @@
 ---
-
 stages:  # Defining main steps of the continous integration
   - check
   - build
@@ -36,7 +35,7 @@ pylint_badge:
     expire_in: 5 min  
     
 pages:
-  stage: deploy
+  stage: build
   variables:
     GIT_STRATEGY: none
   script:
@@ -54,6 +53,8 @@ pages:
 
 linedbot:
   stage: deploy
+  variables:
+    GIT_STRATEGY: none
   before_script:
     ## Run ssh-agent (inside the build environment)
     - eval $(ssh-agent -s)
