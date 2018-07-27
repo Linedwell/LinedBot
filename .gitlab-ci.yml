@@ -2,31 +2,49 @@
 
 stages:  # Defining main steps of the continous integration
   - check
+  - build
   - deploy
+  
+image: alpine #Default docker image loaded by jobs
 
 pylint:
   stage: check
   image: linedwell/pylint:py2
-  before_script:
-    - pip install anybadge
-    - mkdir public
   script:
     - ( pylint --output-format=colorized --disable C,R,import-error --reports=y ./*.py || pylint-exit $? ) | tee pylint.txt
-    - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
-    - anybadge --value=$score --file=public/pylint.svg pylint
   artifacts:
     paths:
-      - public/pylint.svg
-      
+      - ./pylint.txt
+    expire_in: 5 min
+
+pylint_badge:
+  stage: build
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - pip install anybadge
+    - mkdir badges
+  script:
+    - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
+    - anybadge --value=$score --file=badges/pylint.svg pylint
+  dependencies:
+    - pylint
+  artifacts:
+    paths:
+      - badges/pylint.svg
+    expire_in: 5 min  
+    
 pages:
   stage: deploy
+  variables:
+    GIT_STRATEGY: none
   script:
     - mkdir .public
     - cp -r * .public
     - mv .public public
   artifacts:
     paths:
-    - public
+    - badges
   only:
     - master
 
