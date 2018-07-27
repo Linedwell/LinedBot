@@ -33,7 +33,8 @@ pylint_badge:
   artifacts:
     paths:
       - badges/pylint.svg
-    expire_in: 5 min  
+    expire_in: 5 min
+  when: always
     
 pages:
   stage: build
@@ -51,6 +52,7 @@ pages:
     expire_in: 5 min  
   only:
     - master
+  when: always
 
 linedbot:
   stage: deploy
