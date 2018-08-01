@@ -53,43 +53,43 @@ def cleanWIP(delay):
             pywikibot.output(u"Page %s is locked; skipping."
                              % page.title(asLink=True))
         else:
-        	summary = u''
-        	lastEdit = page.editTime()
+            summary = u''
+            lastEdit = page.editTime()
 
-        	if lastEdit < limit:
-				duration = calcDuration(lastEdit)
-				pageTemp, templateResult = removeTemplate(pageTemp)
-				summary = u"[[VD:Robot|Robot]] : Retrait du bandeau %s (article non modifié depuis plus de %s jours)" %(templateResult,duration.days)
-				pywikibot.showDiff(page.text, pageTemp)
-				page.text = pageTemp
-				print summary
-				page.save(summary)
+            if lastEdit < limit:
+                duration = calcDuration(lastEdit)
+                pageTemp, templateResult = removeTemplate(pageTemp)
+                summary = u"[[VD:Robot|Robot]] : Retrait du bandeau %s (article non modifié depuis plus de %s jours)" %(templateResult,duration.days)
+                pywikibot.showDiff(page.text, pageTemp)
+                page.text = pageTemp
+                print summary
+                page.save(summary)
             
     return log
 
 #Retourne la date avant laquelle on considère obsolète l'usage du modèle
 def calcLimit(delay):
-	today = datetime.utcnow()
-	limite = today - timedelta(seconds=delay)
-	return limite
+    today = datetime.utcnow()
+    limite = today - timedelta(seconds=delay)
+    return limite
 
 #Retourne le temps écoulé entre une date et le jour courant
 def calcDuration(date):
-	today = datetime.utcnow()
-	duration = today - date
-	return duration
+    today = datetime.utcnow()
+    duration = today - date
+    return duration
 
 # Retrait du bandeau si besoin
 def removeTemplate(pageTemp):
-	templateResult = ''
-	parser = re.compile(r'{{(En)?Trav(ail|aux)(?:\|.*?)?}}(?P<fin>\r\n|\n|\ )?',re.I | re.U | re.DOTALL)
-	searchResult = parser.search(pageTemp)
-	if searchResult:
-		pageTemp = parser.sub('',pageTemp,1)
-		templateResult = searchResult.group()
-		templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
-		templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
-	return pageTemp, templateResult
+    templateResult = ''
+    parser = re.compile(r'{{(En)?Trav(ail|aux)(?:\|.*?)?}}(?P<fin>\r\n|\n|\ )?',re.I | re.U | re.DOTALL)
+    searchResult = parser.search(pageTemp)
+    if searchResult:
+        pageTemp = parser.sub('',pageTemp,1)
+        templateResult = searchResult.group()
+        templateResult = templateResult.replace('\r\n','') #Retire les sauts de ligne contenus dans le modèle avant de l'ajouter au résumé
+        templateResult = templateResult.replace('\n','') #Correspond au second type de retour à la ligne
+    return pageTemp, templateResult
 
 # Exécution
 def main():

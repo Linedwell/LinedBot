@@ -95,7 +95,7 @@ def main():
 
     for sub in subscribers:
         try:
-            subTemp = sub.get()
+            sub.get()
         
         except pywikibot.NoPage:
             pywikibot.output(u"Page %s does not exist; skipping."
