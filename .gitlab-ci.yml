@@ -15,7 +15,7 @@ pylint:
   artifacts:
     paths:
       - ./pylint.txt
-    expire_in: 5 min
+    expire_in: 15 min
 
 pylint_badge:
   stage: staging
@@ -33,7 +33,7 @@ pylint_badge:
   artifacts:
     paths:
       - badges/pylint.svg
-    expire_in: 5 min
+    expire_in: 15 min
   when: always
     
 pages:
@@ -49,7 +49,7 @@ pages:
   artifacts:
     paths:
     - public/
-    expire_in: 5 min  
+    expire_in: 15 min  
   only:
     - master
   when: always
